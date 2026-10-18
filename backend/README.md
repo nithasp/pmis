@@ -47,6 +47,14 @@ npm run dev                     # http://localhost:4100
 
 Permissions: `SuperAdmin`, `Admin` and `Agency` accounts pass every check; `User` accounts are limited to the permission codes of their role (`admin/roles`), evaluated on every request.
 
+## Production
+
+`ENV=production` switches the API to production behaviour. `NODE_ENV=production`, which the Docker image sets, counts too, so an `ENV=dev` copied from `.env.example` cannot undo it.
+
+- Registration links, password-reset links and e-mail-change codes go out by e-mail only. Outside production the API also returns them in its responses, so the flows can be tested without a mail server.
+- `DEMO_READ_ONLY` defaults to `true`: demo visitors can browse everything, but every write is rejected with `403 read_only`. Set `DEMO_READ_ONLY=false` for a writable demo.
+- `npm run release` (production migrations + seed) refuses the published `ADMIN_PASSWORD` and gives the mock officer and agency accounts random passwords that are never printed, so only the admin and the demo entry can sign in. The passwords in the table above are for local use.
+
 ## Layout
 
 ```
@@ -90,4 +98,5 @@ The placeholders above are refused at startup, so a copied `.env.example` can ne
 | `npm run migrate:up` / `migrate:down` / `migrate:reset` | Database migrations |
 | `npm run seed` | Reload all mock data |
 | `npm run setup` | `migrate:up` + `seed` |
+| `npm run release` | Production `migrate:prod` + `seed:prod` (see Production) |
 | `npm run typecheck` / `lint` / `format` | Quality checks |

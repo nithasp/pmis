@@ -41,7 +41,7 @@
             </div>
             <div class="version text-center text-[10px] text-[#B7A4CE]"
                style="position: absolute; left: 0px; bottom: 10px">
-               {{ deployment.version }}
+               ({{ config.public.version }})
             </div>
          </div>
          <div class="w-[414px] mx-7 lg:mx-0">
@@ -82,9 +82,9 @@ import NuxtIcon from "../components/ui/nuxtIcon.vue";
 
 import InputPassword from "~/components/form/u-input-password.vue";
 import Input from "~/components/form/u-input.vue";
-import deployment from "~/deployment.config.js";
 
 const { locale, t } = useI18n();
+const config = useRuntimeConfig();
 
 definePageMeta({
    layout: false,

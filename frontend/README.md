@@ -11,7 +11,7 @@ npm install
 npm run dev          # http://localhost:3000, talks to http://localhost:4100/api/v1
 ```
 
-The API base URL per target is in `deployment.config.js` (`dev` uses the local backend; override with `NUXT_PUBLIC_API_BASE_URL`). Production bundles: `npm run generate:prd`.
+The API base URL and the version label come from `NUXT_PUBLIC_API_BASE_URL` and `NUXT_PUBLIC_VERSION` (see `.env.example`). `npm run dev` falls back to the local backend; `nuxt generate` writes the values into the static files and stops if `NUXT_PUBLIC_API_BASE_URL` is missing. Production bundle: put the values in `.env.prd` (or in the CI environment) and run `npm run generate:prd`. Everything in these files ends up in the browser, so never put a secret there.
 
 ## How the app talks to the API
 

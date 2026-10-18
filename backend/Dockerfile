@@ -17,7 +17,7 @@ WORKDIR /app
 
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
-COPY package.json database.js openapi.yaml ./
+COPY package.json database.js ./
 COPY migrations ./migrations
 COPY public ./public
 COPY assets ./assets

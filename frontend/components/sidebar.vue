@@ -205,7 +205,7 @@
             </div>
          </div>
          <div v-if="fullSidebar" class="info">
-            <div class="version text-center text-[10px] text-[#B7A4CE]">{{ version }}</div>
+            <div class="version text-center text-[10px] text-[#B7A4CE]">({{ version }})</div>
             <div class="h-[1px] w-full bg-[#EAECF0] mt-[11px] mb-1"></div>
             <div :class="[
                isSmallScreen ? 'justify-between' : '',

@@ -1,3 +1,4 @@
+import { config } from '../config';
 import { USER_STATUS_TH } from '../constants/statuses';
 import { withTransaction } from '../database';
 import { ProfileUser, RoleType, UploadFileRef, UserType } from '../types/auth.types';
@@ -306,7 +307,7 @@ export function createUserService({ users, roles, verifications, files, tokens }
         expiresAt: new Date(Date.now() + 30 * 60 * 1000),
       });
       await mailService.send({ to: newEmail, subject: 'PMIS: รหัสยืนยันการเปลี่ยนอีเมล', text: `รหัสยืนยันของคุณคือ ${code}` });
-      return `code:${code}`;
+      return config.isProduction ? undefined : `code:${code}`;
     },
 
     async acceptTerm(userId: number): Promise<ProfileUser> {

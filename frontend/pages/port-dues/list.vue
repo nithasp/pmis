@@ -261,7 +261,7 @@ const vesselList = ref<any[]>([
       jetty_name: "MIT-1",
       document_berth_id: 0,
       document_number: "",
-      vessel_flag: "https://pmis-apidev.wisdomcloud.net/data/flag/af.png",
+      vessel_flag: "",
       name: "NP BANGPAKONG",
       imoNumber: "9020455",
       officialNumber: "570001110 ",

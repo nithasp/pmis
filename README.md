@@ -51,6 +51,8 @@ All data is mock data created by `npm run seed` (master data, 24 accounts, 78 ve
 | `vtms@pmis.local` | `Officer@12345678` | VTMS officer |
 | `agency@pmis.local` (+12 more) | `Agency@12345678` | Vessel agencies |
 
+These passwords are for local development. In production (`ENV=production` or `NODE_ENV=production`) the seed requires your own `ADMIN_PASSWORD`, the officer and agency accounts get random passwords, and the demo account is read-only unless `DEMO_READ_ONLY=false`; see `backend/README.md`.
+
 ## Backend flow
 
 ```

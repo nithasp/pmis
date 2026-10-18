@@ -1,5 +1,4 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import deployment from "./deployment.config.js";
 import { i18nLocaleFiles } from "./i18n/modules";
 
 export default defineNuxtConfig({
@@ -42,8 +41,17 @@ export default defineNuxtConfig({
 
    runtimeConfig: {
       public: {
-         apiBaseUrl: deployment.baseURL,
-         version: deployment.version
+         apiBaseUrl: "http://localhost:4100/api/v1", // overridden by NUXT_PUBLIC_API_BASE_URL
+         version: "DEV: 1.16.2", // overridden by NUXT_PUBLIC_VERSION
+      },
+   },
+
+   hooks: {
+      "nitro:init"(nitro) {
+         // `nuxt generate` writes the API URL into the static files, so it must never fall back to localhost there
+         if (nitro.options.static && !process.env.NUXT_PUBLIC_API_BASE_URL) {
+            throw new Error("NUXT_PUBLIC_API_BASE_URL is not set: copy .env.example to .env (or to .env.prd for npm run generate:prd)");
+         }
       },
    },
 

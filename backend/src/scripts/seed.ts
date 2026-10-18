@@ -1,4 +1,4 @@
-import { config } from '../config';
+import { config, DEV_ADMIN_PASSWORD } from '../config';
 import { ROLE_PRESETS } from '../constants/permissions';
 import pool from '../database';
 import { logger } from '../logger';
@@ -40,8 +40,9 @@ import { addDays, addHours, atHour, createRandom } from './seed/random';
 
 const rnd = createRandom(20260401);
 const NOW = new Date();
-const AGENCY_PASSWORD = 'Agency@12345678';
-const OFFICER_PASSWORD = 'Officer@12345678';
+// The README publishes these for local use, so in production nobody can sign in as a mock officer or agency
+const AGENCY_PASSWORD = config.isProduction ? randomToken() : 'Agency@12345678';
+const OFFICER_PASSWORD = config.isProduction ? randomToken() : 'Officer@12345678';
 const SEED_BY = 'seed';
 
 const TRUNCATE = `
@@ -597,6 +598,9 @@ async function seedAis(ctx: SeedContext): Promise<void> {
 }
 
 async function main(): Promise<void> {
+  if (config.isProduction && config.adminSeed.password === DEV_ADMIN_PASSWORD) {
+    throw new Error('set ADMIN_PASSWORD: the default one is published in the README');
+  }
   const started = Date.now();
   const client = await pool.connect();
   const ctx: SeedContext = {
@@ -630,10 +634,12 @@ async function main(): Promise<void> {
     counts[table] = rows[0].n as number;
   }
   logger.info({ counts, seconds: Math.round((Date.now() - started) / 100) / 10 }, 'seed complete');
-  logger.info(
-    { admin: `${config.adminSeed.email} / ${config.adminSeed.password}`, demo: `${config.demo.email} / ${config.demo.password}`, officers: `reviewer|approver|mit|tct|spacial|stat|statapprove|vtms|officer@pmis.local / ${OFFICER_PASSWORD}`, agency: `agency@pmis.local (and 12 more) / ${AGENCY_PASSWORD}` },
-    'seeded accounts',
-  );
+  if (!config.isProduction) {
+    logger.info(
+      { admin: `${config.adminSeed.email} / ${config.adminSeed.password}`, demo: `${config.demo.email} / ${config.demo.password}`, officers: `reviewer|approver|mit|tct|spacial|stat|statapprove|vtms|officer@pmis.local / ${OFFICER_PASSWORD}`, agency: `agency@pmis.local (and 12 more) / ${AGENCY_PASSWORD}` },
+      'seeded accounts',
+    );
+  }
   await pool.end();
 }
 

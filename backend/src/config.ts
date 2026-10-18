@@ -6,6 +6,9 @@ dotenv.config({ quiet: true });
 const MIN_SECRET_LENGTH = 32;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+// Published in the README for local use, so the production seed refuses it
+export const DEV_ADMIN_PASSWORD = 'Admin@12345678';
+
 const secret = z.string().min(MIN_SECRET_LENGTH, `must be at least ${MIN_SECRET_LENGTH} characters`);
 
 // A value copied over from .env.example unchanged is treated as missing, so a placeholder key can
@@ -47,12 +50,12 @@ const envSchema = z
     DATABASE_SSL_CA: z.string().optional(),
 
     ADMIN_EMAIL: z.string().default('admin@pmis.local'),
-    ADMIN_PASSWORD: z.string().default('Admin@12345678'),
+    ADMIN_PASSWORD: z.string().default(DEV_ADMIN_PASSWORD),
 
     DEMO_LOGIN_ENABLED: z.stringbool().default(true),
     DEMO_EMAIL: z.string().default('demo@pmis.local'),
     DEMO_PASSWORD: z.string().default('Demo@12345678'),
-    DEMO_READ_ONLY: z.stringbool().default(false),
+    DEMO_READ_ONLY: z.stringbool().optional(),
 
     MAIL_DRIVER: z.enum(['log', 'smtp']).default('log'),
     SMTP_HOST: z.string().optional(),
@@ -103,11 +106,14 @@ function readEnv(): z.infer<typeof envSchema> {
 
 const env = readEnv();
 
+// NODE_ENV=production (set by the Docker image) wins over an ENV=dev copied from .env.example
+const isProduction = env.ENV === 'production' || env.NODE_ENV === 'production';
+
 const sslMode = env.DATABASE_SSL ?? (env.DATABASE_URL ? 'verify' : 'off');
 
 export const config = {
-  env: env.ENV,
-  isProduction: env.ENV === 'production',
+  env: isProduction ? 'production' : 'dev',
+  isProduction,
   port: env.PORT,
   publicUrl: env.PUBLIC_URL.replace(/\/+$/, ''),
   frontendUrl: env.FRONTEND_URL.replace(/\/+$/, ''),
@@ -118,7 +124,7 @@ export const config = {
   uploadMaxBytes: Math.round(env.UPLOAD_MAX_MB * 1024 * 1024),
   trustProxy: env.TRUST_PROXY,
   logLevel: env.LOG_LEVEL ?? 'info',
-  prettyLogs: env.ENV === 'dev' && env.NODE_ENV !== 'production',
+  prettyLogs: !isProduction,
 
   apiRateLimit: env.API_RATE_LIMIT,
   authRateLimit: env.AUTH_RATE_LIMIT,
@@ -152,7 +158,7 @@ export const config = {
     loginEnabled: env.DEMO_LOGIN_ENABLED,
     email: env.DEMO_EMAIL,
     password: env.DEMO_PASSWORD,
-    readOnly: env.DEMO_READ_ONLY,
+    readOnly: env.DEMO_READ_ONLY ?? isProduction,
   },
 
   mail: {

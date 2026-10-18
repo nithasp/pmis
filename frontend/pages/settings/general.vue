@@ -37,7 +37,7 @@
                class="sm:grid sm:grid-cols-2 lg:grid-cols-[280px_1fr] items-center border-y-[#E4E7EC] border-t border-solid pt-5">
                <div class="font-anuphan-semi-bold text-sm text-grayy-400">{{ $t("settings_general_application_version")
                   }}</div>
-               <div class="text-sm text-grayy-400">PMIS Version {{ deployment.version }}</div>
+               <div class="text-sm text-grayy-400">PMIS Version ({{ config.public.version }})</div>
             </div>
          </div>
       </UForm>
@@ -66,10 +66,10 @@ import useAdminService from "~/core/services/adminService";
 import useSettingService from "~/core/services/settingService";
 import type { IUpdateUser } from "~/core/interfaces/ISetting";
 
-import deployment from "~/deployment.config.js";
 import { z } from "zod";
 import type { FormSubmitEvent } from "#ui/types";
 const { t } = useI18n();
+const config = useRuntimeConfig();
 const generalSchema = z.object({ email: z
     .string()
     .min(1, { message: t("required") })
