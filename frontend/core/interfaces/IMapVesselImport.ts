@@ -27,3 +27,14 @@ export interface IMapVesselImport {
    isSelectGrossTonnageVS: boolean;
    isSelectGrossTonnageVT: boolean;
 }
+
+export interface IGrossTonnage {
+   grossTonnageAgency: number;
+   grossTonnageVS: number;
+   grossTonnageVT: number;
+}
+
+export interface IGrossTonnageOption {
+   id: number;
+   name: string;
+}

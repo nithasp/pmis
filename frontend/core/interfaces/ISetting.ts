@@ -87,3 +87,7 @@ export interface IUserAddressList {
    stageProvince: string;
    zipCode: string;
 }
+
+export interface IFileDropzoneSettingsInstance {
+   clearController: () => void;
+}

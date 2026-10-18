@@ -70,6 +70,8 @@
 
 <script setup lang="ts">
 import { useDropzone } from "vue3-dropzone";
+import type { AxiosResponse } from "axios";
+import type { IUploadResponse } from "~/core/interfaces/IUploadFile";
 import NuxtIcon from "../../components/ui/nuxtIcon.vue";
 import masterDataShipService from "~/core/services/masterDataShipService/vesselService.ts";
 const { $api } = useNuxtApp();
@@ -168,7 +170,7 @@ const uploadFileVessel = async (file: any) => {
    // console.log('file.name',file)
    formData.append("file", file[0], file[0].name);
    try {
-      const response: AxiosResponse<UploadResponse> = await $api.post("/admin/master-data/upload", formData, {
+      const response: AxiosResponse<IUploadResponse> = await $api.post("/admin/master-data/upload", formData, {
          headers: {
             "Content-Type": "multipart/form-data",
          },

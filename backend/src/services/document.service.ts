@@ -8,7 +8,8 @@ import { ListQuery, PagedResult } from '../types/pagination.types';
 import { formatDateTime, toDate } from '../utils/dates';
 import { AppError, forbidden, notFound } from '../utils/errors';
 import { idOrNull, iso, num, str } from '../utils/rows';
-import { FileService, UploadInput } from './file.service';
+import { FileService } from './file.service';
+import { UploadInput } from '../types/file.types';
 import { pdfToBuffer } from './template.service';
 
 const PENDING = ['PendingReview', 'PendingApproval', ...PENDING_CONFIRMATION_STATUSES];

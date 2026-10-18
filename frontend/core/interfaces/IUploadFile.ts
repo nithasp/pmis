@@ -5,3 +5,9 @@ export interface IUploadFile {
    extension: string
    size: number
 }
+
+export interface IUploadResponse {
+   success: boolean;
+   message: string;
+   data?: any;
+}

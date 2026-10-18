@@ -1,19 +1,10 @@
 import crypto from 'crypto';
 import pool from '../database';
-import { SessionSource } from '../types/auth.types';
+import { SessionSource, StoredRefreshToken } from '../types/auth.types';
 import { Queryable } from '../types/database.types';
 import { clip } from '../utils/text';
 
 const hashToken = (token: string): string => crypto.createHash('sha256').update(token).digest('hex');
-
-export interface StoredRefreshToken {
-  id: number;
-  userId: number;
-  familyId: string;
-  isDemo: boolean;
-  expiresAt: Date;
-  usedAt: Date | null;
-}
 
 export class RefreshTokenRepository {
   async create(

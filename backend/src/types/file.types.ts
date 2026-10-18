@@ -23,3 +23,24 @@ export interface StorageDriver {
   download(key: string): Promise<Buffer>;
   publicUrl(key: string, storedUrl: string | null): Promise<string>;
 }
+
+export interface NewFileRow {
+  fileName: string;
+  storageKey: string;
+  storageDriver: string;
+  url: string | null;
+  mimeType: string | null;
+  sizeBytes: number | null;
+  fileType: string | null;
+  uploadedBy: number | null;
+}
+
+export interface UploadInput {
+  buffer: Buffer;
+  originalName: string;
+  mimeType: string;
+  size: number;
+  uploadedBy: number | null;
+  folder?: string;
+  fileType?: string;
+}

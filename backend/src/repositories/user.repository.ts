@@ -1,6 +1,7 @@
 import pool from '../database';
 import { ListQuery, PagedResult } from '../types/pagination.types';
 import { Queryable, Row } from '../types/database.types';
+import { UserFilter } from '../types/user.types';
 import { pagedResult } from '../utils/paging';
 import { requireRow } from '../utils/rows';
 import { SqlBuilder } from '../utils/sql';
@@ -11,16 +12,6 @@ export const USER_SELECT = `
 
 const FROM = ' FROM users u LEFT JOIN roles r ON r.id = u.role_id';
 const LIVE = 'u.deleted_at IS NULL';
-
-export interface UserFilter {
-  type?: string | string[];
-  status?: string;
-  personType?: string;
-  enabled?: string;
-  roleId?: number;
-  begin?: unknown;
-  end?: unknown;
-}
 
 const SORTABLE: Record<string, string> = {
   id: 'u.id',

@@ -413,7 +413,7 @@ import DialogConfirm from "~/components/dialog/confirm.vue";
 import DialogAlert from "~/components/dialog/alert.vue";
 import NuxtIcon from "~/components/ui/nuxtIcon.vue";
 import useVesselImportService from "~/core/services/vesselImport";
-import type { IMapVesselImport } from "~/core/interfaces/IMapVesselImport";
+import type { IGrossTonnage, IMapVesselImport } from "~/core/interfaces/IMapVesselImport";
 import SendBackDialog from "~/components/dialog/vessel-in-out/send-back-dialog.vue";
 import SelectGrossTonnageDialog from "~/components/dialog/vessel-in-out/select-gross-tonnage-dialog.vue";
 import { VesselInOutStatusEnum } from "~/utils/enums/VesselInOutStatusEnum";
@@ -613,13 +613,7 @@ const handleClickRejectSendBack = () => {
    isSendBackDialogOpen.value = true;
 };
 
-type GrossTonnage = {
-   grossTonnageAgency: number;
-   grossTonnageVS: number;
-   grossTonnageVT: number;
-};
-
-const validateGrossTonnageEquality = (grossTonnage: GrossTonnage): boolean => {
+const validateGrossTonnageEquality = (grossTonnage: IGrossTonnage): boolean => {
    const { grossTonnageAgency, grossTonnageVS, grossTonnageVT } = grossTonnage;
 
    // Check if all values are equal

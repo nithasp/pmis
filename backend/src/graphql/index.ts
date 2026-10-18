@@ -6,7 +6,8 @@ import { config } from '../config';
 import { tokenService } from '../services';
 import { AuthUser } from '../types/auth.types';
 import { bearerToken, requestSource } from '../utils/request';
-import { GraphQLContext, resolvers } from './resolvers';
+import { resolvers } from './resolvers';
+import { GraphQLContext } from '../types/graphql.types';
 import { typeDefs } from './typeDefs';
 
 export const GRAPHQL_PATH = '/graphql';

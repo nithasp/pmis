@@ -110,3 +110,27 @@ export interface IVtmsLogBookAdd {
    pilots: [];
    products: [];
 }
+
+// Vessel block of the government log book form. The create screen keeps `breadth`
+// while the edit screen reads `breadthExtreme` back from the API.
+export interface IVtmsLogBookGovernmentVessel {
+   owner: string;
+   name: string;
+   vesselFlagName: string;
+   officialNumber: string;
+   authority_name: string;
+   loa: number;
+   draft: number;
+   displacement: number;
+   depth: number;
+   lengthOverall: number;
+   grossTonnage: number;
+}
+
+export interface IVtmsLogBookGovernmentVesselCreate extends IVtmsLogBookGovernmentVessel {
+   breadth: number;
+}
+
+export interface IVtmsLogBookGovernmentVesselEdit extends IVtmsLogBookGovernmentVessel {
+   breadthExtreme: number;
+}

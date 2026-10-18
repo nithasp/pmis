@@ -1,12 +1,6 @@
 import { config } from '../config';
 import { logger } from '../logger';
-
-export interface Mail {
-  to: string;
-  subject: string;
-  text: string;
-  link?: string;
-}
+import { Mail } from '../types/mail.types';
 
 // The demo deployment has no mail server: every e-mail is written to the log (with its link), and
 // the link is also returned to the caller so a tester can open it. Set MAIL_DRIVER=smtp and the

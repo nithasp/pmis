@@ -1,3 +1,6 @@
+import { UserService } from '../services/user.service';
+import { UserServiceDeps } from './user.types';
+
 export const USER_TYPES = ['SuperAdmin', 'Admin', 'User', 'Agency'] as const;
 export type UserType = (typeof USER_TYPES)[number];
 
@@ -92,4 +95,19 @@ export interface LoginResult {
 export interface SessionSource {
   ipAddress?: string | null;
   userAgent?: string | null;
+}
+
+export interface StoredRefreshToken {
+  id: number;
+  userId: number;
+  familyId: string;
+  isDemo: boolean;
+  expiresAt: Date;
+  usedAt: Date | null;
+}
+
+export type VerificationKind = 'register' | 'password_reset' | 'email_change';
+
+export interface AuthServiceDeps extends UserServiceDeps {
+  userService: UserService;
 }

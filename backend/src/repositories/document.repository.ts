@@ -1,5 +1,6 @@
 import pool from '../database';
 import { Queryable, Row } from '../types/database.types';
+import { DocumentFilter } from '../types/document.types';
 import { ListQuery, PagedResult } from '../types/pagination.types';
 import { pagedResult } from '../utils/paging';
 import { requireRow } from '../utils/rows';
@@ -49,25 +50,6 @@ const SORTABLE: Record<string, string> = {
   approvedAt: 'approved_at',
   updatedAt: 'updated_at',
 };
-
-export interface DocumentFilter {
-  agencyUserId?: number | null;
-  status?: unknown;
-  excludeDraft?: boolean;
-  berthId?: unknown;
-  berthType?: string;
-  begin?: unknown;
-  end?: unknown;
-  etaBegin?: unknown;
-  etaEnd?: unknown;
-  vesselStatus?: unknown;
-  vesselFlagId?: unknown;
-  purposeId?: unknown;
-  vesselId?: number | null;
-  approvedBegin?: unknown;
-  approvedEnd?: unknown;
-  keyword?: string;
-}
 
 export class DocumentRepository {
   async list(filter: DocumentFilter, query: ListQuery, db: Queryable = pool): Promise<PagedResult<Row>> {

@@ -15,24 +15,12 @@ import {
   vesselService,
   vtmsService,
 } from '../services';
-import { AuthUser, SessionSource } from '../types/auth.types';
+import { AuthUser } from '../types/auth.types';
 import { Row } from '../types/database.types';
+import { GraphQLContext, ListInput } from '../types/graphql.types';
 import { ListQuery } from '../types/pagination.types';
 import { AppError } from '../utils/errors';
 import { parseListQuery } from '../utils/paging';
-
-export interface GraphQLContext extends Record<PropertyKey, unknown> {
-  user: AuthUser | null;
-  source: SessionSource;
-}
-
-interface ListInput {
-  page?: number | null;
-  limit?: number | null;
-  search?: string | null;
-  order?: unknown;
-  filter?: Row | null;
-}
 
 const OFFICER_TYPES = ['SuperAdmin', 'Admin', 'User'];
 

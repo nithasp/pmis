@@ -1,18 +1,10 @@
 import pool from '../database';
 import { Queryable, Row } from '../types/database.types';
+import { ListSpec } from '../types/master.types';
 import { ListQuery, PagedResult } from '../types/pagination.types';
 import { pagedResult } from '../utils/paging';
 import { requireRow } from '../utils/rows';
 import { SqlBuilder } from '../utils/sql';
-
-export interface ListSpec {
-  select: string;
-  from: string;
-  live: string;
-  searchColumns: string[];
-  sortable: Record<string, string>;
-  defaultOrder: string;
-}
 
 const AUDIT = 'created_at, created_by, updated_at, updated_by';
 

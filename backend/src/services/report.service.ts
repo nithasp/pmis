@@ -1,26 +1,11 @@
 import ExcelJS from 'exceljs';
 import pool from '../database';
 import { Row } from '../types/database.types';
+import { ReportParams, ReportRange } from '../types/report.types';
 import { endOfDay, hoursBetween, toDate } from '../utils/dates';
 import { AppError } from '../utils/errors';
 import { idOrNull, iso, num, str } from '../utils/rows';
 import { money } from '../utils/text';
-
-export interface ReportParams {
-  startDate?: unknown;
-  endDate?: unknown;
-  year?: unknown;
-  berthId?: unknown;
-  productTypeId?: unknown;
-}
-
-interface Range {
-  from: Date;
-  to: Date;
-  berthId: number | null;
-  productTypeId: number | null;
-  era: 'buddhist' | 'christian';
-}
 
 const LATE_HOURS = 24;
 const THAI_FLAG_ID = 218;
@@ -41,14 +26,14 @@ export const REPORT_NAMES = [
 
 export type ReportName = (typeof REPORT_NAMES)[number];
 
-function range(params: ReportParams): Range {
+function range(params: ReportParams): ReportRange {
   const from = toDate(params.startDate) ?? new Date(new Date().getFullYear(), 0, 1);
   const to = endOfDay(params.endDate) ?? new Date();
   if (to < from) throw new AppError('ช่วงวันที่ไม่ถูกต้อง', 400, 'invalid_request', 'endDate must not be before startDate');
   return { from, to, berthId: idOrNull(params.berthId), productTypeId: idOrNull(params.productTypeId), era: String(params.year) === 'buddhist' ? 'buddhist' : 'christian' };
 }
 
-const fmtDate = (value: unknown, era: Range['era']): string => {
+const fmtDate = (value: unknown, era: ReportRange['era']): string => {
   const d = toDate(value);
   if (!d) return '';
   const pad = (n: number) => String(n).padStart(2, '0');
@@ -56,7 +41,7 @@ const fmtDate = (value: unknown, era: Range['era']): string => {
 };
 
 // Approved requests in the period with their agency, vessel and first berth
-async function approvedDocuments(r: Range, foreignOnly = false): Promise<Row[]> {
+async function approvedDocuments(r: ReportRange, foreignOnly = false): Promise<Row[]> {
   const params: unknown[] = [r.from, r.to];
   let where = "d.deleted_at IS NULL AND d.status = 'Approved' AND COALESCE(d.approved_at, d.request_date) BETWEEN $1 AND $2";
   if (r.berthId) {
@@ -81,7 +66,7 @@ async function approvedDocuments(r: Range, foreignOnly = false): Promise<Row[]> 
 }
 
 // Submitted requests in the period (whatever happened to them afterwards)
-async function submittedDocuments(r: Range): Promise<Row[]> {
+async function submittedDocuments(r: ReportRange): Promise<Row[]> {
   const { rows } = await pool.query(
     `SELECT d.*, dv.vessel_name, dv.vessel_gross_tonnage, u.id AS user_id, COALESCE(NULLIF(u.company, ''), u.full_name) AS company_name, u.full_name AS contact_name,
             u.email, u.phone, u.mobile_phone, (SELECT MIN(b.estimated_arrival) FROM document_berths b WHERE b.document_id = d.id) AS eta
@@ -100,7 +85,7 @@ const isLate = (doc: Row): boolean => {
 };
 
 export function createReportService() {
-  const builders: Record<ReportName, (r: Range) => Promise<Row | Row[]>> = {
+  const builders: Record<ReportName, (r: ReportRange) => Promise<Row | Row[]>> = {
     // 1. share of late submissions per agency
     async 'sum-submit-late-order'(r) {
       const docs = await submittedDocuments(r);

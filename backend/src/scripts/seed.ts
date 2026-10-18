@@ -7,6 +7,7 @@ import { hashPassword, randomToken } from '../services/password.service';
 import { pdfToBuffer } from '../services/template.service';
 import { storage } from '../storage';
 import { Queryable, Row } from '../types/database.types';
+import { SeedContext } from '../types/seed.types';
 import aisBerths from './seed/ais-berths.json';
 import aisShips from './seed/ais-last.json';
 import {
@@ -54,40 +55,6 @@ const TRUNCATE = `
     sub_districts, districts, provinces, countries, user_addresses, terms, user_files, users, roles, files
   RESTART IDENTITY CASCADE`;
 
-type Ids = Record<string, number>;
-
-interface Ctx {
-  db: Queryable;
-  roles: Ids;
-  provinces: Ids;
-  districts: Ids;
-  subDistricts: Record<string, { id: number; zipcode: string }>;
-  vesselTypes: Ids;
-  flags: Ids;
-  ports: Ids;
-  berths: { id: number; type: string; alt: string; rate: number; jetties: number[] }[];
-  purposeTypes: Ids;
-  purposes: { id: number; type: string; typeId: number }[];
-  cargoTypes: number[];
-  cargoWharfages: number[];
-  productTypes: { id: number; groupId: number; name: string; products: { id: number; name: string }[] }[];
-  pilots: number[];
-  tugs: number[];
-  paymentMethods: { id: number; days: number }[];
-  paymentTerms: number[];
-  cargoOwners: number[];
-  customers: number[];
-  locates: number[];
-  useBerths: number[];
-  files: Ids;
-  officers: Record<string, number>;
-  agencies: { id: number; company: string; fullName: string; email: string }[];
-  vessels: { id: number; name: string; imo: string; official: string; callSign: string; mmsi: string; flagId: number; typeId: number; ownerId: number; grt: number; loa: number; beam: number; draft: number; owner: string; nrt: number; dwt: number; engine: string }[];
-  governmentVessels: number[];
-  documents: { id: number; vesselIndex: number; agencyId: number; status: string; berthIds: number[]; docBerthIds: number[]; approvedAt: Date | null; etaFirst: Date; grt: number; berthIndex: number }[];
-  logBooks: { id: number; documentId: number; vesselId: number; berthId: number; jettyId: number | null; mooring: Date; departure: Date | null; grt: number }[];
-}
-
 async function insert(db: Queryable, table: string, data: Row): Promise<number> {
   const cols = Object.keys(data);
   const { rows } = await db.query(
@@ -123,7 +90,7 @@ const PLACEHOLDER_FILES: { key: string; title: string; type: string }[] = [
   { key: 'government_logbook', title: 'บันทึกการเดินเรือราชการ', type: 'logbook' },
 ];
 
-async function seedFiles(ctx: Ctx): Promise<void> {
+async function seedFiles(ctx: SeedContext): Promise<void> {
   const files = new FileRepository();
   for (const item of PLACEHOLDER_FILES) {
     const buffer = await pdfToBuffer((doc) => {
@@ -154,7 +121,7 @@ async function seedFiles(ctx: Ctx): Promise<void> {
 // ---------------------------------------------------------------------------------------------
 // Master data
 // ---------------------------------------------------------------------------------------------
-async function seedMaster(ctx: Ctx): Promise<void> {
+async function seedMaster(ctx: SeedContext): Promise<void> {
   const { db } = ctx;
   for (const c of COUNTRIES) await db.query('INSERT INTO countries (id, code, name_th, name_en) VALUES ($1, $2, $3, $4)', [c.id, c.code, c.nameTh, c.nameEn]);
 
@@ -248,7 +215,7 @@ async function seedMaster(ctx: Ctx): Promise<void> {
 // ---------------------------------------------------------------------------------------------
 // Roles and accounts
 // ---------------------------------------------------------------------------------------------
-async function seedAccounts(ctx: Ctx): Promise<void> {
+async function seedAccounts(ctx: SeedContext): Promise<void> {
   const { db } = ctx;
   for (const preset of ROLE_PRESETS) {
     ctx.roles[preset.roleType] = await insert(db, 'roles', { name: preset.name, role_type: preset.roleType, activated: true, is_system: true, permissions: preset.permissions, created_by: SEED_BY, updated_by: SEED_BY });
@@ -298,7 +265,7 @@ async function seedAccounts(ctx: Ctx): Promise<void> {
 // ---------------------------------------------------------------------------------------------
 // Vessels
 // ---------------------------------------------------------------------------------------------
-async function seedVessels(ctx: Ctx): Promise<void> {
+async function seedVessels(ctx: SeedContext): Promise<void> {
   const { db } = ctx;
   const approvedAgencies = ctx.agencies.slice(0, 11);
   for (const [i, v] of VESSELS.entries()) {
@@ -341,7 +308,7 @@ const STATUS_PLAN: string[] = [
   ...Array<string>(2).fill('AdminCanceled'),
 ];
 
-async function seedDocuments(ctx: Ctx): Promise<void> {
+async function seedDocuments(ctx: SeedContext): Promise<void> {
   const { db } = ctx;
   const thaiYear = NOW.getFullYear() + 543;
   let counter = 0;
@@ -414,7 +381,7 @@ async function seedDocuments(ctx: Ctx): Promise<void> {
   }
 }
 
-async function seedLogBooks(ctx: Ctx): Promise<void> {
+async function seedLogBooks(ctx: SeedContext): Promise<void> {
   const { db } = ctx;
   const approved = ctx.documents.filter((d) => d.status === 'Approved' && d.approvedAt);
   for (const doc of approved) {
@@ -480,7 +447,7 @@ async function seedLogBooks(ctx: Ctx): Promise<void> {
 // ---------------------------------------------------------------------------------------------
 const IMPORT_PLAN = [...Array<string>(3).fill('PendingSend'), ...Array<string>(3).fill('PendingEdit'), ...Array<string>(6).fill('Send'), ...Array<string>(4).fill('PendingCheck'), ...Array<string>(3).fill('RequestEdit'), ...Array<string>(5).fill('PendingApproval'), ...Array<string>(8).fill('Approved')];
 
-async function seedVesselImports(ctx: Ctx): Promise<void> {
+async function seedVesselImports(ctx: SeedContext): Promise<void> {
   const { db } = ctx;
   const withLogs = ctx.logBooks.filter((l) => l.departure);
   for (const [i, status] of rnd.sample(IMPORT_PLAN, IMPORT_PLAN.length).entries()) {
@@ -520,7 +487,7 @@ async function seedVesselImports(ctx: Ctx): Promise<void> {
 // ---------------------------------------------------------------------------------------------
 // Port dues (invoices) for vessels that have berthed
 // ---------------------------------------------------------------------------------------------
-async function seedPortDues(ctx: Ctx): Promise<void> {
+async function seedPortDues(ctx: SeedContext): Promise<void> {
   const { db } = ctx;
   const thaiYear = NOW.getFullYear() + 543;
   const candidates = ctx.logBooks.filter((l) => l.departure);
@@ -561,7 +528,7 @@ async function seedPortDues(ctx: Ctx): Promise<void> {
 // ---------------------------------------------------------------------------------------------
 // Contracts, surveys and AIS
 // ---------------------------------------------------------------------------------------------
-async function seedContracts(ctx: Ctx): Promise<void> {
+async function seedContracts(ctx: SeedContext): Promise<void> {
   const { db } = ctx;
   for (const [i, berth] of ctx.berths.slice(0, 8).entries()) {
     const start = new Date(NOW.getFullYear() - 2 + (i % 3), 0, 1);
@@ -584,7 +551,7 @@ async function seedContracts(ctx: Ctx): Promise<void> {
   }
 }
 
-async function seedSurveys(ctx: Ctx): Promise<void> {
+async function seedSurveys(ctx: SeedContext): Promise<void> {
   const { db } = ctx;
   for (const [si, survey] of SURVEYS.entries()) {
     const publishDate = daysAgo(40 - si * 12);
@@ -620,7 +587,7 @@ async function seedSurveys(ctx: Ctx): Promise<void> {
   }
 }
 
-async function seedAis(ctx: Ctx): Promise<void> {
+async function seedAis(ctx: SeedContext): Promise<void> {
   const { db } = ctx;
   const ships = aisShips as Row[];
   const berthBoxes = (aisBerths as { berthbox: { name: string; p1: { lat: number; lon: number } }[] }).berthbox;
@@ -661,7 +628,7 @@ async function seedAis(ctx: Ctx): Promise<void> {
 async function main(): Promise<void> {
   const started = Date.now();
   const client = await pool.connect();
-  const ctx: Ctx = {
+  const ctx: SeedContext = {
     db: client, roles: {}, provinces: {}, districts: {}, subDistricts: {}, vesselTypes: {}, flags: {}, ports: {}, berths: [], purposeTypes: {}, purposes: [], cargoTypes: [], cargoWharfages: [], productTypes: [], pilots: [], tugs: [],
     paymentMethods: [], paymentTerms: [], cargoOwners: [], customers: [], locates: [], useBerths: [], files: {}, officers: {}, agencies: [], vessels: [], governmentVessels: [], documents: [], logBooks: [],
   };

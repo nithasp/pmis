@@ -1,15 +1,10 @@
+import { BerthSeed, CountrySeed, FlagSeed, ProvinceSeed } from '../../types/seed.types';
+
 // Reference lists for `npm run seed`. Ids that the frontend hard-codes are pinned here:
 // Thailand is country 219 and vessel flag 218; purpose types are 1..6 in this order.
 
 export const THAILAND_COUNTRY_ID = 219;
 export const THAILAND_FLAG_ID = 218;
-
-export interface CountrySeed {
-  id: number;
-  code: string;
-  nameEn: string;
-  nameTh: string;
-}
 
 const COUNTRY_LIST: [string, string, string][] = [
   ['AU', 'Australia', 'ออสเตรเลีย'],
@@ -64,13 +59,6 @@ export const COUNTRIES: CountrySeed[] = [
   ...COUNTRY_LIST.map(([code, nameEn, nameTh], i) => ({ id: i + 1, code, nameEn, nameTh })),
   { id: THAILAND_COUNTRY_ID, code: 'TH', nameEn: 'Thailand', nameTh: 'ไทย' },
 ];
-
-export interface ProvinceSeed {
-  nameTh: string;
-  nameEn: string;
-  geographyId: number;
-  districts: { nameTh: string; nameEn: string; subDistricts: { nameTh: string; nameEn: string; zipcode: string }[] }[];
-}
 
 export const PROVINCES: ProvinceSeed[] = [
   {
@@ -177,12 +165,6 @@ export const PROVINCES: ProvinceSeed[] = [
 
 export const VESSEL_TYPES = ['Bulk Carrier', 'Container Ship', 'General Cargo', 'Chemical Tanker', 'Oil Tanker', 'LPG Carrier', 'LNG Carrier', 'Tug Boat', 'Barge', 'Passenger Ship', 'Ro-Ro', 'Offshore Supply Vessel'];
 
-export interface FlagSeed {
-  id: number;
-  code: string;
-  name: string;
-}
-
 const FLAG_LIST: [string, string][] = [
   ['pa', 'Panama'],
   ['lr', 'Liberia'],
@@ -236,16 +218,6 @@ export const PORTS: { name: string; locode: string; country: string }[] = [
   { name: 'Ras Tanura', locode: 'SARTA', country: 'SA' },
   { name: 'Fremantle', locode: 'AUFRE', country: 'AU' },
 ];
-
-export interface BerthSeed {
-  nameTh: string;
-  nameEn: string;
-  nameAlt: string;
-  berthType: 'MIT' | 'TCT' | 'Spacial' | 'Other';
-  vesselType: string;
-  rate: number;
-  jetties: string[];
-}
 
 export const BERTHS: BerthSeed[] = [
   { nameTh: 'ท่าเทียบเรือสาธารณะ MIT', nameEn: 'Map Ta Phut Industrial Terminal (MIT)', nameAlt: 'MIT', berthType: 'MIT', vesselType: 'General Cargo', rate: 8.56, jetties: ['MIT-1', 'MIT-2', 'MIT-3', 'MIT-4'] },

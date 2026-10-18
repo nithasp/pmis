@@ -1,18 +1,7 @@
 import pool from '../database';
 import { Queryable, Row } from '../types/database.types';
-import { StoredFile } from '../types/file.types';
+import { NewFileRow, StoredFile } from '../types/file.types';
 import { requireRow } from '../utils/rows';
-
-export interface NewFileRow {
-  fileName: string;
-  storageKey: string;
-  storageDriver: string;
-  url: string | null;
-  mimeType: string | null;
-  sizeBytes: number | null;
-  fileType: string | null;
-  uploadedBy: number | null;
-}
 
 // Join tables that link a stored file to a record: (table, foreign key column, has file_type)
 export const FILE_LINKS = {

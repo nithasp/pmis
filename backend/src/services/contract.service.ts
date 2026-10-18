@@ -1,4 +1,5 @@
 import pool, { withTransaction } from '../database';
+import { RateInput } from '../types/contract.types';
 import { Row } from '../types/database.types';
 import { ListQuery, PagedResult } from '../types/pagination.types';
 import { toDate } from '../utils/dates';
@@ -8,15 +9,6 @@ import { idOrNull, iso, num, str } from '../utils/rows';
 import { SqlBuilder } from '../utils/sql';
 import { money } from '../utils/text';
 import { FileService } from './file.service';
-
-export interface RateInput {
-  start: unknown;
-  end: unknown;
-  initialRate: unknown;
-  annualIncreaseRate: unknown;
-  rateChangeCycle: unknown;
-  rateChangeStartYear: unknown;
-}
 
 // Splits the contract into yearly periods; the rate rises by the annual percentage every
 // `rateChangeCycle` years, starting from the year the contract says the first change applies.

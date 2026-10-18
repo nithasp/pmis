@@ -314,7 +314,7 @@ import USelect from "~/components/form/u-select.vue";
 import DialogConfirm from "~/components/dialog/confirm.vue";
 import DialogAlert from "~/components/dialog/alert.vue";
 import Loading from "~/components/loading.vue";
-import type { IVtmsLogBookAdd } from "~/core/interfaces/IVtmsLogBook";
+import type { IVtmsLogBookAdd, IVtmsLogBookGovernmentVesselCreate } from "~/core/interfaces/IVtmsLogBook";
 import { format } from "date-fns";
 import UInput from "~/components/form/u-input.vue";
 import Datepicker from "~/components/form/v-datepicker.vue";
@@ -357,21 +357,7 @@ const logBookSchema = z.object({
 });
 
 // const logBookSchema = ref(createSchema());
-interface VesselDataInterface {
-   owner: string;
-   name: string;
-   vesselFlagName: string;
-   officialNumber: string;
-   authority_name: string;
-   loa: number;
-   breadth: number;
-   draft: number;
-   displacement: number;
-   depth: number;
-   lengthOverall: number;
-   grossTonnage: number;
-}
-const vesselData = ref<VesselDataInterface>({
+const vesselData = ref<IVtmsLogBookGovernmentVesselCreate>({
    owner: "",
    name: "",
    vesselFlagName: "",

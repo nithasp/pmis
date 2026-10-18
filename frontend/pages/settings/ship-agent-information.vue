@@ -152,6 +152,7 @@ import DialogAlert from "~/components/dialog/alert.vue";
 import DialogConfirm from "~/components/dialog/confirm.vue";
 
 import type {
+  IFileDropzoneSettingsInstance,
   IUpdateUserAgent,
 } from "~/core/interfaces/ISetting";
 import useAdminService from "~/core/services/adminService";
@@ -173,10 +174,7 @@ import { ref } from "vue";
 import type { IFileUpload } from "~/core/interfaces/IFileUpload";
 import { FileRegisterTypeEnum } from "~/utils/enums/FileRegisterTypeEnum";
 import FileUpload from "~/components/form/FileUpload.vue";
-interface FileDropzoneSettingsInstance {
-  clearController: () => void;
-}
-const fileDropzoneSettingRef = ref<FileDropzoneSettingsInstance | null>(null);
+const fileDropzoneSettingRef = ref<IFileDropzoneSettingsInstance | null>(null);
 
 const config = useRuntimeConfig();
 const downloadUrl = config.public.apiBaseUrl + '/downloads/agent-template';

@@ -30,6 +30,7 @@ import type { FormSubmitEvent } from "@nuxt/ui/dist/runtime/types";
 import USelect from "~/components/form/u-select.vue";
 import ShipVariant from "~/assets/icons/dialog/ship-variant.png";
 import useVesselImportService from "~/core/services/vesselImport";
+import type { IGrossTonnageOption } from "~/core/interfaces/IMapVesselImport";
 
 const { t } = useI18n();
 const documentOptionsStore = useDocumentOptionsStore()
@@ -69,12 +70,7 @@ const vesselImportId = computed(() => props.vesselImportId)
 const vesselImportMapDetail = computed(() => props.vesselImportMapDetail)
 const deletedFiles = computed(() => props.deletedFiles)
 console.log('vesselImportMapDetail', vesselImportMapDetail.value)
-interface GrossTonnageOption {
-    id: number;
-    name: string;
-}
-
-const grossTonnageOptions = ref<GrossTonnageOption[]>([])
+const grossTonnageOptions = ref<IGrossTonnageOption[]>([])
 const createSchema = () => {
     return z.object({
         grossTonnage: z.number().min(1, { message: t('please_enter_a_value') }),

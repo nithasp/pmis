@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { ALLOWED_UPLOAD_TYPES, UploadInput } from '../services/file.service';
+import { ALLOWED_UPLOAD_TYPES } from '../services/file.service';
+import { UploadInput } from '../types/file.types';
 import { documentService, fileService } from '../services';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/errors';

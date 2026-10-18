@@ -1,5 +1,7 @@
 import { useNuxtApp } from "#app";
+import type { AxiosResponse } from "axios";
 import type { IVesselTypePost, IVesselTypePut, IVesselFlagPost, IVesselFlagPut } from "~/core/interfaces/IVessel";
+import type { IUploadResponse } from "~/core/interfaces/IUploadFile";
 
 export default function useMasterDataShipService() {
    const { $api } = useNuxtApp();
@@ -71,7 +73,7 @@ export default function useMasterDataShipService() {
       formData.append("file", file[0], file[0].name);
       let percentCompleted = null;
       try {
-         const response: AxiosResponse<UploadResponse> = await $api.post("/admin/master-data/upload", formData, {
+         const response: AxiosResponse<IUploadResponse> = await $api.post("/admin/master-data/upload", formData, {
             headers: {
                "Content-Type": "multipart/form-data",
             },

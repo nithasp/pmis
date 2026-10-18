@@ -1,6 +1,7 @@
 import pool from '../database';
 import { Queryable, Row } from '../types/database.types';
 import { ListQuery, PagedResult } from '../types/pagination.types';
+import { VesselFilter } from '../types/vessel.types';
 import { pagedResult } from '../utils/paging';
 import { requireRow } from '../utils/rows';
 import { SqlBuilder } from '../utils/sql';
@@ -22,13 +23,6 @@ const VESSEL_SORT: Record<string, string> = {
   createdAt: 'v.created_at',
   updatedAt: 'v.updated_at',
 };
-
-export interface VesselFilter {
-  flag?: number | null;
-  type?: number | null;
-  owner?: string;
-  ownerId?: number | null;
-}
 
 export class VesselRepository {
   async list(filter: VesselFilter, query: ListQuery, db: Queryable = pool): Promise<PagedResult<Row>> {

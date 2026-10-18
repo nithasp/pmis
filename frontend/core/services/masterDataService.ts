@@ -1,11 +1,6 @@
 import { useNuxtApp } from "#app";
 import type { AxiosResponse } from "axios";
-interface UploadResponse {
-   // Define the shape of your expected response here
-   success: boolean;
-   message: string;
-   data?: any; // Replace 'any' with actual data type
-}
+import type { IUploadResponse } from "~/core/interfaces/IUploadFile";
 
 export default function useMasterDataService() {
    const { $api } = useNuxtApp();
@@ -62,7 +57,7 @@ export default function useMasterDataService() {
       if (type) formData.append("type", type);
 
       try {
-         const response: AxiosResponse<UploadResponse> = await $api.post("/upload/register", formData, {
+         const response: AxiosResponse<IUploadResponse> = await $api.post("/upload/register", formData, {
             headers: {
                "Content-Type": "multipart/form-data",
             },
@@ -80,7 +75,7 @@ export default function useMasterDataService() {
       if (type) formData.append("type", type);
 
       try {
-         const response: AxiosResponse<UploadResponse> = await $api.post("/upload/register", formData, {
+         const response: AxiosResponse<IUploadResponse> = await $api.post("/upload/register", formData, {
             headers: {
                "Content-Type": "multipart/form-data",
             },
@@ -97,7 +92,7 @@ export default function useMasterDataService() {
       formData.append("file", new Blob([file]), file.name);
 
       try {
-         const response: AxiosResponse<UploadResponse> = await $api.post("/contracts/upload", formData, {
+         const response: AxiosResponse<IUploadResponse> = await $api.post("/contracts/upload", formData, {
             headers: {
                "Content-Type": "multipart/form-data",
             },
@@ -114,7 +109,7 @@ export default function useMasterDataService() {
       formData.append("file", new Blob([file]), file.name);
       formData.append("type", type);
       try {
-         const response: AxiosResponse<UploadResponse> = await $api.post("/admin/vessels/uploads", formData, {
+         const response: AxiosResponse<IUploadResponse> = await $api.post("/admin/vessels/uploads", formData, {
             headers: {
                "Content-Type": "multipart/form-data",
             },
@@ -141,7 +136,7 @@ export default function useMasterDataService() {
       formData.append("file", new Blob([file]), file.name);
       formData.append("type", type)
       try {
-         const response: AxiosResponse<UploadResponse> = await $api.post(`/admin/documents/${documentId}/berths/${berthId}/uploads`, formData, {
+         const response: AxiosResponse<IUploadResponse> = await $api.post(`/admin/documents/${documentId}/berths/${berthId}/uploads`, formData, {
             headers: {
                "Content-Type": "multipart/form-data",
             },
@@ -155,7 +150,7 @@ export default function useMasterDataService() {
 
    const deleteFileBerth = async (documentId: number, berthId: number, fileId: number) => {
       try {
-         const response: AxiosResponse<UploadResponse> = await $api.delete(`/admin/documents/${documentId}/berths/${berthId}/files/${fileId}`);
+         const response: AxiosResponse<IUploadResponse> = await $api.delete(`/admin/documents/${documentId}/berths/${berthId}/files/${fileId}`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
          console.error("delete file documents berths failed:", error);
@@ -168,7 +163,7 @@ export default function useMasterDataService() {
       formData.append("file", new Blob([file]), file.name);
       formData.append("type", type);
       try {
-         const response: AxiosResponse<UploadResponse> = await $api.post("/admin/documents/uploads", formData, {
+         const response: AxiosResponse<IUploadResponse> = await $api.post("/admin/documents/uploads", formData, {
             headers: {
                "Content-Type": "multipart/form-data",
             },
@@ -185,7 +180,7 @@ export default function useMasterDataService() {
       formData.append("file", new Blob([file]), file.name);
 
       try {
-         const response: AxiosResponse<UploadResponse> = await $api.post("/admin/master-data/upload", formData, {
+         const response: AxiosResponse<IUploadResponse> = await $api.post("/admin/master-data/upload", formData, {
             headers: {
                "Content-Type": "multipart/form-data",
             },

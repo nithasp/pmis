@@ -1,32 +1,17 @@
 import { config } from '../config';
 import { withTransaction } from '../database';
-import { RoleRepository } from '../repositories/role.repository';
-import { UserRepository } from '../repositories/user.repository';
-import { VerificationRepository } from '../repositories/verification.repository';
-import { LoginResult, SessionSource } from '../types/auth.types';
+import { AuthServiceDeps, LoginResult, SessionSource } from '../types/auth.types';
 import { Row } from '../types/database.types';
 import { AppError, conflict, notFound } from '../utils/errors';
 import { idOrNull, str } from '../utils/rows';
-import { FileService } from './file.service';
 import { mailService } from './mail.service';
 import { hashPassword, randomToken, spendVerifyTime, verifyPassword } from './password.service';
-import { TokenService } from './token.service';
-import { UserService } from './user.service';
-
-interface Deps {
-  users: UserRepository;
-  roles: RoleRepository;
-  verifications: VerificationRepository;
-  files: FileService;
-  tokens: TokenService;
-  userService: UserService;
-}
 
 const INVALID_LOGIN = ['อีเมลหรือรหัสผ่านของคุณไม่ถูกต้อง', 'email_password_not_correct'] as const;
 const REGISTER_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
 
-export function createAuthService({ users, roles, verifications, files, tokens, userService }: Deps) {
+export function createAuthService({ users, roles, verifications, files, tokens, userService }: AuthServiceDeps) {
   async function startSession(user: Row, isDemo: boolean, source: SessionSource): Promise<LoginResult> {
     const token = await tokens.issueSession(user, isDemo, source);
     return { token, user: await userService.profileOf(user.id as number) };

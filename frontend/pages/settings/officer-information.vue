@@ -65,7 +65,7 @@ import SaveButton from "~/components/button/save.vue";
 import DialogAlert from "~/components/dialog/alert.vue";
 import DialogConfirm from "~/components/dialog/confirm.vue";
 
-import type { IFileUploadSetting, IUpdateUser } from "~/core/interfaces/ISetting";
+import type { IFileDropzoneSettingsInstance, IFileUploadSetting, IUpdateUser } from "~/core/interfaces/ISetting";
 import useAdminService from "~/core/services/adminService";
 import useSettingService from "~/core/services/settingService";
 
@@ -78,10 +78,7 @@ const shipAgentInformationSchema = z.object({
 });
 
 import { ref } from "vue";
-interface FileDropzoneSettingsInstance {
-   clearController: () => void;
-}
-const fileDropzoneSettingRef = ref<FileDropzoneSettingsInstance | null>(null);
+const fileDropzoneSettingRef = ref<IFileDropzoneSettingsInstance | null>(null);
 
 const { locale } = useI18n();
 const toast = useToast();

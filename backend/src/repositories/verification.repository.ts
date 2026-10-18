@@ -1,8 +1,7 @@
 import pool from '../database';
+import { VerificationKind } from '../types/auth.types';
 import { Queryable, Row } from '../types/database.types';
 import { requireRow } from '../utils/rows';
-
-export type VerificationKind = 'register' | 'password_reset' | 'email_change';
 
 export class VerificationRepository {
   async create(

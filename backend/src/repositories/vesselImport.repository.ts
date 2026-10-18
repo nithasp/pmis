@@ -1,6 +1,7 @@
 import pool from '../database';
 import { Queryable, Row } from '../types/database.types';
 import { ListQuery, PagedResult } from '../types/pagination.types';
+import { VesselImportFilter } from '../types/vesselImport.types';
 import { pagedResult } from '../utils/paging';
 import { requireRow } from '../utils/rows';
 import { SqlBuilder, csvList } from '../utils/sql';
@@ -45,28 +46,6 @@ const SORT: Record<string, string> = {
   createdAt: 'created_at',
   updatedAt: 'updated_at',
 };
-
-export interface VesselImportFilter {
-  createdById?: number | null;
-  status?: unknown;
-  excludeStatuses?: string[];
-  onlyStatuses?: string[];
-  vesselFlagId?: unknown;
-  vesselTypeId?: unknown;
-  berthId?: unknown;
-  jettyId?: unknown;
-  purposeTypeId?: unknown;
-  productName?: string;
-  created?: unknown;
-  mooringBegin?: unknown;
-  mooringEnd?: unknown;
-  unmooringBegin?: unknown;
-  unmooringEnd?: unknown;
-  vtMooringBegin?: unknown;
-  vtMooringEnd?: unknown;
-  vtUnmooringBegin?: unknown;
-  vtUnmooringEnd?: unknown;
-}
 
 export class VesselImportRepository {
   async list(filter: VesselImportFilter, query: ListQuery, db: Queryable = pool): Promise<PagedResult<Row>> {

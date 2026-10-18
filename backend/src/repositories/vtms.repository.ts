@@ -1,6 +1,7 @@
 import pool from '../database';
 import { Queryable, Row } from '../types/database.types';
 import { ListQuery, PagedResult } from '../types/pagination.types';
+import { LogBookFilter } from '../types/vtms.types';
 import { pagedResult } from '../utils/paging';
 import { requireRow } from '../utils/rows';
 import { SqlBuilder, csvIds, csvList } from '../utils/sql';
@@ -63,21 +64,6 @@ const LOG_BOOK_SORT: Record<string, string> = {
   mooring_date: 'mooring_date',
   departure_date: 'departure_date',
 };
-
-export interface LogBookFilter {
-  status?: unknown;
-  logType?: unknown;
-  berthId?: unknown;
-  berthIds?: unknown;
-  purposeTypeIds?: unknown;
-  vesselId?: unknown;
-  documentId?: number | null;
-  mooringBegin?: unknown;
-  mooringEnd?: unknown;
-  departureBegin?: unknown;
-  departureEnd?: unknown;
-  hasDocument?: boolean;
-}
 
 export class VtmsRepository {
   async listLogBooks(filter: LogBookFilter, query: ListQuery, db: Queryable = pool): Promise<PagedResult<Row>> {

@@ -1,11 +1,4 @@
-import { RoleType } from '../../types/auth.types';
-
-export interface OfficerSeed {
-  email: string;
-  fullName: string;
-  roleType: RoleType;
-  phone: string;
-}
+import { AgencySeed, OfficerSeed, VesselSeed } from '../../types/seed.types';
 
 // Officer accounts: one per role so every menu of the frontend has someone who can use it
 export const OFFICERS: OfficerSeed[] = [
@@ -19,21 +12,6 @@ export const OFFICERS: OfficerSeed[] = [
   { email: 'vtms@pmis.local', fullName: 'นายพงศกร เจ้าหน้าที่ VTMS', roleType: 'VTMS', phone: '038-683-312' },
   { email: 'officer@pmis.local', fullName: 'นางสาวศิริพร ผู้ดูแลระบบ', roleType: 'Admin', phone: '038-683-313' },
 ];
-
-export interface AgencySeed {
-  email: string;
-  company: string;
-  fullName: string;
-  tax: string;
-  phone: string;
-  mobile: string;
-  personType: 'corporate' | 'individual';
-  status: 'Approved' | 'WaitingApproved';
-  province: string;
-  district: string;
-  subDistrict: string;
-  address: string;
-}
 
 export const AGENCIES: AgencySeed[] = [
   { email: 'agency@pmis.local', company: 'บริษัท สยามมารีน โลจิสติกส์ จำกัด', fullName: 'นายธนวัฒน์ สมุทรสาคร', tax: '0105551012345', phone: '02-345-6781', mobile: '081-111-2201', personType: 'corporate', status: 'Approved', province: 'กรุงเทพมหานคร', district: 'คลองเตย', subDistrict: 'คลองเตย', address: '88 อาคารสยามมารีน ถนนพระราม 4' },
@@ -50,23 +28,6 @@ export const AGENCIES: AgencySeed[] = [
   { email: 'newagency@pmis.local', company: 'บริษัท นิวเวฟ ชิปปิ้ง จำกัด', fullName: 'นายกิตติพงษ์ คลื่นใหม่', tax: '0215561112345', phone: '038-901-234', mobile: '081-111-2212', personType: 'corporate', status: 'WaitingApproved', province: 'ระยอง', district: 'เมืองระยอง', subDistrict: 'ทับมา', address: '12 ถนนราชชุมพล' },
   { email: 'pending.agent@pmis.local', company: '', fullName: 'นางสาวปาริชาต รอตรวจ', tax: '3100200023456', phone: '', mobile: '089-222-3313', personType: 'individual', status: 'WaitingApproved', province: 'ชลบุรี', district: 'เมืองชลบุรี', subDistrict: 'แสนสุข', address: '99/1 ถนนลงหาดบางแสน' },
 ];
-
-export interface VesselSeed {
-  name: string;
-  type: string;
-  flag: string;
-  imo: string;
-  official: string;
-  callSign: string;
-  mmsi: string;
-  grt: number;
-  nrt: number;
-  dwt: number;
-  loa: number;
-  beam: number;
-  draft: number;
-  engine: string;
-}
 
 export const VESSELS: VesselSeed[] = [
   { name: 'NP BANGPAKONG', type: 'Bulk Carrier', flag: 'th', imo: '9020455', official: '570001110', callSign: 'HSB2', mmsi: '567000111', grt: 3501, nrt: 1900, dwt: 5200, loa: 98.5, beam: 16.2, draft: 6.1, engine: 'MAN B&W 6S35MC' },

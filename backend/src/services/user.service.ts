@@ -1,25 +1,13 @@
 import { USER_STATUS_TH } from '../constants/statuses';
 import { withTransaction } from '../database';
-import { RoleRepository } from '../repositories/role.repository';
-import { UserRepository } from '../repositories/user.repository';
 import { ProfileUser, RoleType, UploadFileRef, UserType } from '../types/auth.types';
 import { Queryable, Row } from '../types/database.types';
 import { ListQuery, PagedResult } from '../types/pagination.types';
+import { UserServiceDeps } from '../types/user.types';
 import { AppError, conflict, notFound } from '../utils/errors';
 import { idOrNull, iso, str } from '../utils/rows';
-import { FileService } from './file.service';
 import { mailService } from './mail.service';
 import { hashPassword, randomToken } from './password.service';
-import { TokenService } from './token.service';
-import { VerificationRepository } from '../repositories/verification.repository';
-
-interface Deps {
-  users: UserRepository;
-  roles: RoleRepository;
-  verifications: VerificationRepository;
-  files: FileService;
-  tokens: TokenService;
-}
 
 export function toProfile(row: Row, uploadFiles: UploadFileRef[] = []): ProfileUser {
   return {
@@ -77,7 +65,7 @@ const addressColumns = (input: Row): Row => ({
   zip_code: str(input.zipCode),
 });
 
-export function createUserService({ users, roles, verifications, files, tokens }: Deps) {
+export function createUserService({ users, roles, verifications, files, tokens }: UserServiceDeps) {
   async function profileOf(id: number, db?: Queryable): Promise<ProfileUser> {
     const row = await users.findById(id, db);
     if (!row) throw notFound('ผู้ใช้งาน', 'user not found');

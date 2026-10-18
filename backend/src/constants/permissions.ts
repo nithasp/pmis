@@ -1,4 +1,4 @@
-import { RoleType } from '../types/auth.types';
+import { RolePreset } from '../types/role.types';
 
 // The checkbox tree of frontend/pages/permission-management/[mode].vue. A `User`-type account only
 // sees the actions its role grants; every other account type passes `allowPermission()` as true.
@@ -40,12 +40,6 @@ export const PERMISSION_CODES = [
 ] as const;
 
 export type PermissionCode = (typeof PERMISSION_CODES)[number];
-
-export interface RolePreset {
-  name: string;
-  roleType: RoleType;
-  permissions: PermissionCode[];
-}
 
 const all = [...PERMISSION_CODES];
 const pick = (...prefixes: string[]): PermissionCode[] =>

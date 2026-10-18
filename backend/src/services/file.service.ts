@@ -5,21 +5,11 @@ import { FileLink, FileRepository } from '../repositories/file.repository';
 import { storage } from '../storage';
 import { UploadFileRef } from '../types/auth.types';
 import { Queryable, Row } from '../types/database.types';
-import { StoredFile } from '../types/file.types';
+import { StoredFile, UploadInput } from '../types/file.types';
 import { AppError } from '../utils/errors';
 import { idOrNull, num, str } from '../utils/rows';
 
 const SAFE_NAME = /[^a-zA-Z0-9._฀-๿-]+/g;
-
-export interface UploadInput {
-  buffer: Buffer;
-  originalName: string;
-  mimeType: string;
-  size: number;
-  uploadedBy: number | null;
-  folder?: string;
-  fileType?: string;
-}
 
 export const ALLOWED_UPLOAD_TYPES = new Set([
   'application/pdf',
