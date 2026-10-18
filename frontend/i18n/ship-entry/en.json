@@ -1,0 +1,22 @@
+{
+   "vessel_date_and_time_mooring": "Date and time of ship docking",
+   "vessel_date_and_time_departure": "Date and time the ship departs from the port",
+   "vessel_entry_exit_data_import": "Vessel Entry Exit Data Import",
+   "import_file": "Import File",
+   "import_data": "Import Data",
+   "mooring_date": "Mooring Date",
+   "ship_flag": "Ship Flag / Registration",
+   "jetty": "Jetty",
+   "vessel_import_cancel_title": "Vessel Import Cancel",
+   "vessel_import_cancel_description": "Do you want to cancel this Vessel Import? If you cancel it, it cannot be recovered.",
+   "vessel_import_success": "Vessel Import Success",
+   "vessel_import_cancel_success": "Vessel Import Cancel Success",
+   "vessel_import_list": "Vessel Import List",
+   "vessel_import_data": "Vessel Import Data",
+   "vessel_import_specify_details": "Vessel Import Specify Details",
+   "gross_tonnage_title": "Gross Tonnage",
+   "vessel_import": "Import Vessel Import Data",
+   "vessel_import_send": "Submit Vessel Import Data",
+   "vessel_import_send_success": "Your vessel Import data import was successful",
+   "vessel_import_confirm": "Do you confirm the submission of this data?"
+}

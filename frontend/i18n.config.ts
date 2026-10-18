@@ -1,11 +1,6 @@
-import en from "~/assets/locales/en/index";
-import th from "~/assets/locales/th/index";
-
+// Messages live in `i18n/` and are registered per page module through
+// `langDir` + `locales[].files` in `nuxt.config.ts`.
 export default defineI18nConfig(() => ({
   legacy: false,
   locale: "th",
-  messages: {
-    en: en,
-    th: th,
-  },
 }));

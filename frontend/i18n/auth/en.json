@@ -1,0 +1,50 @@
+{
+   "welcome": "Welcome back",
+   "pims_text": "Port Management\nInformation System",
+   "new_register": "Register",
+   "register_manual": "Register Manual",
+   "contact_text": "Please email maptaphutportcontrol{'@'}hotmail.com or\ncall 0-3868-3305-8 during business hours,\nif you have questions or system issue.",
+   "login_title": "Log in to your account",
+   "login_error_title": "Something went wrong",
+   "login_error_message": "The username or password is incorrect, please log in again.",
+   "forget_password": "Forget Password",
+   "remember_me": "Remember Me",
+   "login_form_username": "Username",
+   "login_form_submit": "Login",
+   "enter_demo": "Enter demo (no login needed)",
+   "demo_hint": "Recruiters: the demo signs you in automatically as an administrator. Log out to try the other accounts.",
+   "demo_unavailable": "The demo account is not available right now",
+   "confirm_password": "Confirm Password",
+   "email_password_not_correct": "Your email or password is not correct.",
+   "back_to_login": "Back to Login page",
+   "forget_password_message": "Please email maptaphutportcontrol{'@'}hotmail.com or call 0-3868-3305-8 during business hours, if you forget your account.",
+   "forget_alert_message": "Please check your one-time password in your email. (If you didn't receive your one-time password email, please confirm in your spam/junk mail.",
+   "auth_email_not_found": "This email is not in the system.",
+   "create_an_account": "Create an account",
+   "register_sub_message": "Create an account to manage your vessel.",
+   "register_alert_message": "Please check your email to continue the process. (If you didn't receive your one-time password email, please confirm in your spam/junk mail.",
+   "register_step": [
+      {
+         "step": "Step 1",
+         "detail": "Provide your detail"
+      },
+      {
+         "step": "Step 2",
+         "detail": "Upload your document"
+      },
+      {
+         "step": "Step 3",
+         "detail": "Terms and Conditions"
+      }
+   ],
+   "register_success_title": "We are verifying your registration information.",
+   "register_success_message": "The system has received your registration information. We will proceed with checking your registration request. Please check your email to confirm registration.",
+   "terms_and_conditions": "Terms and Conditions",
+   "last_updated": "Last updated:",
+   "agree_accept_term": "I agree to the terms and conditions agreement.",
+   "email_verification_failed": "Email verification failed. The entered code is incorrect.",
+   "email_already_exist": "This email address is already in use.",
+   "create_new_password": "Create new password",
+   "please_fill_your_new_password": "Please fill your new password.",
+   "change_password": "Change Password"
+}

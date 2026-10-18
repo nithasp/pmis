@@ -1,0 +1,16 @@
+{
+   "contact_person": "Contact",
+   "company": "Company",
+   "person_type": "Person Type",
+   "vessel_agents_management": "Vessel Agents Management",
+   "vessel_agents_all": "All Vessel Agents",
+   "cancel_vessel_agent": "Cancel Vessel Agent",
+   "confirm_cancel_vessel_agent": "Do you confirm to cancel this vessel agent?<br>If you cancel it, it cannot be recovered.",
+   "cancel_vessel_agent_success": "Cancel vessel agent success",
+   "create_vessel_agent": "Create Vessel Agent",
+   "edit_vessel_agent": "Edit Vessel Agent",
+   "vessel_agent_detail": "Vessel Agent Detail",
+   "vessel_agent_information": "Vessel Agent Information",
+   "corporate": "corporate",
+   "personal": "personal"
+}

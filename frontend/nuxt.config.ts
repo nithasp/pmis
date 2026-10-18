@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import deployment from "./deployment.config.js";
+import { i18nLocaleFiles } from "./i18n/modules";
 
 export default defineNuxtConfig({
    ssr: false,
@@ -25,12 +26,15 @@ export default defineNuxtConfig({
          "@nuxtjs/i18n",
          {
             vueI18n: "./i18n.config.ts",
+            langDir: "./i18n",
             locales: [
-               { code: "en", iso: "en-US", name: "English" },
-               { code: "th", iso: "th-TH", name: "ไทย" },
+               { code: "en", iso: "en-US", name: "English", files: i18nLocaleFiles("en") },
+               { code: "th", iso: "th-TH", name: "ไทย", files: i18nLocaleFiles("th") },
             ],
             defaultLocale: "th",
             strategy: "no_prefix",
+            // a few confirmation messages carry an inline <br>
+            compilation: { strictMessage: false },
          },
       ],
       'nuxt-icons',

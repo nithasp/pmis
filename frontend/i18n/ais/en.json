@@ -1,0 +1,11 @@
+{
+   "water_traffic_map": "Water Trafic Map",
+   "water_traffic_event": "Water Trafic Event",
+   "event_date": "Event Date",
+   "mmsi_no": "MMSI No.",
+   "position": "Position",
+   "lat": "Latitude",
+   "lng": "Longitude",
+   "ais_log": "AIS Log",
+   "all_ais_log": "All AIS Log"
+}

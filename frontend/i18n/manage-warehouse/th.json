@@ -1,0 +1,8 @@
+{
+   "manage_warehouse": "จัดการโกดังสินค้า",
+   "document_no": "เลขที่เอกสาร",
+   "shipname_imo_officialno": "ชื่อเรือ/IMO/Official No.",
+   "product_owner": "เจ้าของสินค้า",
+   "warehouse_inventory_list": "รายการสินค้าในโกดัง",
+   "warehouse_inventory_total": "รายการ"
+}

@@ -1,0 +1,22 @@
+{
+   "vessel_date_and_time_mooring": "วันที่เวลาเรือเข้าเทียบท่า",
+   "vessel_date_and_time_departure": "วันที่เวลาเรือออกจากท่า",
+   "vessel_entry_exit_data_import": "นำเข้าข้อมูลเรือเข้า-ออก",
+   "import_file": "ไฟล์นำเข้า",
+   "import_data": "นำเข้าข้อมูล",
+   "mooring_date": "วันที่บันทึก",
+   "ship_flag": "สัญชาติเรือ / ธงเรือ",
+   "jetty": "ท่าเรือย่อย",
+   "vessel_import_cancel_title": "ยกเลิกข้อมูลเรือเข้า-ออก",
+   "vessel_import_cancel_description": "คุณต้องการยกเลิกใบคำร้องนี้ใช่หรือไม่หากยกเลิกแล้วจะไม่สามารถกู้คืนได้อีก",
+   "vessel_import_success": "การขอแก้ไขข้อมูลเรือเข้า-ออกของคุณสำเร็จแล้ว",
+   "vessel_import_cancel_success": "การยกเลิกใบคำร้องของคุณสำเร็จแล้ว",
+   "vessel_import_list": "รายการเรือเข้า-ออก",
+   "vessel_import_data": "ข้อมูลเรือเข้า-ออก",
+   "vessel_import_specify_details": "ระบุรายละเอียดข้อมูลเรือเข้า-ออก",
+   "gross_tonnage_title": "ตันกรอส",
+   "vessel_import": "นำเข้าข้อมูลเรือเข้า-ออก",
+   "vessel_import_send": "ส่งข้อมูลเรือเข้า-ออก",
+   "vessel_import_send_success": "การนำเข้าข้อมูลเรือเข้า-ออกของคุณสำเร็จแล้ว",
+   "vessel_import_confirm": "คุณยืนยันการส่งข้อมูลนี้ใช่หรือไม่"
+}

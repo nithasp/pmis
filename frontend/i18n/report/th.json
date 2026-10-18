@@ -1,0 +1,10 @@
+{
+   "report_title_request_document": "รายงานเจ้าหน้าที่ใบคำร้อง",
+   "report_all_list": "รายการทั้งหมด",
+   "report_date_range": "ช่วงวันที่",
+   "export": "นำออก Excel",
+   "please_select_filter": "กรุณาเลือกตัวกรอง",
+   "report_filter_message": "คุณยังไม่ได้เลือกตัวกรอง กรุณาเลือกตัวกรองให้ครบถ้วนและเรียกดูรายงานใหม่อีกครั้ง",
+   "year_era": "ปีศักราช",
+   "print_pdf": "พิมพ์ PDF"
+}

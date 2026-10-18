@@ -1,0 +1,16 @@
+{
+   "contact_person": "ผู้ติดต่อ",
+   "company": "บริษัท",
+   "person_type": "ประเภทบุคคล",
+   "vessel_agents_management": "จัดการตัวแทนเรือ",
+   "vessel_agents_all": "ตัวแทนเรือทั้งหมด",
+   "cancel_vessel_agent": "ยกเลิกตัวแทนเรือ",
+   "confirm_cancel_vessel_agent": "คุณต้องการยกเลิกตัวแทนเรือนี้ใช่หรือไม่<br>หากยกเลิกแล้วจะไม่สามารถกู้คืนได้อีก",
+   "cancel_vessel_agent_success": "การยกเลิกตัวแทนเรือของคุณสำเร็จแล้ว",
+   "create_vessel_agent": "สร้างตัวแทนเรือ",
+   "edit_vessel_agent": "แก้ไขข้อมูลตัวแทนเรือ",
+   "vessel_agent_detail": "รายละเอียดตัวแทนเรือ",
+   "vessel_agent_information": "ข้อมูลตัวแทนเรือ",
+   "corporate": "นิติบุคคล",
+   "personal": "บุคคลธรรมดา"
+}

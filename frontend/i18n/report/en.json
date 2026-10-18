@@ -1,0 +1,10 @@
+{
+   "report_title_request_document": "Application Officer Report",
+   "report_all_list": "Report All List",
+   "report_date_range": "Date Range",
+   "export": "Export Excel",
+   "please_select_filter": "Please Select Filter",
+   "report_filter_message": "You have not selected any filters. Please complete your filters and try reloading the report.",
+   "year_era": "Year Era",
+   "print_pdf": "Print PDF"
+}

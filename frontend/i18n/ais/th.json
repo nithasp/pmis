@@ -1,0 +1,11 @@
+{
+   "water_traffic_map": "แผนที่การจราจรทางน้ำ",
+   "water_traffic_event": "กิจกรรมการจราจรทางน้ำ",
+   "event_date": "วันที่กิจกรรม",
+   "mmsi_no": "MMSI No.",
+   "position": "ตำแหน่ง",
+   "lat": "ละติจูด",
+   "lng": "ลองจิจูด",
+   "ais_log": "บันทึก AIS",
+   "all_ais_log": "รายการ AIS Log ทั้งหมด"
+}
