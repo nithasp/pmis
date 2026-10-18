@@ -1,24 +1,24 @@
-# Nuxt dev/build outputs
-.output
-.data
-.nuxt
-.nitro
-.cache
-dist
+# Dependencies
+node_modules/
 
-# Node dependencies
-node_modules
+# Build outputs
+frontend/.output/
+frontend/.nuxt/
+frontend/.nitro/
+frontend/.cache/
+frontend/dist/
+backend/dist/
 
-# Logs
-logs
-*.log
-
-# Misc
-.DS_Store
-.fleet
-.idea
-
-# Local env files
+# Local environment
 .env
 .env.*
 !.env.example
+
+# Uploaded files of the local storage driver
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Logs and OS files
+*.log
+.DS_Store
+Thumbs.db

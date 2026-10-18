@@ -1,0 +1,7 @@
+dist
+node_modules
+uploads
+package-lock.json
+openapi.yaml
+migrations
+*.md

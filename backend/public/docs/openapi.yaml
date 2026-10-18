@@ -1,0 +1,584 @@
+openapi: 3.1.0
+info:
+  title: PMIS API
+  version: 1.0.0
+  description: |
+    REST API of the Port Management Information System (Map Ta Phut Industrial Port).
+
+    **Envelope.** Every success body is `{ "data": ... }`. Every failure is
+    `{ "error": { "message": "<Thai>", "translation": "<English or i18n key>", "code": "<snake_case>" } }`.
+
+    **Lists** return `{ "data": { "data": [...], "totalItems": n, "totalPages": n } }` and accept
+    `page`, `limit` (`-1` or `0` = all), `search` and `Order` (a JSON array `[{ "column": "...", "dir": "asc|desc" }]`).
+
+    **Auth.** `POST /auth/login` (or `POST /auth/demo`) returns an access token (1 h) and a refresh token (7 d).
+    Send `Authorization: Bearer <access_token>`; when it expires call `POST /auth/refresh` with `{ "refresh_token" }`.
+    Report downloads also accept `?token=<access_token>` so a workbook can be opened in a new tab.
+
+    The same operations are available through GraphQL at `/graphql` (explorer at `/altair/`).
+servers:
+  - url: http://localhost:4100/api/v1
+    description: Local development
+tags:
+  - name: Auth
+  - name: Account
+  - name: Options
+  - name: Master data
+  - name: Users & roles
+  - name: Vessels
+  - name: Request forms
+  - name: VTMS
+  - name: Vessel in-out
+  - name: Port dues
+  - name: Contracts
+  - name: Surveys
+  - name: AIS
+  - name: Reports
+  - name: Files
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    page: { name: page, in: query, schema: { type: integer, default: 1 } }
+    limit: { name: limit, in: query, schema: { type: integer, default: 10 }, description: "-1 or 0 returns everything" }
+    search: { name: search, in: query, schema: { type: string } }
+    order: { name: Order, in: query, schema: { type: string }, description: 'JSON array, e.g. [{"column":"createAt","dir":"desc"}]' }
+    id: { name: id, in: path, required: true, schema: { type: integer } }
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message: { type: string, description: Thai message }
+            translation: { type: string, description: English message or i18n key (email_already_exist, duplicate, ...) }
+            code: { type: string }
+    Token:
+      type: object
+      properties:
+        access_token: { type: string }
+        refresh_token: { type: string }
+    Profile:
+      type: object
+      properties:
+        id: { type: integer }
+        email: { type: string }
+        fullName: { type: string }
+        type: { type: string, enum: [SuperAdmin, Admin, User, Agency] }
+        roleId: { type: integer, nullable: true }
+        roleName: { type: string }
+        roleType: { type: string, description: SuperAdmin | Admin | Agency | DocumentReviewer | DocumentApprove | DocumentBerthOfficerMIT | DocumentBerthOfficerTCT | DocumentBerthOfficerSpacial | StatOfficer | StatApprove | VTMS }
+        company: { type: string }
+        isAcceptedTerm: { type: boolean }
+        isFirstLogin: { type: boolean }
+        isDemo: { type: boolean }
+        uploadFiles: { type: array, items: { $ref: '#/components/schemas/UploadFile' } }
+    LoginResult:
+      type: object
+      properties:
+        token: { $ref: '#/components/schemas/Token' }
+        user: { $ref: '#/components/schemas/Profile' }
+    UploadFile:
+      type: object
+      properties:
+        id: { type: integer }
+        fileName: { type: string }
+        filePath: { type: string, description: Public URL (local /uploads or Cloudflare R2) }
+        preview: { type: string }
+        extension: { type: string }
+        size: { type: integer }
+        fileType: { type: string }
+        document_file_type: { type: string }
+    Page:
+      type: object
+      properties:
+        data: { type: array, items: { type: object } }
+        totalItems: { type: integer }
+        totalPages: { type: integer }
+    DocumentListItem:
+      type: object
+      properties:
+        id: { type: integer }
+        docNumber: { type: string }
+        status: { type: string, enum: [Draft, PendingReview, PendingApproval, PendingConfirmation, PendingConfirmation1, PendingConfirmation2, PendingEdit, Approved, Canceled, AdminCanceled] }
+        statusDes: { type: string }
+        vesselName: { type: string }
+        imoNumber: { type: string }
+        officialNumber: { type: string }
+        grt: { type: number }
+        eta: { type: string, format: date-time, nullable: true }
+        berthNames: { type: string }
+        vesselStatus: { type: string, enum: [PendingBerth, Berth] }
+        agencyName: { type: string }
+        createAt: { type: string, format: date-time }
+    DocumentVessel:
+      type: object
+      properties:
+        vesselId: { type: integer }
+        vesselName: { type: string }
+        vesselFlagId: { type: integer }
+        vesselTypeId: { type: integer }
+        vesselImoNumber: { type: string }
+        vesselOfficialNumber: { type: string }
+        vesselCallSign: { type: string }
+        vesselGrossTonnage: { type: number }
+        vesselNetTonnage: { type: number }
+        vesselLoadWeight: { type: number }
+        vesselLengthOverall: { type: number }
+        vesselBreadthExtreme: { type: number }
+        vesselDepth: { type: number }
+        vesselUploadFiles: { type: array, items: { $ref: '#/components/schemas/UploadFile' } }
+    DocumentBerth:
+      type: object
+      properties:
+        berthId: { type: integer }
+        berthType: { type: string, enum: [MIT, TCT, Spacial, Other] }
+        purposeTypeId: { type: integer }
+        purposeId: { type: integer }
+        cargoTypeId: { type: integer }
+        passengers: { type: integer }
+        estimatedArrival: { type: string, format: date-time }
+        estimatedDeparture: { type: string, format: date-time }
+        note: { type: string }
+        sequence: { type: integer }
+    DocumentProduct:
+      type: object
+      properties:
+        purposeId: { type: integer }
+        productTypeId: { type: integer }
+        productGroupId: { type: integer }
+        cargoWharfageId: { type: integer }
+        mTonQty: { type: number }
+        rTonQty: { type: number }
+        packageAmount: { type: integer }
+        receiver: { type: string }
+        cargoOwnerId: { type: integer }
+    Invoice:
+      type: object
+      properties:
+        customerId: { type: integer, nullable: true }
+        name: { type: string }
+        taxId: { type: string }
+        contactName: { type: string }
+        paymentMethodId: { type: integer }
+        paymentTermId: { type: integer }
+        countryId: { type: integer, description: Thailand is 219 }
+        provinceId: { type: integer }
+        districtId: { type: integer }
+        subDistrictId: { type: integer }
+        postCode: { type: string }
+        stageProvince: { type: string }
+        address: { type: string }
+    Document:
+      type: object
+      properties:
+        id: { type: integer }
+        docNumber: { type: string }
+        status: { type: string }
+        statusDescription: { type: string }
+        vesselStatus: { type: string }
+        rejectedNote: { type: array, items: { type: object, properties: { date: { type: string }, message: { type: string } } } }
+        vessel: { $ref: '#/components/schemas/DocumentVessel' }
+        invoice: { $ref: '#/components/schemas/Invoice' }
+        berths: { type: array, items: { allOf: [{ $ref: '#/components/schemas/DocumentBerth' }, { type: object, properties: { id: { type: integer }, products: { type: array, items: { $ref: '#/components/schemas/DocumentProduct' } }, files: { type: array, items: { $ref: '#/components/schemas/UploadFile' } } } }] } }
+        spacialBerths: { type: array, items: { type: object } }
+        vesselDocuments: { type: array, items: { $ref: '#/components/schemas/UploadFile' } }
+        canApprove: { type: boolean, description: True when the caller's berth office still has to confirm this request }
+        isNewShip: { type: boolean }
+    Vessel:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        owner: { type: string }
+        imoNumber: { type: string }
+        officialNumber: { type: string }
+        callSign: { type: string }
+        grossTonnage: { type: number }
+        vesselFlagId: { type: integer, description: Thailand is 218 }
+        vesselTypeId: { type: integer }
+        uploadFiles: { type: array, items: { $ref: '#/components/schemas/UploadFile' } }
+    LogBookInput:
+      type: object
+      properties:
+        vesselType: { type: string, description: '"government" to log a government vessel from vessel-government' }
+        document_berth_id: { type: integer }
+        vessel_id: { type: integer }
+        gross_tonnage: { type: number }
+        depth: { type: number }
+        voyage: { type: string }
+        port_id_last: { type: integer }
+        port_id_next: { type: integer }
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              type_doc: { type: string, enum: [Arrival, Departure] }
+              berth_id: { type: integer }
+              jetty_id: { type: integer }
+              purpose_id: { type: integer }
+              cargo_type_id: { type: integer }
+              cargo_wharfage_id: { type: integer }
+              mooring_date: { type: string, format: date-time }
+              departure_date: { type: string, format: date-time }
+        tugs: { type: array, items: { type: object, properties: { id: { type: integer }, tug_id: { type: integer }, is_delete: { type: boolean } } } }
+        pilots: { type: array, items: { type: object, properties: { id: { type: integer }, pilot_id: { type: integer }, is_delete: { type: boolean } } } }
+        products: { type: array, items: { type: object, properties: { id: { type: integer }, product_group_id: { type: integer }, product_type_id: { type: integer }, mTonQty: { type: number }, rTonQty: { type: number }, is_delete: { type: boolean } } } }
+    VesselImportInput:
+      type: object
+      properties:
+        vesselId: { type: integer }
+        berthId: { type: integer }
+        jettyId: { type: integer }
+        grossTonnage: { type: number }
+        mooringDate: { type: string, format: date-time }
+        unmooringDate: { type: string, format: date-time }
+        note: { type: string }
+        products: { type: array, items: { type: object, properties: { purposeTypeId: { type: integer, description: 1 Loading, 2 Discharge, 3 Discharge/Loading, 4 Spare Part, 5 Passenger, 6 Other }, productId: { type: integer }, productName: { type: string }, mTonQty: { type: number }, rTonQty: { type: number }, passengers: { type: integer } } } }
+        statementFile: { type: object, properties: { fileId: { type: integer }, isDelete: { type: boolean } } }
+        shipFile: { type: object, properties: { fileId: { type: integer }, isDelete: { type: boolean } } }
+        cargoManifestFile: { type: object, properties: { fileId: { type: integer }, isDelete: { type: boolean } } }
+        surveyorFile: { type: object, properties: { fileId: { type: integer }, isDelete: { type: boolean } } }
+        certificateQuantityFile: { type: object, properties: { fileId: { type: integer }, isDelete: { type: boolean } } }
+        berthBookingRequestFile: { type: object, properties: { fileId: { type: integer }, isDelete: { type: boolean } } }
+        otherFile: { type: object, properties: { fileId: { type: integer }, isDelete: { type: boolean } } }
+  responses:
+    Data: { description: '`{ data: ... }`', content: { application/json: { schema: { type: object, properties: { data: { type: object } } } } } }
+    PageResponse: { description: Paged list, content: { application/json: { schema: { type: object, properties: { data: { $ref: '#/components/schemas/Page' } } } } } }
+    Error: { description: Error envelope, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    File: { description: Binary file, content: { application/octet-stream: { schema: { type: string, format: binary } } } }
+security:
+  - bearerAuth: []
+paths:
+  # ---------------------------------------------------------------- Auth
+  /auth/login:
+    post:
+      tags: [Auth]
+      security: []
+      summary: Sign in with e-mail and password
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [email, password], properties: { email: { type: string }, password: { type: string } } } } } }
+      responses:
+        '200': { description: Tokens and profile, content: { application/json: { schema: { type: object, properties: { data: { $ref: '#/components/schemas/LoginResult' } } } } } }
+        '401': { $ref: '#/components/responses/Error' }
+  /auth/demo:
+    post:
+      tags: [Auth]
+      security: []
+      summary: Sign in as the shared demo account (the frontend calls this automatically for visitors)
+      responses:
+        '200': { description: Tokens and profile of the demo account, content: { application/json: { schema: { type: object, properties: { data: { $ref: '#/components/schemas/LoginResult' } } } } } }
+        '404': { $ref: '#/components/responses/Error' }
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      security: []
+      summary: Rotate the refresh token and get a new access token
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [refresh_token], properties: { refresh_token: { type: string } } } } } }
+      responses:
+        '200': { description: New token pair and the profile, content: { application/json: { schema: { type: object, properties: { data: { $ref: '#/components/schemas/LoginResult' } } } } } }
+        '401': { $ref: '#/components/responses/Error' }
+  /auth/logout:
+    post: { tags: [Auth], summary: Revoke the current session, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /auth/user:
+    get: { tags: [Auth], summary: Profile of the signed-in account, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /auth/password/forgot:
+    post: { tags: [Auth], security: [], summary: Send a password-reset link (logged, and returned as verifyUrl outside production), requestBody: { content: { application/json: { schema: { type: object, properties: { email: { type: string } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' }, '404': { $ref: '#/components/responses/Error' } } }
+  /auth/password/verify-token:
+    post: { tags: [Auth], security: [], summary: Check a reset token, requestBody: { content: { application/json: { schema: { type: object, properties: { password_reset_token: { type: string } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /auth/password/reset:
+    post: { tags: [Auth], security: [], summary: Set a new password with a reset token, requestBody: { content: { application/json: { schema: { type: object, properties: { password_reset_token: { type: string }, new_password: { type: string } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /verify/send_email:
+    post: { tags: [Auth], security: [], summary: Start a vessel-agency registration by verifying an e-mail, requestBody: { content: { application/json: { schema: { type: object, properties: { email: { type: string } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' }, '409': { $ref: '#/components/responses/Error' } } }
+  /verify/email:
+    post: { tags: [Auth], security: [], summary: Validate a registration token, requestBody: { content: { application/json: { schema: { type: object, properties: { token: { type: string } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /user/register:
+    post: { tags: [Auth], security: [], summary: Register a vessel agency (needs the verified token), responses: { '200': { $ref: '#/components/responses/Data' } } }
+  # ---------------------------------------------------------------- Account
+  /user/term:
+    post: { tags: [Account], summary: Accept the terms and conditions, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /user/update:
+    post: { tags: [Account], summary: Update own profile (an e-mail change returns isChangeEmail and needs the mailed code), responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /user/password:
+    post: { tags: [Account], summary: Verify the current password, requestBody: { content: { application/json: { schema: { type: object, properties: { old_password: { type: string } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /user/password/reset:
+    post: { tags: [Account], summary: Change the password (first login), requestBody: { content: { application/json: { schema: { type: object, properties: { password: { type: string }, confirm_password: { type: string } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /user/verify/send_email:
+    post: { tags: [Account], summary: Send the e-mail change code, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /user/{id}:
+    get: { tags: [Account], summary: Account detail, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /user/address/list/{userId}:
+    get: { tags: [Account], summary: Billing addresses of a user, parameters: [{ name: userId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /user/address/{userId}:
+    post: { tags: [Account], summary: Add a billing address, parameters: [{ name: userId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    put: { tags: [Account], summary: Update a billing address (body carries id), parameters: [{ name: userId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /user/address/{addressId}:
+    delete: { tags: [Account], summary: Delete a billing address, parameters: [{ name: addressId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /contents/terms:
+    get: { tags: [Account], security: [], summary: Current terms and conditions, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  # ---------------------------------------------------------------- Options
+  /options/{kind}:
+    get:
+      tags: [Options]
+      summary: Dropdown sources
+      description: 'kinds: countries, provinces, districts?province_id=, subdistricts?district_id= (public); roles, authority, vessel-flags, vessel-types, vessel-owners?q=, vessel-status, vessel-import-status, document-status, agency-document-status, berths, berth-types, jetties, berth-jetties/{berthId}, purposes, purpose-types, locations, products, product-groups, product-types, cargo-types, cargo-wharfage, payment-methods, payment-terms, cargo-owners'
+      parameters: [{ name: kind, in: path, required: true, schema: { type: string } }]
+      responses: { '200': { $ref: '#/components/responses/Data' } }
+  /customers/search:
+    get: { tags: [Options], summary: Billing customers for the invoice form, parameters: [{ name: search, in: query, schema: { type: string } }, { name: field, in: query, schema: { type: string, enum: [name, tax_id] } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  # ---------------------------------------------------------------- Master data
+  /admin/master-data/{kind}:
+    get:
+      tags: [Master data]
+      summary: Master data list
+      description: 'kinds: berth, port, locate, use-berth, purpose, purpose-type, cargo-type, cargo-wharfage, product, product-type, product-type/list, product-type/type/{groupId}, product-group/list, vessel-type, vessel-flag, pilot/list, tug/list. Filters: status=true|false, vessel_type_id, country_id, purpose_type_id'
+      parameters: [{ name: kind, in: path, required: true, schema: { type: string } }, { $ref: '#/components/parameters/page' }, { $ref: '#/components/parameters/limit' }, { $ref: '#/components/parameters/search' }, { $ref: '#/components/parameters/order' }]
+      responses: { '200': { $ref: '#/components/responses/PageResponse' } }
+    post: { tags: [Master data], summary: Create a master record (officers), parameters: [{ name: kind, in: path, required: true, schema: { type: string } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/master-data/{kind}/{id}:
+    get: { tags: [Master data], summary: Master record, parameters: [{ name: kind, in: path, required: true, schema: { type: string } }, { $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    put: { tags: [Master data], summary: Update a master record (officers), parameters: [{ name: kind, in: path, required: true, schema: { type: string } }, { $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/master-data/upload:
+    post: { tags: [Files], summary: Upload a master-data file (vessel flag image), requestBody: { content: { multipart/form-data: { schema: { type: object, properties: { file: { type: string, format: binary } } } } } }, responses: { '200': { description: Stored file, content: { application/json: { schema: { type: object, properties: { data: { $ref: '#/components/schemas/UploadFile' } } } } } } } }
+  # ---------------------------------------------------------------- Users & roles
+  /admin/roles:
+    get: { tags: [Users & roles], summary: Roles, parameters: [{ $ref: '#/components/parameters/page' }, { $ref: '#/components/parameters/limit' }, { $ref: '#/components/parameters/search' }], responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+    post: { tags: [Users & roles], summary: Create a role, requestBody: { content: { application/json: { schema: { type: object, properties: { name: { type: string }, activated: { type: boolean }, permissions: { type: array, items: { type: string } }, roleType: { type: string } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/roles/{id}:
+    get: { tags: [Users & roles], summary: Role with its permission codes, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    put: { tags: [Users & roles], summary: Update a role, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    delete: { tags: [Users & roles], summary: Delete a role (use /{id}/{newRoleId} to move its users), parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/roles/{id}/status:
+    put: { tags: [Users & roles], summary: Activate or deactivate a role, parameters: [{ $ref: '#/components/parameters/id' }], requestBody: { content: { application/json: { schema: { type: object, properties: { enabled: { type: boolean } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/users:
+    get: { tags: [Users & roles], summary: Officer accounts, parameters: [{ $ref: '#/components/parameters/page' }, { $ref: '#/components/parameters/limit' }, { $ref: '#/components/parameters/search' }, { name: enabled, in: query, schema: { type: string } }, { name: roleId, in: query, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+    post: { tags: [Users & roles], summary: Create an officer (a password-setup link is mailed/logged), responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/users/{id}:
+    get: { tags: [Users & roles], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    put: { tags: [Users & roles], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    delete: { tags: [Users & roles], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/users/{id}/status:
+    put: { tags: [Users & roles], summary: Enable or disable an officer, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vessel-agencies:
+    get: { tags: [Users & roles], summary: Vessel agencies, parameters: [{ $ref: '#/components/parameters/page' }, { $ref: '#/components/parameters/limit' }, { $ref: '#/components/parameters/search' }, { name: status, in: query, schema: { type: string, enum: [WaitingApproved, Approved] } }, { name: personType, in: query, schema: { type: string } }], responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+    post: { tags: [Users & roles], summary: Create an agency, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vessel-agencies/{id}:
+    get: { tags: [Users & roles], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    put: { tags: [Users & roles], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    delete: { tags: [Users & roles], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vessel-agencies/{id}/approve:
+    put: { tags: [Users & roles], summary: Approve a registration, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  # ---------------------------------------------------------------- Vessels
+  /admin/vessels:
+    get: { tags: [Vessels], summary: Vessels (agencies see their own unless showAll=true), parameters: [{ $ref: '#/components/parameters/page' }, { $ref: '#/components/parameters/limit' }, { $ref: '#/components/parameters/search' }, { name: flag, in: query, schema: { type: integer } }, { name: type, in: query, schema: { type: integer } }, { name: owner, in: query, schema: { type: string } }, { name: showAll, in: query, schema: { type: boolean } }], responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+    post: { tags: [Vessels], summary: Register a vessel, responses: { '200': { description: Vessel, content: { application/json: { schema: { type: object, properties: { data: { $ref: '#/components/schemas/Vessel' } } } } } } } }
+  /admin/vessels/{id}:
+    get: { tags: [Vessels], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    put: { tags: [Vessels], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vessels/{id}/history:
+    get: { tags: [Vessels], summary: Snapshots of the vessel on past requests, parameters: [{ $ref: '#/components/parameters/id' }, { name: approvedDateBegin, in: query, schema: { type: string } }, { name: approvedDateEnd, in: query, schema: { type: string } }], responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+  /admin/vessels/uploads:
+    post: { tags: [Files], summary: Upload a vessel document, requestBody: { content: { multipart/form-data: { schema: { type: object, properties: { file: { type: string, format: binary }, type: { type: string } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vessel-government:
+    get: { tags: [Vessels], summary: Government vessels, responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+    post: { tags: [Vessels], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vessel-government/{id}:
+    get: { tags: [Vessels], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    put: { tags: [Vessels], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    delete: { tags: [Vessels], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  # ---------------------------------------------------------------- Request forms
+  /admin/documents:
+    get:
+      tags: [Request forms]
+      summary: Request forms (agencies see their own)
+      parameters: [{ $ref: '#/components/parameters/page' }, { $ref: '#/components/parameters/limit' }, { $ref: '#/components/parameters/search' }, { $ref: '#/components/parameters/order' }, { name: status, in: query, schema: { type: string }, description: 'comma separated, e.g. PendingConfirmation,PendingConfirmation1,PendingConfirmation2' }, { name: berthId, in: query, schema: { type: integer } }, { name: begin, in: query, schema: { type: string } }, { name: end, in: query, schema: { type: string } }, { name: etaBegin, in: query, schema: { type: string } }, { name: etaEnd, in: query, schema: { type: string } }, { name: vesselStatus, in: query, schema: { type: string } }, { name: vesselFlagId, in: query, schema: { type: integer } }, { name: purposeId, in: query, schema: { type: integer } }]
+      responses: { '200': { description: Paged request forms, content: { application/json: { schema: { type: object, properties: { data: { type: object, properties: { data: { type: array, items: { $ref: '#/components/schemas/DocumentListItem' } }, totalItems: { type: integer }, totalPages: { type: integer } } } } } } } } }
+    post:
+      tags: [Request forms]
+      summary: Step 1 of the form - vessel block (creates or updates the agency's draft)
+      requestBody: { content: { application/json: { schema: { $ref: '#/components/schemas/DocumentVessel' } } } }
+      responses: { '200': { description: The draft, content: { application/json: { schema: { type: object, properties: { data: { $ref: '#/components/schemas/Document' } } } } } } }
+  /admin/admin-documents:
+    get: { tags: [Request forms], summary: Request forms across all agencies (officers), responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+  /admin/documents/draft:
+    get: { tags: [Request forms], summary: The caller's current draft (an empty shell when none), responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}:
+    get: { tags: [Request forms], summary: Request form detail, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { description: Detail, content: { application/json: { schema: { type: object, properties: { data: { $ref: '#/components/schemas/Document' } } } } } } } }
+    put: { tags: [Request forms], summary: Update the vessel block, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}/admin:
+    get: { tags: [Request forms], summary: Detail for officers, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}/reviews:
+    get: { tags: [Request forms], summary: Previous version (documentHistory) for the side-by-side review, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}/export-pdf:
+    get: { tags: [Request forms], summary: PDF of the request, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/File' } } }
+  /admin/documents/{id}/submit-for-review:
+    put: { tags: [Request forms], summary: 'Draft / PendingEdit -> PendingReview (assigns the document number)', parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}/approve:
+    put:
+      tags: [Request forms]
+      summary: 'Reviewer: PendingReview -> PendingApproval. Approver: PendingApproval -> PendingConfirmation (or Approved). Berth officer: confirms the berths of their type; Approved once every berth type confirmed'
+      parameters: [{ $ref: '#/components/parameters/id' }]
+      requestBody: { content: { application/json: { schema: { type: object, properties: { spacialBerths: { type: array, items: { type: object, properties: { berthId: { type: integer }, jettyId: { type: integer } } } } } } } } }
+      responses: { '200': { $ref: '#/components/responses/Data' } }
+  /admin/documents/{id}/reject:
+    put: { tags: [Request forms], summary: Send back for editing (PendingEdit) with a note, parameters: [{ $ref: '#/components/parameters/id' }], requestBody: { content: { application/json: { schema: { type: object, properties: { rejectNote: { type: string } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}/recall:
+    put: { tags: [Request forms], summary: Take a PendingEdit request back into the queue, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}/request-edit:
+    put: { tags: [Request forms], summary: VTMS asks the agency to correct the request, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}/cancel:
+    put: { tags: [Request forms], summary: Agency cancels, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}/admin-cancel:
+    put: { tags: [Request forms], summary: Officer cancels, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}/berths:
+    post: { tags: [Request forms], summary: Step 2 - add a berth, parameters: [{ $ref: '#/components/parameters/id' }], requestBody: { content: { application/json: { schema: { $ref: '#/components/schemas/DocumentBerth' } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}/berths/{berthId}:
+    get: { tags: [Request forms], parameters: [{ $ref: '#/components/parameters/id' }, { name: berthId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    put: { tags: [Request forms], parameters: [{ $ref: '#/components/parameters/id' }, { name: berthId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    delete: { tags: [Request forms], parameters: [{ $ref: '#/components/parameters/id' }, { name: berthId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}/berths/{berthId}/products:
+    post: { tags: [Request forms], summary: Add a cargo line to a berth, parameters: [{ $ref: '#/components/parameters/id' }, { name: berthId, in: path, required: true, schema: { type: integer } }], requestBody: { content: { application/json: { schema: { $ref: '#/components/schemas/DocumentProduct' } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}/berths/{berthId}/products/{productId}:
+    get: { tags: [Request forms], parameters: [{ $ref: '#/components/parameters/id' }, { name: berthId, in: path, required: true, schema: { type: integer } }, { name: productId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    put: { tags: [Request forms], parameters: [{ $ref: '#/components/parameters/id' }, { name: berthId, in: path, required: true, schema: { type: integer } }, { name: productId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    delete: { tags: [Request forms], parameters: [{ $ref: '#/components/parameters/id' }, { name: berthId, in: path, required: true, schema: { type: integer } }, { name: productId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}/berths/{berthId}/uploads:
+    post: { tags: [Files], summary: Attach a file to a berth, parameters: [{ $ref: '#/components/parameters/id' }, { name: berthId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}/berths/{berthId}/files/{fileId}:
+    delete: { tags: [Files], parameters: [{ $ref: '#/components/parameters/id' }, { name: berthId, in: path, required: true, schema: { type: integer } }, { name: fileId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/{id}/customers:
+    post: { tags: [Request forms], summary: Step 3 - invoice details, parameters: [{ $ref: '#/components/parameters/id' }], requestBody: { content: { application/json: { schema: { $ref: '#/components/schemas/Invoice' } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/uploads:
+    post: { tags: [Files], summary: Upload a request-form document, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/vessel/{vesselId}:
+    get: { tags: [Request forms], summary: Requests of one vessel, parameters: [{ name: vesselId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+  /admin/documents/berths/{berthAlt}:
+    get: { tags: [Request forms], summary: 'Ship table: approved requests waiting at a berth type (mit, tct, spacial)', parameters: [{ name: berthAlt, in: path, required: true, schema: { type: string } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/berths/etd/{documentBerthId}:
+    put: { tags: [Request forms], summary: Assign jetty, ETB and ETD, parameters: [{ name: documentBerthId, in: path, required: true, schema: { type: integer } }], requestBody: { content: { application/json: { schema: { type: object, properties: { jettyId: { type: integer }, etb: { type: string }, etd: { type: string } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/vessel-in/{berthAlt}:
+    get: { tags: [Request forms], summary: 'Ship table: vessels alongside at a berth type', parameters: [{ name: berthAlt, in: path, required: true, schema: { type: string } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/documents/vessel-in/{logBookId}:
+    put: { tags: [Request forms], summary: Update the ETD of a vessel alongside, parameters: [{ name: logBookId, in: path, required: true, schema: { type: integer } }], requestBody: { content: { application/json: { schema: { type: object, properties: { etd: { type: string } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  # ---------------------------------------------------------------- VTMS
+  /admin/vtms/:
+    get: { tags: [VTMS], summary: 'Dashboard counters: vessel_in, vessel_out, vessel_dock, anchor', responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vtms/documents:
+    get: { tags: [VTMS], summary: Requests for the VTMS desk, parameters: [{ name: keyword, in: query, schema: { type: string } }, { name: berthId, in: query, schema: { type: integer } }, { name: status, in: query, schema: { type: string } }, { name: etaBegin, in: query, schema: { type: string } }, { name: etaEnd, in: query, schema: { type: string } }], responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+  /admin/vtms/log-book:
+    get: { tags: [VTMS], summary: Log book entries (snake_case rows), parameters: [{ $ref: '#/components/parameters/page' }, { $ref: '#/components/parameters/limit' }, { $ref: '#/components/parameters/search' }, { name: status, in: query, schema: { type: string, enum: [Arrival, Departure] } }, { name: berth_id, in: query, schema: { type: integer } }, { name: berth_ids, in: query, schema: { type: string } }, { name: purpose_type_ids, in: query, schema: { type: string } }, { name: mooringDateBegin, in: query, schema: { type: string } }, { name: mooringDateEnd, in: query, schema: { type: string } }], responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+    post: { tags: [VTMS], summary: Log an arrival, departure or shift, requestBody: { content: { application/json: { schema: { $ref: '#/components/schemas/LogBookInput' } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vtms/log-book/{id}:
+    get: { tags: [VTMS], summary: Log book entry (details as an array), parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    put: { tags: [VTMS], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    delete: { tags: [VTMS], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vtms/log-book/doc/{documentId}:
+    get: { tags: [VTMS], summary: Latest log of a request (details as an object), parameters: [{ name: documentId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vtms/log-book/doc/{id}/berth:
+    get: { tags: [VTMS], summary: Berths of a request with the open actions (is_vessel_in / is_vessel_out / is_vessel_shift), parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vtms/anchor:
+    get: { tags: [VTMS], summary: Anchor drops, responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+    post: { tags: [VTMS], summary: Record anchor drops of a vessel (anchors[]), responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vtms/anchor/{id}:
+    get: { tags: [VTMS], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    put: { tags: [VTMS], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    delete: { tags: [VTMS], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vtms/anchor/doc/{documentId}:
+    get: { tags: [VTMS], summary: Anchor drops of a request, parameters: [{ name: documentId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  # ---------------------------------------------------------------- Vessel in-out
+  /admin/vessel-import/list:
+    get: { tags: [Vessel in-out], summary: Reports of the agency (statuses PendingSend, PendingEdit, Send, RequestEdit ...), parameters: [{ $ref: '#/components/parameters/page' }, { $ref: '#/components/parameters/limit' }, { $ref: '#/components/parameters/search' }, { name: status, in: query, schema: { type: string } }, { name: berthId, in: query, schema: { type: integer } }, { name: jettyId, in: query, schema: { type: integer } }, { name: mooringDateBegin, in: query, schema: { type: string } }, { name: mooringDateEnd, in: query, schema: { type: string } }], responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+  /admin/vessel-import/list/send:
+    get: { tags: [Vessel in-out], summary: Sent reports for the statistics desk (grtVS / grtVT / mooringDateVS / mooringDateVT), parameters: [{ name: status, in: query, schema: { type: string }, description: 'Send,PendingCheck | PendingApproval | Approved | PendingEdit | RequestEdit' }, { name: productName, in: query, schema: { type: string } }, { name: purposeTypeId, in: query, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+  /admin/vessel-import/:
+    post: { tags: [Vessel in-out], summary: Create and send a report, requestBody: { content: { application/json: { schema: { $ref: '#/components/schemas/VesselImportInput' } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vessel-import/{id}:
+    get: { tags: [Vessel in-out], summary: Report detail (products grouped by Passenger / Spare Part / Other / cargo), parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    put: { tags: [Vessel in-out], summary: Update a report, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    post: { tags: [Vessel in-out], summary: 'Send reports from an uploaded .xlsx ({id} is the uploaded file id); returns the rows that could not be imported', parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    delete: { tags: [Vessel in-out], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vessel-import/map/{id}:
+    get: { tags: [Vessel in-out], summary: Agency / VS / VT comparison for the statistics desk, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vessel-import/map/{id}/{logBookId}:
+    put: { tags: [Vessel in-out], summary: Match a report with a VTMS log entry, parameters: [{ $ref: '#/components/parameters/id' }, { name: logBookId, in: path, required: true, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vessel-import/edit/{id}:
+    put: { tags: [Vessel in-out], summary: Agency asks to edit a sent report (RequestEdit), parameters: [{ $ref: '#/components/parameters/id' }], requestBody: { content: { application/json: { schema: { type: object, properties: { note: { type: string } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vessel-import/return/{id}:
+    put: { tags: [Vessel in-out], summary: Officer returns a report (PendingEdit), parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vessel-import/approve/{id}:
+    put: { tags: [Vessel in-out], summary: 'Statistics officer: -> PendingApproval. Head of statistics: -> Approved', parameters: [{ $ref: '#/components/parameters/id' }], requestBody: { content: { application/json: { schema: { type: object, properties: { grossTonnage: { type: number } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/vessel-import/approve/edit/{id}/{type}:
+    put: { tags: [Vessel in-out], summary: Allow (true) or refuse (false) an edit request, parameters: [{ $ref: '#/components/parameters/id' }, { name: type, in: path, required: true, schema: { type: boolean } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/template/{fileTemplate}:
+    get: { tags: [Files], summary: Download link of a template (vessel-import, vessel, agent), parameters: [{ name: fileTemplate, in: path, required: true, schema: { type: string } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  # ---------------------------------------------------------------- Port dues
+  /port-dues/pending:
+    get: { tags: [Port dues], summary: Berthed vessels without an invoice, parameters: [{ $ref: '#/components/parameters/page' }, { $ref: '#/components/parameters/limit' }, { $ref: '#/components/parameters/search' }, { name: customerName, in: query, schema: { type: string } }, { name: berthId, in: query, schema: { type: integer } }, { name: begin, in: query, schema: { type: string } }, { name: end, in: query, schema: { type: string } }], responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+  /port-dues/pending/{id}:
+    get: { tags: [Port dues], summary: Invoice preview for a request (rate x GRT, 7% VAT, due date), parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /port-dues:
+    get: { tags: [Port dues], summary: Issued invoices, responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+    post: { tags: [Port dues], summary: Issue an invoice (body = the preview, optionally edited), responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /port-dues/{id}:
+    get: { tags: [Port dues], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /port-dues/{id}/cancel:
+    put: { tags: [Port dues], summary: Cancel an invoice, parameters: [{ $ref: '#/components/parameters/id' }], requestBody: { content: { application/json: { schema: { type: object, properties: { note: { type: string } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  # ---------------------------------------------------------------- Contracts
+  /contracts:
+    get: { tags: [Contracts], summary: Berth contracts, parameters: [{ name: contractNumber, in: query, schema: { type: string } }, { name: berthId, in: query, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+    post: { tags: [Contracts], summary: Create a contract (contractNo must be unique), responses: { '200': { $ref: '#/components/responses/Data' }, '409': { $ref: '#/components/responses/Error' } } }
+  /contracts/rates:
+    get: { tags: [Contracts], summary: Yearly rate schedule for the given terms, parameters: [{ name: start, in: query, schema: { type: string } }, { name: end, in: query, schema: { type: string } }, { name: initialRate, in: query, schema: { type: number } }, { name: annualIncreaseRate, in: query, schema: { type: number } }, { name: rateChangeCycle, in: query, schema: { type: integer } }, { name: rateChangeStartYear, in: query, schema: { type: string } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /contracts/upload:
+    post: { tags: [Files], summary: Upload a contract document, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /contracts/{id}:
+    get: { tags: [Contracts], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    put: { tags: [Contracts], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    delete: { tags: [Contracts], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  # ---------------------------------------------------------------- Surveys
+  /admin/survey/list:
+    get: { tags: [Surveys], parameters: [{ name: beginDate, in: query, schema: { type: string } }, { name: endDate, in: query, schema: { type: string } }], responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+  /admin/survey:
+    post: { tags: [Surveys], summary: Create a survey with sections, questions and options, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/survey/{id}:
+    get: { tags: [Surveys], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    put: { tags: [Surveys], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+    delete: { tags: [Surveys], parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/survey/{id}/result:
+    get: { tags: [Surveys], summary: Answers aggregated per question, parameters: [{ $ref: '#/components/parameters/id' }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/survey/send/{id}:
+    post: { tags: [Surveys], summary: E-mail answer links, parameters: [{ $ref: '#/components/parameters/id' }], requestBody: { content: { application/json: { schema: { type: object, properties: { emails: { type: array, items: { type: string } } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /survey/{token}:
+    get: { tags: [Surveys], security: [], summary: Survey behind an e-mailed token (code success_survey once answered), parameters: [{ name: token, in: path, required: true, schema: { type: string } }], responses: { '200': { $ref: '#/components/responses/Data' }, '404': { $ref: '#/components/responses/Error' } } }
+  /survey:
+    post: { tags: [Surveys], security: [], summary: Submit answers, requestBody: { content: { application/json: { schema: { type: object, properties: { token: { type: string }, surveyId: { type: integer }, questions: { type: array, items: { type: object, properties: { questionId: { type: integer }, ansText: { type: string }, ansOptionId: { type: integer }, ansPoint: { type: integer } } } } } } } } }, responses: { '200': { $ref: '#/components/responses/Data' } } }
+  # ---------------------------------------------------------------- AIS
+  /admin/ais/activity:
+    get: { tags: [AIS], summary: Vessel positions, responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+  /admin/ais/activity/map:
+    get: { tags: [AIS], summary: Live ships for the map (provider field names MMSI, Lat, Lon, COG ...), responses: { '200': { $ref: '#/components/responses/Data' } } }
+  /admin/ais/logs:
+    get: { tags: [AIS], summary: Arrivals and departures seen by AIS, parameters: [{ name: berthId, in: query, schema: { type: integer } }, { name: arrivalBeginDate, in: query, schema: { type: string } }, { name: arrivalEndDate, in: query, schema: { type: string } }], responses: { '200': { $ref: '#/components/responses/PageResponse' } } }
+  # ---------------------------------------------------------------- Reports
+  /reports/{name}:
+    get:
+      tags: [Reports]
+      summary: Excel workbook
+      description: 'names: sum-submit-late-order, sum-submit-late-list, user-document-count, document-count, approved-agency, sum-vessel-agency, sum-port-due-agency, sum-cargo-value-port-agency, sum-foreigner-agency, sum-foreigner-port-due-agency, sum-foreigner-cargo-value-port-agency. Accepts ?token= for the Office preview.'
+      parameters: [{ name: name, in: path, required: true, schema: { type: string } }, { name: startDate, in: query, schema: { type: string } }, { name: endDate, in: query, schema: { type: string } }, { name: year, in: query, schema: { type: string, enum: [christian, buddhist] } }, { name: berthId, in: query, schema: { type: integer } }, { name: token, in: query, schema: { type: string } }]
+      responses: { '200': { $ref: '#/components/responses/File' } }
+  /reports/{name}/pdf:
+    get: { tags: [Reports], summary: Report rows as JSON for the in-browser PDF pages, parameters: [{ name: name, in: path, required: true, schema: { type: string } }, { name: startDate, in: query, schema: { type: string } }, { name: endDate, in: query, schema: { type: string } }, { name: berthId, in: query, schema: { type: integer } }], responses: { '200': { $ref: '#/components/responses/Data' } } }
+  # ---------------------------------------------------------------- Files
+  /upload/register:
+    post: { tags: [Files], security: [], summary: Upload a registration document before an account exists, requestBody: { content: { multipart/form-data: { schema: { type: object, properties: { file: { type: string, format: binary }, type: { type: string } } } } } }, responses: { '200': { description: Stored file, content: { application/json: { schema: { type: object, properties: { data: { $ref: '#/components/schemas/UploadFile' } } } } } } } }
+  /downloads/agent-template:
+    get: { tags: [Files], security: [], summary: Agent registration manual (PDF), responses: { '200': { $ref: '#/components/responses/File' } } }
+  /downloads/vessel-template:
+    get: { tags: [Files], security: [], summary: Vessel import template (xlsx), responses: { '200': { $ref: '#/components/responses/File' } } }
+  /downloads/vessel-import-template:
+    get: { tags: [Files], security: [], summary: Vessel in-out report template (xlsx), responses: { '200': { $ref: '#/components/responses/File' } } }

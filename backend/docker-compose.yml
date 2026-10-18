@@ -1,0 +1,33 @@
+name: pmis-upgrade
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: pmis-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: pmis_user
+      POSTGRES_PASSWORD: pmis_pass
+      POSTGRES_DB: pmis_dev
+    ports:
+      - '127.0.0.1:5435:5432'
+    volumes:
+      - pmis_postgres17_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U pmis_user -d pmis_dev']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    image: adminer
+    container_name: pmis-adminer
+    restart: always
+    ports:
+      - '127.0.0.1:8082:8080'
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pmis_postgres17_data:

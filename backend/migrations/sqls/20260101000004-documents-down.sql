@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS document_histories CASCADE;
+DROP TABLE IF EXISTS document_spacial_berths CASCADE;
+DROP TABLE IF EXISTS document_invoices CASCADE;
+DROP TABLE IF EXISTS document_berth_files CASCADE;
+DROP TABLE IF EXISTS document_berth_products CASCADE;
+DROP TABLE IF EXISTS document_berths CASCADE;
+DROP TABLE IF EXISTS document_files CASCADE;
+DROP TABLE IF EXISTS document_vessels CASCADE;
+DROP TABLE IF EXISTS documents CASCADE;
