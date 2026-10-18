@@ -58,14 +58,12 @@
                <tr v-for="(subRow, subIndex) in row.refDocuments" :key="subIndex">
                   <td v-for="(column, colIndex) in columns" :key="colIndex"
                      class="whitespace-nowrap px-4 py-4 text-grayy-400 text-sm">
-                     <!-- Render the value dynamically based on the column key -->
                      <template v-if="column.key">
                         <span class="text-grayy-75">
                            <template v-if="column.key === 'invoiceNo'">
                               {{ subRow.portDueNumber }}
                            </template>
                            <template v-if="column.key === 'grt_portdues'">
-                              <!-- {{ subRow[column.key]?.grt || "-" }} {{ subRow[column.key]?.portDue || "-" }} -->
                               {{ `฿ ${formatNumber(subRow.total)}` }}
                            </template>
                            <template v-else-if="column.key === 'invoice_issuer_date'">
@@ -95,7 +93,6 @@
                   <td :colspan="columns.length - 3">
                      <div class="text-sm p-4">
                         <span class="text-red-600">{{ t('remarks') }} {{ row.cancelNote }}</span>
-                        <!-- <span class="text-grayy-75"> ({{ renderDateFormat(row.canceledAt) + ' ' + renderTimeFormat(row.canceledAt) }})</span> -->
                      </div>
                   </td>
                </tr>
@@ -142,7 +139,6 @@
                <div class="text-black font-semibold">{{ row.berthAt && renderDateFormat(row.berthAt) }}</div>
                <div class="text-grayy-75">{{ row.berthAt && renderTimeFormat(row.berthAt) }}</div>
             </template>
-            <!-- invoice_issuer_date -->
             <template #invoice_issuer_date-data="{ row }: any">
                <div class="text-grayy-75">{{ row.createdAt &&
                   renderDateFormat(row.createdAt)
@@ -282,9 +278,7 @@ const vesselList = ref<any[]>([
       grt_portdues: { grt: "3,501.000", portDue: "฿ 29,968.56" },
       ports: "PTT TANK",
       paymentMethod: "Bank Guarantee",
-
    }
-
 ]);
 const paginationData = ref({
    totalItems: 0,
@@ -364,7 +358,6 @@ const handleClickResetFitler = () => {
    });
 };
 
-
 const columns = [
    { key: "id", label: "ลำดับ", sortable: false },
    { key: "show", label: "แสดง", expandButton: true, sortable: false },
@@ -381,13 +374,9 @@ const columns = [
    { key: "actions", label: "", sortable: false },
 ];
 
-
 onMounted(() => {
    getPortDuesInvoiceList(filter.value);
    documentOptionsStore.getBerthsOptions()
-   // getVesselList(filter.value);
-   // vesselOptionsStore.getVesselTypeOption();
-   // vesselOptionsStore.getVesselFlagOption();
 });
 
 const renderFlagAvatar = (vesselFlagId: number) => {
@@ -401,12 +390,9 @@ const renderFlagAvatar = (vesselFlagId: number) => {
    return "";
 };
 
-
 onMounted(() => {
    getPortDuesInvoiceList(filter.value);
    documentOptionsStore.getBerthsOptions()
-   // vesselOptionsStore.getVesselTypeOption();
-   // vesselOptionsStore.getVesselFlagOption();
 });
 
 const getPortDuesInvoiceList = async (filter: IFilterPortDuesPending = {

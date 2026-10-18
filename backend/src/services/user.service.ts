@@ -101,7 +101,6 @@ export function createUserService({ users, roles, verifications, files, tokens }
       return toUserSystem(row, await files.refs('user', id));
     },
 
-    // ---- officers (users-management) -------------------------------------------------------
     listOfficers(filter: { enabled?: string; roleId?: number }, query: ListQuery): Promise<PagedResult<Row>> {
       return users.list({ type: ['User', 'Admin', 'SuperAdmin'], ...filter }, query).then(withFiles);
     },
@@ -171,7 +170,6 @@ export function createUserService({ users, roles, verifications, files, tokens }
       await tokens.revokeAllSessions(id);
     },
 
-    // ---- vessel agencies -------------------------------------------------------------------
     listAgencies(filter: { status?: string; personType?: string; begin?: unknown; end?: unknown }, query: ListQuery) {
       return users.list({ type: 'Agency', ...filter }, query).then(withFiles);
     },
@@ -247,7 +245,6 @@ export function createUserService({ users, roles, verifications, files, tokens }
       return this.detail(id);
     },
 
-    // ---- own profile (settings) -----------------------------------------------------------
     async updateProfile(userId: number, input: Row, by: string): Promise<Row> {
       const existing = await users.findById(userId);
       if (!existing) throw notFound('ผู้ใช้งาน', 'user not found');

@@ -275,7 +275,6 @@ const authorityList = ref([]);
 const vesselOptionsStore = useVesselOptionsStore();
 
 onMounted(async () => {
-   // vesselOptionsStore.getVesselTypeOption();
   await vesselOptionsStore.getVesselFlagOption();
    getAuthorityList();
    if (vesselGovernmentId) {
@@ -288,9 +287,9 @@ onBeforeRouteLeave((to, from, next) => {
    if (notAllowNavigate.value && !isView) {
       isConfirmLeaveDialogOpen.value = true;
       nextRoute.value = to;
-      next(false); // Prevent navigation until confirmed
+      next(false);
    } else {
-      next(); // Allow navigation
+      next();
    }
 });
 
@@ -343,7 +342,6 @@ const getAuthorityList = async () => {
 const validate = (field: string, valueSelected: any = 0) => {
    const validationErrors: FormError[] = [];
 
-   // Clear previous errors for the specific field and add the new error if any
    errors.value = errors.value.filter((err) => err.path !== field);
    if (validationErrors.length) {
       errors.value.push(...validationErrors);

@@ -95,16 +95,6 @@ export interface IVtmsLogBookAdd {
    port_id_last: number;
    voyage: string;
    details: [
-    //   {
-    //      type_doc: string;
-    //      berth_id: number;
-    //      purpose_id: number;
-    //      locate_id: number;
-    //      use_berth_id: number;
-    //      jetty_id: number;
-    //      mooring_date: any;
-    //      departure_date: any;
-    //   }
    ];
    tugs: [];
    pilots: [];

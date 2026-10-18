@@ -2,7 +2,6 @@
    <div class="mb-8">
       <h1 class="font-bold text-[30px]">Anchor</h1>
    </div>
-   <!-- <UForm :schema="anchorSchema" :state="formGroup" @submit="onSubmit"> -->
    <div id="log-book-create-form-content" class="bg-white px-8 py-6 rounded-[0px_0px_20px_20px]">
       <div class="flex items-center justify-between mb-5">
          <div>
@@ -11,7 +10,6 @@
          </div>
          <div class="">
             <UButton @click="handleCancleCreateVessel" class="mx-2 border border-grayy-100" size="md" color="gray" :label="isEdit ? $t('close') : $t('cancel')" />
-            <!-- <UButton size="md" :label="$t('save')" type="submit" /> -->
             <UButton
                class="border border-primaryy-500 bg-primaryy-500 hover:bg-primaryy-500 text-grayy-25 w-[82px] h-[36px] justify-center"
                size="md"
@@ -69,7 +67,6 @@
                <Input is-view :label="'สัญญานเรียกขาน'" name="callSign" :placeholder="'callSign'" v-model="vesselData.callSign" />
             </div>
             <div class="col-span-1" v-if="vesselData.vesselFlagName.trim().toLowerCase() == 'thailand'">
-               <!-- <Input is-view :label="'วันหมดอายุทะเบียนเรือ'" name="LicenseExpiredDate" :placeholder="''" v-model="vesselData.licenseExpiredDate" /> -->
                <UFormGroup name="vesselLicenseExpiredDate">
                   <Input
                      is-view
@@ -287,7 +284,6 @@
          </div>
       </div>
    </div>
-   <!-- </UForm> -->
    <DialogConfirm
       :title="isEdit ? $t('save_anchor_ship') : $t('add_anchor_ship')"
       :desc="isEdit ? $t('confirm_save_anchor_ship') : $t('confirm_add_anchor_ship')"
@@ -418,20 +414,15 @@ const formGroup = ref({
    voyage: "",
    port_id_next: 0,
    port_id_last: 0,
-   //   "document_id": 0,
    anchors: [
       {
          berth_id: 0,
          purpose_id: 0,
          cargo_type_id: 0,
          cargo_wharfage_id: 0,
-         // use_berth_id: 0,
          pilot_date: "",
          anchor_date: "",
          aweigh_date: "",
-         // pilot_date: "2024-10-07T19:00:00+07:00",
-         // anchor_date: "2024-10-08T19:00:00+07:00",
-         // aweigh_date: "2024-10-08T19:00:00+07:00",
          latitude: "",
          longitude: "",
          remark: "",
@@ -440,7 +431,6 @@ const formGroup = ref({
 });
 const portList = ref([]);
 const berthList = ref([]);
-// const arrivalDate = ref(new Date())
 const arrivalDate = ref();
 
 watch(
@@ -461,7 +451,7 @@ const daysRemaining = computed(() => {
    console.log("sss", vesselData.value.licenseExpiredDate);
    const diffTime = new Date(vesselData.value.licenseExpiredDate).getTime() - currentDate.getTime();
    let day = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-   return day ? day : null; // Convert ms to days
+   return day ? day : null;
 });
 const errors = ref<FormError[]>([]);
 
@@ -498,7 +488,6 @@ const payload = ref<IVtmsAnchorAdd>({
 const addressOptionsStore = useAddressOptionsStore();
 
 onMounted(async () => {
-   // getVesselList();
    await getMasterList();
    await getPortList();
    if (anchorId) {
@@ -544,11 +533,6 @@ const getAnchorDetailById = async (id: number) => {
          pilotDate.value = resp.data.anchors.pilot_date ? new Date(resp.data.anchors.pilot_date) : "";
          anchorDate.value = resp.data.anchors.anchor_date ? new Date(resp.data.anchors.anchor_date) : "";
          aweighDate.value = resp.data.anchors.aweigh_date ? new Date(resp.data.anchors.aweigh_date) : "";
-
-         // if (resp.data.details.berth_id) {
-         //    await getJettyList(resp.data.details.berth_id);
-         // }
-         // console.log("get detail", formGroup.value);
       }
    } catch (error) {
       console.error(error);
@@ -561,9 +545,9 @@ onBeforeRouteLeave((to, from, next) => {
    if (notAllowNavigate.value) {
       isConfirmLeaveDialogOpen.value = true;
       nextRoute.value = to;
-      next(false); // Prevent navigation until confirmed
+      next(false);
    } else {
-      next(); // Allow navigation
+      next();
    }
 });
 
@@ -583,7 +567,6 @@ const getPortList = async () => {
 };
 const getBerthList = async () => {
    try {
-      // isLoading.value = true;
       const resp = await getBerth();
       if (resp.statusCode === 200) {
          const { data } = resp.data;
@@ -606,13 +589,6 @@ async function onSubmit() {
       vesselType: vesselType,
       ...formGroup.value,
       vessel_id: formGroup.value.vessel.id,
-      // details: [
-      //    {
-      //       pilot_date: "2024-10-07T19:00:00+07:00",
-      //        anchor_date: "2024-10-08T19:00:00+07:00",
-      //  aweigh_date: "2024-10-08T19:00:00+07"
-      //    },
-      // ],
    };
 
    payload.value = { ...newPayload };

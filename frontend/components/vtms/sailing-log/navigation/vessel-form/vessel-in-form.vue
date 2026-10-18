@@ -34,7 +34,6 @@
          <h2 class="font-anuphan-semi-bold text-base text-gray-400">
            {{ $t("vessel_info") }}
          </h2>
-         <!-- Responsive grid: 1 column on mobile, 2 columns on md+ -->
          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mt-4">
            <InputNumber
              :label="$t('gross_tonnage_confirm')"
@@ -160,7 +159,6 @@
                @click="() => handleTugBoatForm(true, 'create', '')"
              />
            </div>
-           <!-- Wrap table in responsive container -->
            <div class="overflow-x-auto mt-4">
              <UTable
                :columns="columnsTugListTable"
@@ -266,7 +264,6 @@
      </UForm>
    </div>
  
-   <!-- Dialog Components -->
    <TugBoatForm
      :isDialogOpen="isDialogTugBoatFormOpen"
      :dialogCancel="dialogTugBoatCancel"
@@ -328,7 +325,6 @@
    <Loading v-if="isLoading" />
  </template>
  
-
 <script setup lang="ts">
 import Input from "~/components/form/u-input.vue";
 import InputNumber from "~/components/form/input-number.vue";
@@ -408,8 +404,6 @@ const vesselInSchema = z.object({
    voyage: z.string().min(1, t("required")),
    berth_id: z.number().min(1, { message: t("required") }),
    purpose_id: z.number().min(1, { message: t("required") }),
-   //cargo_type_id: z.number().min(1, { message: t("required") }),
-   //cargo_wharfage_id: z.number().min(1, { message: t("required") }),
    jetty_id: z.number().min(1, { message: t("required") }),
 });
 
@@ -428,13 +422,11 @@ const formGroup = ref<any>({
    document_berth_id: 0,
    vessel_id: 0,
 
-   // Details
    berth_id: 0,
    purpose_id: 0,
    cargo_type_id: 0,
    cargo_wharfage_id: 0,
    jetty_id: 0,
-   //mooring_date: generateDateTimeOffset(),
    mooring_date: null,
    type_doc: "Arrival",
 
@@ -527,7 +519,6 @@ const getVtmsDocumentBerthDetail = async () => {
       formGroup.value.cargo_type_id = resp.data.cargoTypeId ? resp.data.cargoTypeId : 0;
       formGroup.value.cargo_wharfage_id = resp.data.cargoWharfageId ? resp.data.cargoWharfageId : 0;
       formGroup.value.jetty_id = resp.data.selectedJettyId ? resp.data.selectedJettyId : 0;
-      //productList.value = resp.data.products ? resp.data.products : [];
       productList.value = resp.data.products 
       ? resp.data.products.map((item: any) => {
          return {
@@ -550,7 +541,6 @@ const getVtmsLogBookDocumentDetail = async () => {
       formGroup.value.voyage = resp.data.voyage;
       tugList.value = resp.data.tugs ? resp.data.tugs : [];
       pilotList.value = resp.data.pilots ? resp.data.pilots : [];
-      //productList.value = resp.data.products ? resp.data.products : [];
    }
 };
 
@@ -848,7 +838,6 @@ onBeforeRouteLeave((to, from, next) => {
    }
 });
 
-//tug boat
 const isDialogTugBoatFormOpen = ref(false);
 const handleTugBoatForm = (status: boolean, mode: string, vesselTypeValue: string) => {
    actionMode.value = mode;
@@ -860,13 +849,9 @@ const dialogTugBoatCancel = () => {
 };
 const dialogTugBoatConfirm = (status: boolean, type: string = "") => {
    isDialogTugBoatFormOpen.value = status;
-   if (type === "refresh") {
-      // filter.value.page = 1;
-      // getTugBoatList();
-   }
+   if (type === "refresh") {}
 };
 
-// navigate
 const isDialogNavigateFormOpen = ref(false);
 const handleNavigateForm = (status: boolean, mode: string, vesselTypeValue: string) => {
    actionMode.value = mode;
@@ -878,13 +863,9 @@ const dialogNavigateCancel = () => {
 };
 const dialogNavigateConfirm = (status: boolean, type: string = "") => {
    isDialogNavigateFormOpen.value = status;
-   if (type === "refresh") {
-      // filter.value.page = 1;
-      // getNavigateList();
-   }
+   if (type === "refresh") {}
 };
 
-// inventory
 const isDialogInventoryFormOpen = ref(false);
 const handleInventoryForm = (status: boolean, mode: string, vesselTypeValue: string) => {
    actionMode.value = mode;
@@ -896,10 +877,7 @@ const dialogInventoryCancel = () => {
 };
 const dialogInventoryConfirm = (status: boolean, type: string = "") => {
    isDialogInventoryFormOpen.value = status;
-   if (type === "refresh") {
-      // filter.value.page = 1;
-      // getproductList();
-   }
+   if (type === "refresh") {}
 };
 
 const addTug = (tugs: any[]) => {

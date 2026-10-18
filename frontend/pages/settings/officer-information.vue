@@ -127,22 +127,12 @@ const handleCloseSuccessDialog = (status: boolean) => {
    isDialogSuccessOpen.value = status;
 };
 
-// const getVesselAgenciesDetail = async (userId: number) => {
-//    const resp = await adminService.getVesselAgenciesDetail(userId);
-//    if (resp.statusCode === 200) {
-//       formGroup.value = {
-//          ...resp?.data,
-//       };
-//    }
-// };
-
 const fetchUserDetail = async (userId: number) => {
    const resp = await getUserDetail(userId);
    if (resp.statusCode === 200) {
       formGroup.value = {
          ...resp?.data,
          zipCodeTemp: resp.data?.zipCode,
-         //uploadFiles: resp.data?.uploadFiles || [],
       };
    }
 };

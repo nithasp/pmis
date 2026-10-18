@@ -328,7 +328,6 @@ export function createDocumentService(documents: DocumentRepository, vessels: Ve
   return {
     toDocumentListItem,
 
-    // ---- lists ---------------------------------------------------------------------------------
     list(user: AuthUser, filter: Row, query: ListQuery): Promise<PagedResult<Row>> {
       return documents
         .list(
@@ -360,7 +359,6 @@ export function createDocumentService(documents: DocumentRepository, vessels: Ve
         .then((page) => ({ ...page, data: page.data.map(toDocumentListItem) }));
     },
 
-    // ---- detail / draft -----------------------------------------------------------------------
     async detail(id: number, user: AuthUser): Promise<Row> {
       const doc = await load(id);
       assertCanRead(user, doc);
@@ -372,7 +370,6 @@ export function createDocumentService(documents: DocumentRepository, vessels: Ve
       return doc ? detailOf(doc, user) : emptyDraft();
     },
 
-    // The vessel step of the form: creates the agency's draft, or updates the vessel block of a document
     async saveVessel(id: number | null, user: AuthUser, input: Row, by: string): Promise<Row> {
       const docId = await withTransaction(async (tx) => {
         let doc: Row | null = id === null ? await documents.findDraft(user.userId, tx) : await load(id, tx);
@@ -405,7 +402,6 @@ export function createDocumentService(documents: DocumentRepository, vessels: Ve
       return detailOf(await load(docId), user);
     },
 
-    // ---- berths -------------------------------------------------------------------------------
     async berthDetail(documentId: number, berthId: number, user: AuthUser): Promise<Row> {
       const doc = await load(documentId);
       assertCanRead(user, doc);
@@ -460,7 +456,6 @@ export function createDocumentService(documents: DocumentRepository, vessels: Ve
       await documents.update(documentId, { updated_by: by });
     },
 
-    // ---- products -----------------------------------------------------------------------------
     async productDetail(documentId: number, berthId: number, productId: number, user: AuthUser): Promise<Row> {
       const doc = await load(documentId);
       assertCanRead(user, doc);
@@ -511,7 +506,6 @@ export function createDocumentService(documents: DocumentRepository, vessels: Ve
       await documents.deleteProduct(productId);
     },
 
-    // ---- invoice ------------------------------------------------------------------------------
     async saveInvoice(documentId: number, user: AuthUser, input: Row, by: string): Promise<Row> {
       const doc = await load(documentId);
       assertCanEdit(user, doc);
@@ -533,7 +527,6 @@ export function createDocumentService(documents: DocumentRepository, vessels: Ve
         secondary_phone_number: str(input.secondaryPhoneNumber),
       };
       await withTransaction(async (tx) => {
-        // Billing details are remembered as a customer so the next request can pick them from the search box
         if (!data.customer_id && data.tax_id) {
           const { rows } = await tx.query('SELECT id FROM customers WHERE tax_id = $1 LIMIT 1', [data.tax_id]);
           if (rows[0]) data.customer_id = rows[0].id as number;
@@ -554,7 +547,6 @@ export function createDocumentService(documents: DocumentRepository, vessels: Ve
       return detailOf(await load(documentId), user);
     },
 
-    // ---- workflow -----------------------------------------------------------------------------
     async submitForReview(documentId: number, user: AuthUser, by: string): Promise<Row> {
       const doc = await load(documentId);
       assertCanEdit(user, doc);
@@ -599,7 +591,6 @@ export function createDocumentService(documents: DocumentRepository, vessels: Ve
       return detailOf(await load(documentId), user);
     },
 
-    // VTMS asks the agency to correct an approved request
     async requestEdit(documentId: number, user: AuthUser, note: string, by: string): Promise<Row> {
       const doc = await load(documentId);
       if (!isOfficer(user)) throw forbidden();
@@ -677,7 +668,6 @@ export function createDocumentService(documents: DocumentRepository, vessels: Ve
       throw new AppError('ใบคำร้องนี้ไม่อยู่ในสถานะที่อนุมัติได้', 400, 'bad_request', 'The request cannot be approved in its current status');
     },
 
-    // Approval registers a new vessel from the request so later requests can reuse it
     async finishApproval(doc: Row, status: string, by: string, db?: Queryable): Promise<void> {
       const run = async (tx: Queryable) => {
         const extra: Row = status === 'Approved' ? { approved_at: new Date() } : {};
@@ -725,7 +715,6 @@ export function createDocumentService(documents: DocumentRepository, vessels: Ve
       return { documentHistory: latest ? latest.snapshot : current, history: latest ? [{ status: latest.status, createdAt: iso(latest.created_at) }] : [] };
     },
 
-    // ---- berth files --------------------------------------------------------------------------
     async uploadBerthFile(documentId: number, berthId: number, input: UploadInput, user: AuthUser): Promise<UploadFileRef> {
       const doc = await load(documentId);
       assertCanRead(user, doc);
@@ -742,7 +731,6 @@ export function createDocumentService(documents: DocumentRepository, vessels: Ve
       await files.removeLink('documentBerth', berthId, fileId);
     },
 
-    // ---- ship table (MIT / TCT) ---------------------------------------------------------------
     async berthQueue(berthAlt: string, query: ListQuery): Promise<Row[]> {
       const page = await documents.berthQueue(berthAlt.toUpperCase() === 'SPACIAL' ? 'Spacial' : berthAlt.toUpperCase(), { ...query, limit: null, offset: 0 });
       return page.data.map((r) => ({
@@ -812,7 +800,6 @@ export function createDocumentService(documents: DocumentRepository, vessels: Ve
       return { id: logBookId, etd: etd.toISOString() };
     },
 
-    // ---- PDF ----------------------------------------------------------------------------------
     async exportPdf(documentId: number, user: AuthUser): Promise<Buffer> {
       const doc = await load(documentId);
       assertCanRead(user, doc);

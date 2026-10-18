@@ -70,13 +70,6 @@
             <h2 class="font-anuphan-semi-bold text-sm text-grayy-400">
               {{ $t("document_content.title") }}
             </h2>
-            <!-- <ul class="text-sm list-decimal pl-6 space-y-0.5 text-grayy-500 mt-1">
-              <li>{{ $t("document_content.list[0]") }}</li>
-              <li>{{ $t("document_content.list[1]") }}</li>
-              <li>{{ $t("document_content.list[2]") }}</li>
-              <li>{{ $t("document_content.list[3]") }}</li>
-              <li>{{ $t("document_content.list[4]") }}</li>
-            </ul> -->
             <div class="flex justify-start">
               <div class="flex items-center cursor-pointer">
                 <a :href="downloadUrl" class="text-sm text-primaryy-500 mr-2 my-3" target="_blank">
@@ -87,9 +80,6 @@
             </div>
           </div>
           <div class="max-w-[512px]">
-            <!-- <FileDropzoneSettings :error="errorMessageUploadFile" :getFiles="getFiles"
-              :filesValue="formGroup?.uploadFiles"
-              :errorFromUpload="(message: string) => errorMessageUploadFile = message" ref="fileDropzoneSettingRef" /> -->
             <div id="containerUpload">
               <div class="flex justify-end">
                 <span class="font-anuphan-semi-bold text-sm text-grayy-500">{{
@@ -248,15 +238,6 @@ const handleCloseSuccessDialog = (status: boolean) => {
   isDialogSuccessOpen.value = status;
 };
 
-// const getVesselAgenciesDetail = async (userId: number) => {
-//    const resp = await adminService.getVesselAgenciesDetail(userId);
-//    if (resp.statusCode === 200) {
-//       formGroup.value = {
-//          ...resp?.data,
-//       };
-//    }
-// };
-
 const fetchUserDetail = async (userId: number) => {
   const resp = await getUserDetail(userId);
   if (resp.statusCode === 200) {
@@ -270,23 +251,6 @@ const fetchUserDetail = async (userId: number) => {
 };
 
 const dialogConfirmSubmit = async () => {
-  // const filteredArray = formGroup.value.uploadFiles
-  //   ?.filter((item: IFileUploadSetting) => {
-  //     if (item.id) {
-  //       return true;
-  //     }
-  //     if (item.mockId) {
-  //       return item.progress === 100 && item.isError === false;
-  //     }
-  //     return false;
-  //   })
-  //   .map((item: IFileUploadSetting) => {
-  //     if (item.mockId) {
-  //       const { mockId, progress, ...rest } = item;
-  //       return rest;
-  //     }
-  //     return item;
-  //   });
   const uploadFiles = filesUpload.value.filter((e: any) => !e.isError
     && (formGroup.value.personType === 'corporate'
       ? [FileRegisterTypeEnum.legalEntityCert, FileRegisterTypeEnum.powerOfAttorney, FileRegisterTypeEnum.powerOfAttorneyNationId].includes(e.fileType)
@@ -374,7 +338,6 @@ const validateFileUpload = (field: FileRegisterTypeEnum) => {
 watch(
   () => nationalId.value,
   (value) => {
-    // remove from uploadfile
     if (value === null) {
       const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileRegisterTypeEnum.nationalId)
       if (findFileIndex !== -1) {
@@ -390,7 +353,6 @@ watch(
 watch(
   () => powerOfAttorney.value,
   (value) => {
-    // remove from uploadfile
     if (value === null) {
       const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileRegisterTypeEnum.powerOfAttorney)
       if (findFileIndex !== -1) {
@@ -406,7 +368,6 @@ watch(
 watch(
   () => legalEntityCert.value,
   (value) => {
-    // remove from uploadfile
     if (value === null) {
       const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileRegisterTypeEnum.legalEntityCert)
       if (findFileIndex !== -1) {
@@ -422,7 +383,6 @@ watch(
 watch(
   () => powerOfAttorneyNationId.value,
   (value) => {
-    // remove from uploadfile
     if (value === null) {
       const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileRegisterTypeEnum.powerOfAttorneyNationId)
       if (findFileIndex !== -1) {

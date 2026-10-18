@@ -111,7 +111,6 @@ import CrossIcon from "~/assets/icons/fi-rs-cross-circle.svg";
 import CheckIcon from "~/assets/icons/fi-rs-check.svg";
 
 import { convertObjToQueryString, renderDateFormat, renderTimeFormat } from "~/utils/function.js";
-// import vtService from "~/core/services/vtms/tableService.ts";
 import logBookService from "~/core/services/vtms/logBookService.ts";
 import { watch } from "vue";
 const { getVtmsLogBook, getBerth, deleteVtmsLogBook } = logBookService();
@@ -120,7 +119,6 @@ const toast = useToast();
 const router = useRouter();
 const dateValue = ref<any>("");
 const selectedDate = ref({ start: new Date(), end: new Date() });
-// const { getVt } = vtService();
 const sortField = ref("");
 const sortOrder = ref("");
 const columns = [

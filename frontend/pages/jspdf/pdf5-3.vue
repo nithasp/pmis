@@ -41,12 +41,12 @@ function prepareGroupedTableData(data: any) {
       });
 
    const rows = data.map((item: any, index: any) => [
-      index + 1, // ลำดับ
-      item.fullName, // ตัวแทนเรือ
-      formatNumber(item.mTon), // ปริมาณสินค้าผ่านท่า with formatting
-      formatNumber(item.portCharges), // ค่าสินค้าผ่านท่า (ไม่รวม VAT) with formatting
-      formatNumber(item.portChargesVat), // VAT with formatting
-      formatNumber(item.portChargesNet), // รวม VAT with formatting
+      index + 1,
+      item.fullName,
+      formatNumber(item.mTon),
+      formatNumber(item.portCharges),
+      formatNumber(item.portChargesVat),
+      formatNumber(item.portChargesNet),
    ]);
 
    const totalMTon = data.reduce((sum: any, i: any) => sum + i.mTon, 0);

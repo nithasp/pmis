@@ -128,16 +128,12 @@
                <div class="grid grid-cols-[1fr_1fr] gap-y-4 gap-x-6">
                   <div>
                      <h3 class="font-anuphan-medium text-sm text-gray-400">{{ $t("service_rate") }}</h3>
-                     <!-- <div class="text-grayy-75">
-                        {{ formGroup.invoice.rate ? `฿ ${formatNumber(formGroup.invoice.rate)}` : "-" }}
-                     </div> -->
                      <div class="text-grayy-75">
                         {{ `฿ ${formatNumber(formGroup.invoice.rate)}` }}
                      </div>
                   </div>
                   <div>
                      <h3 class="font-anuphan-medium text-sm text-gray-400">{{ $t("service_fee") }}</h3>
-                     <!-- <div class="text-grayy-75">{{ formGroup.invoice.fee ? `฿ ${formatNumber(formGroup.invoice.fee)}` : "-" }}</div> -->
                      <div class="text-grayy-75">{{ `฿ ${formatNumber(formGroup.invoice.fee)}` }}</div>
                   </div>
                   <div>
@@ -146,14 +142,6 @@
                   </div>
                   <div>
                      <h3 class="font-anuphan-medium text-sm text-gray-400">{{ $t("vat") }}</h3>
-                     <!-- <div class="text-grayy-75">
-                        {{
-                           formGroup.invoice.vatTotal
-                              ? `฿
-                        ${formatNumber(formGroup.invoice.vatTotal)}`
-                              : "-"
-                        }}
-                     </div> -->
                      <div class="text-grayy-75">
                         {{ `฿ ${formatNumber(formGroup.invoice.vatTotal)}` }}
                      </div>

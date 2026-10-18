@@ -6,10 +6,6 @@
                <h1 class="font-normal text-lg text-white">{{ $t("anchor_topic") }}</h1>
                <div class="rounded-full bg-purple-25 text-sm py-1 px-2 ml-2">{{ total }} {{ $t("anchor_total") }}</div>
             </div>
-            <!-- <div>
-                       <UButton class="" outlined icon="i-heroicons-plus-circle" size="md" label="เรือกิจกรรม  />
-                 
-              </div> -->
          </div>
          <UTable @select="selectRow" :columns="columns" :rows="vtList" :ui="{
             base: 'u-table-list',
@@ -118,8 +114,6 @@ import NotebookIcon from "~/assets/icons/fi-rs-notebook.svg";
 import CrossIcon from "~/assets/icons/fi-rs-cross-circle.svg";
 import CheckIcon from "~/assets/icons/fi-rs-check.svg";
 
-// import { convertObjToQueryString, renderDateFormat, renderTimeFormat } from "~/utils/function.js";
-// import vtService from "~/core/services/vtms/tableService.ts";
 import vtmsAnchorService from "~/core/services/vtms/anchorService.ts";
 import { watch } from "vue";
 const { t } = useI18n();
@@ -127,7 +121,6 @@ const toast = useToast();
 const router = useRouter();
 const dateValue = ref<any>("");
 const selectedDate = ref({ start: new Date(), end: new Date() });
-// const { getVt } = vtService();
 const { getVtmsAnchor, deleteVtmsAnchor } = vtmsAnchorService();
 const sortField = ref("");
 const sortOrder = ref("");

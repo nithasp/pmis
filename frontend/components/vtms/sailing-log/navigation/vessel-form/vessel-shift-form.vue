@@ -189,7 +189,6 @@
          </div>
        </section>
  
-
        <section id="vessel-shift-section3" class="border rounded-xl border-solid border-[#D0D5DD] p-8 mt-6">
          <div>
            <div class="flex flex-col sm:flex-row items-center sm:items-center justify-between">
@@ -365,7 +364,6 @@
    <Loading v-if="isLoading" />
  </template>
  
-
 <script setup lang="ts">
 import Input from "~/components/form/u-input.vue";
 import Select from "~/components/form/u-select.vue";
@@ -430,16 +428,12 @@ const vesselShiftSchema = z.object({
    vessel_out: z.object({
       berth_id: z.number().min(1, { message: t("required") }),
       purpose_id: z.number().min(1, { message: t("required") }),
-      //cargo_type_id: z.number().min(1, { message: t("required") }),
-      //cargo_wharfage_id: z.number().min(1, { message: t("required") }),
       jetty_id: z.number().min(1, { message: t("required") }),
    }),
 
    vessel_in: z.object({
       berth_id: z.number().min(1, { message: t("required") }),
       purpose_id: z.number().min(1, { message: t("required") }),
-      //cargo_type_id: z.number().min(1, { message: t("required") }),
-      //cargo_wharfage_id: z.number().min(1, { message: t("required") }),
       jetty_id: z.number().min(1, { message: t("required") }),
    }),
 });
@@ -459,7 +453,6 @@ const formGroup = ref<any>({
    document_berth_id: 0,
    vessel_id: 0,
 
-   // Details
    vessel_out: {
       berth_id: 0,
       purpose_id: 0,
@@ -476,7 +469,6 @@ const formGroup = ref<any>({
       cargo_type_id: 0,
       cargo_wharfage_id: 0,
       jetty_id: 0,
-      //departure_date: null,
       mooring_date: null,
       type_doc: "Arrival",
    },
@@ -485,7 +477,6 @@ const formGroup = ref<any>({
    pilots: [],
    products: [],
 });
-//const vesselInDepartureDate = ref<any>(new Date());
 const vesselInMooringDate = ref<any>(new Date());
 const vesselOutDepartureDate = ref<any>(new Date());
 const vesselOutMooringDate = ref<any>(new Date());
@@ -577,11 +568,6 @@ const getVtmsDocumentBerthDetail = async () => {
    if (resp.statusCode === 200) {
       formGroup.value.vessel_in.berth_id = resp.data.berthId ? resp.data.berthId : 0;
       formGroup.value.vessel_in.purpose_id = resp.data.purposeId ? resp.data.purposeId : 0;
-      // formGroup.value.vessel_in.cargo_type_id = resp.data.cargoTypeId ? resp.data.cargoTypeId : 0;
-      // formGroup.value.vessel_in.cargo_wharfage_id = resp.data.cargoWharfageId ? resp.data.cargoWharfageId : 0;
-      // formGroup.value.vessel_in.jetty_id = resp.data.jettyId ? resp.data.jettyId : 0;
-      // formGroup.value.vessel_in.mooring_date = resp.data?.estimatedArrival ? resp.data?.estimatedArrival : null;
-      // formGroup.value.vessel_in.departure_date = resp.data?.estimatedDeparture ? resp.data?.estimatedDeparture : null;
       formGroup.value.vessel_in.jetty_id = resp.data.selectedJettyId ? resp.data.selectedJettyId : 0;
       getJetty(resp.data.berthId ? resp.data.berthId : 0, "all-vessel-in", "fetch");
    }
@@ -621,7 +607,6 @@ const getMasterDataList = async () => {
    const respBerth = await getBerth(filterBerth.value);
    if (respBerth.statusCode === 200) {
       berthList.value = respBerth.data.data.map((item: IBerthGet) => ({ id: item.id, name: locale.value === "en" ? item.name_en : item.name_th }));
-      //getJetty(formGroup.value?.berth_id, "all", "fetch");
    }
 
    const respPurpose = await getPurpose(filterPurpose.value);
@@ -643,7 +628,6 @@ const getMasterDataList = async () => {
 const getJetty = async (berthId: number, vesselType: string = "", type: string = "") => {
    const res = await getBerthDetail(berthId);
    if (res.statusCode === 200) {
-      //console.log(berthId, vesselType, type);
       if (vesselType === "all-vessel-out" && type === "fetch") {
          jettyListVesselOut.value = res.data.jettys;
       }
@@ -708,7 +692,6 @@ const dialogConfirm = async () => {
             cargo_type_id: formGroup.value.vessel_in.cargo_type_id,
             cargo_wharfage_id: formGroup.value.vessel_in.cargo_wharfage_id,
             jetty_id: formGroup.value.vessel_in.jetty_id,
-            //departure_date: convertTimezone(new Date(formGroup.value.vessel_in.departure_date), 7, false),
             mooring_date: convertTimezone(new Date(formGroup.value.vessel_in.mooring_date), 7, false),
             type_doc: "Arrival",
             document_berth_id: documentBerthIdArrival.value,
@@ -930,7 +913,6 @@ onBeforeRouteLeave((to, from, next) => {
    }
 });
 
-//tug boat
 const isDialogTugBoatFormOpen = ref(false);
 const handleTugBoatForm = (status: boolean, mode: string, vesselTypeValue: string) => {
    actionMode.value = mode;
@@ -942,13 +924,9 @@ const dialogTugBoatCancel = () => {
 };
 const dialogTugBoatConfirm = (status: boolean, type: string = "") => {
    isDialogTugBoatFormOpen.value = status;
-   if (type === "refresh") {
-      // filter.value.page = 1;
-      // getTugBoatList();
-   }
+   if (type === "refresh") {}
 };
 
-// navigate
 const isDialogNavigateFormOpen = ref(false);
 const handleNavigateForm = (status: boolean, mode: string, vesselTypeValue: string) => {
    actionMode.value = mode;
@@ -960,13 +938,9 @@ const dialogNavigateCancel = () => {
 };
 const dialogNavigateConfirm = (status: boolean, type: string = "") => {
    isDialogNavigateFormOpen.value = status;
-   if (type === "refresh") {
-      // filter.value.page = 1;
-      // getNavigateList();
-   }
+   if (type === "refresh") {}
 };
 
-// inventory
 const isDialogInventoryFormOpen = ref(false);
 const handleInventoryForm = (status: boolean, mode: string, vesselTypeValue: string) => {
    actionMode.value = mode;
@@ -978,10 +952,7 @@ const dialogInventoryCancel = () => {
 };
 const dialogInventoryConfirm = (status: boolean, type: string = "") => {
    isDialogInventoryFormOpen.value = status;
-   if (type === "refresh") {
-      // filter.value.page = 1;
-      // getproductList();
-   }
+   if (type === "refresh") {}
 };
 
 const addTug = (tugs: any[]) => {
@@ -1139,7 +1110,6 @@ const deleteProduct = (product: any, index: number) => {
 });
 const dateValidation = ref<DateValidationAnchorDroppingForm>({
    vessel_in_mooring_date: { message: t("required"), pristine: false },
-   //vessel_in_departure_date: { message: t("required"), pristine: false },
    vessel_out_mooring_date: { message: t("required"), pristine: false },
    vessel_out_departure_date: { message: t("required"), pristine: false },
 });
@@ -1158,11 +1128,6 @@ const isDateError = (field: string) => {
       dateValidation.value[validationKey].message = t("required");
       return true;
    }
-
-   // if (field === "vessel_in.departure_date" && value && new Date(value) < new Date(formGroup.value.vessel_in.mooring_date)) {
-   //    dateValidation.value[validationKey].message = t("departure_day_or_time_gte");
-   //    return true;
-   // }
 
    if (field === "vessel_out.departure_date" && value && new Date(value) < new Date(formGroup.value.vessel_out.mooring_date)) {
       dateValidation.value[validationKey].message = t("departure_day_or_time_gte");
@@ -1190,8 +1155,6 @@ const isFormGroupValid = (formGroup: { vessel_in: { mooring_date: string }; vess
 
    const allFieldsValid = Object.values(fieldsToCheck).every((value) => value);
 
-   // const isVesselInValid = vessel_in.mooring_date && vessel_in.departure_date && new Date(vessel_in.departure_date) >= new Date(vessel_in.mooring_date);
-
    const isVesselInValid = vessel_in.mooring_date;
 
    const isVesselOutValid = vessel_out.mooring_date && vessel_out.departure_date && new Date(vessel_out.departure_date) >= new Date(vessel_out.mooring_date);
@@ -1202,9 +1165,6 @@ const isFormGroupValid = (formGroup: { vessel_in: { mooring_date: string }; vess
 const onVesselInMooringDateChange = (newDate: any) => {
    formGroup.value.vessel_in.mooring_date = newDate ? new Date(newDate).toISOString() : "";
 };
-// const onVesselInDepartureDateChange = (newDate: any) => {
-//    formGroup.value.vessel_in.departure_date = newDate ? new Date(newDate).toISOString() : "";
-// };
 const onVesselOutMooringDateChange = (newDate: any) => {
    formGroup.value.vessel_out.mooring_date = newDate ? new Date(newDate).toISOString() : "";
 };

@@ -203,7 +203,6 @@
                      </div>
                      <div class="td text-center">
                         <div class="relative left-4">
-                           <!-- <Badge :label="row.statusDes" :type="renderStatus(row.status)" /> -->
                            <BadgeVesselInOut :label="row.statusDes" :type="row.status" />
                         </div>
                      </div>
@@ -932,7 +931,6 @@ watch(
          limit: filter.value.limit,
          status: newQueryStatus === "Send,PendingCheck" ? "Send,PendingCheck" : newQueryStatus || "",
          Order: [{ column: sortField.value, dir: sortOrder.value }]
-
       });
 
       search.value = "";

@@ -2,7 +2,6 @@
     <h2 class="font-bold mb-3">รายละเอียดที่อยู่ใบแจ้งหนี้</h2>
     <UDivider class="my-4" />
     <div class="border border-grayy-100 p-8 rounded-xl mt-6">
-      <!-- First Section: Customer / Payment Details -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="col-span-1 md:col-span-2">
           <UFormGroup label="ชื่อลูกค้า/บริษัท" name="name" required :error="getError('name') || ''">
@@ -48,7 +47,6 @@
       <UDivider class="my-4" />
       <h2 class="font-bold mb-3">{{ $t('invoice_address') }}</h2>
   
-      <!-- Second Section: Invoice Address -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="col-span-1 md:col-span-2">
           <USelect :label="$t('country')" name="countryId" :placeholder="$t('country')" required
@@ -94,7 +92,6 @@
     </div>
   </template>
   
-
 <script setup lang="ts">
 import UInput from '../form/u-input.vue';
 import USelect from '../form/u-select.vue';

@@ -12,7 +12,6 @@ export const canEdit = (roleType: string, status: string) => {
 };
 
 export const canApprove = (roleType: string, status: string) => {
-    // console.log('canApprove', roleType, status);
     let roles = [RoleTypeEnum.DocumentReviewer.toString(), RoleTypeEnum.DocumentApprove.toString()];
 
     if (roles.includes(roleType) && status === UserStatusEnum.WaitingApproved)
@@ -22,6 +21,5 @@ export const canApprove = (roleType: string, status: string) => {
 };
 
 export const canResetPassword = (row: IUserSystem) => {
-    // console.log('canResetPassword', row.status === UserStatusEnum.Approved);
     return row.status === UserStatusEnum.Approved && row.enabled
 };

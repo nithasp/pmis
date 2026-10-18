@@ -4,7 +4,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     const config = useRuntimeConfig();
     const api = axios.create({
         baseURL: config.public.apiBaseUrl,
-        // baseURL: 'https://pmis-api-dev-1097426262171.asia-southeast1.run.app/api/v1',
         withCredentials: true,
         headers: { 'Content-Type': 'application/json' }
     });
@@ -25,11 +24,9 @@ export default defineNuxtPlugin((nuxtApp) => {
             const logoutUrl = "/auth/logout"
             if (status === 401 && (![loginUrl, logoutUrl].includes(error.config.url))) {
                 const accessToken = localStorage.getItem('access_token') || '';
-                // Split the JWT into its parts
                 const base64Url = accessToken.split('.')[1];
                 const base64 = base64Url ? base64Url.replace(/-/g, '+').replace(/_/g, '/') : '';
 
-                // Decode the base64 string to get the JSON payload
                 const jsonPayload = base64 ? decodeURIComponent(atob(base64).split('').map(function (c) {
                     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                 }).join('')) : '{}';
@@ -43,7 +40,6 @@ export default defineNuxtPlugin((nuxtApp) => {
                             error.config.headers.Authorization = `Bearer ${newToken}`;
                             return api.request(error.config);
                         } catch (refreshError) {
-                            // Redirect to login page or handle error
                             nuxtApp.$router.push('/login');
                             return Promise.reject(refreshError);
                         }
@@ -59,7 +55,6 @@ export default defineNuxtPlugin((nuxtApp) => {
             api,
         },
     };
-
 });
 
 async function refreshAccessToken(baseURL, refreshToken) {

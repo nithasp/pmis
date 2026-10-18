@@ -90,7 +90,7 @@ onBeforeUnmount(() => {
     clearController();
 });
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const errorMessage = ref(props.error || "");
 const files = ref(props.filesValue || []);
 const controllers = new Map();

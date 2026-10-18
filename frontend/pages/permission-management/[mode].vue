@@ -28,7 +28,6 @@
                     </div>
                 </div>
                 <UDivider class="my-4" />
-                <!-- request form -->
                 <h2 class="font-semibold text-grayy-400 mb-3">ใบคำร้อง</h2>
                 <h3 class="font-medium text-grayy-400 my-3">แดชบอร์ด</h3>
                 <div class="grid grid-cols-4 gap-4 xl:grid-cols-6">
@@ -67,7 +66,6 @@
                     </UFormGroup>
                 </div>
                 <UDivider class="my-4" />
-                <!-- vessel -->
                 <h2 class="font-semibold text-grayy-400 mb-3">การเดินเรือ</h2>
                 <h3 class="font-medium text-grayy-400 my-3">แดชบอร์ด</h3>
                 <div class="grid grid-cols-4 gap-4 xl:grid-cols-6">
@@ -105,7 +103,6 @@
                     </UFormGroup>
                 </div>
                 <UDivider class="my-4" />
-                <!-- vessel ship in out -->
                 <h2 class="font-semibold text-grayy-400 mb-3">เรือเข้า-ออก</h2>
                 <h3 class="font-medium text-grayy-400 my-3">แดชบอร์ด</h3>
                 <div class="grid grid-cols-4 gap-4 xl:grid-cols-6">
@@ -161,7 +158,6 @@
                             @change="toggleSelection('delete_ship_in_out_verify')" />
                     </UFormGroup>
                 </div>
-                <!-- account -->
                 <UDivider class="my-4" />
                 <h2 class="font-semibold text-grayy-400 mb-3">บัญชี</h2>
                 <h3 class="font-medium text-grayy-400 my-3">แดชบอร์ด</h3>
@@ -200,7 +196,6 @@
                     </UFormGroup>
                 </div>
                 <UDivider class="my-4" />
-                <!-- vessel data -->
                 <h2 class="font-semibold text-grayy-400 mb-3">ข้อมูล</h2>
                 <h3 class="font-medium text-grayy-400 my-3">รายการเรือ</h3>
                 <div class="grid grid-cols-4 gap-4 xl:grid-cols-6">
@@ -279,20 +274,15 @@ const notAllowNavigate = ref(true)
 
 const selectedPermissions = ref<string[]>([]);
 
-// Helper method to check if a permission is selected
 const isSelected = (permission: string) => selectedPermissions.value.includes(permission);
 
-// Method to toggle the selection
 const toggleSelection = (permission: string) => {
     if (isSelected(permission)) {
-        // Remove from the array if it's already selected
         selectedPermissions.value = selectedPermissions.value.filter(p => p !== permission);
     } else {
-        // Add to the array if it's not selected
         selectedPermissions.value.push(permission);
     }
 };
-
 
 const permissionSchema = z.object({
     name: z.string().nonempty({ message: t('please_enter_a_value') }),
@@ -307,7 +297,6 @@ const payload = ref<IRoleRequest>({
     activated: false,
     permissions: []
 })
-
 
 onMounted(() => {
     if (roleId) {
@@ -331,14 +320,13 @@ onBeforeRouteLeave((to, from, next) => {
         if (notAllowNavigate.value) {
             isConfirmLeaveDialogOpen.value = true;
             nextRoute.value = to;
-            next(false); // Prevent navigation until confirmed
+            next(false);
         } else {
-            next(); // Allow navigation
+            next();
         }
     } else {
         next()
     }
-
 });
 
 async function onSubmit(event: FormSubmitEvent<z.output<typeof permissionSchema>>) {

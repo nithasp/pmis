@@ -719,7 +719,6 @@ const handleClickResetFitler = () => {
       flagName: "",
    };
    filter.value.Order = [{ column: sortField.value, dir: sortOrder.value }];
-   //resetSort();
 
    Object.assign(filter.value, {
       status: 0,
@@ -745,23 +744,13 @@ const handleClickCreateDocument = () => {
 };
 
 const handleExportDocument = (row: any) => {
-   // navigateTo('/request-form/create')
    documentService.exportDocumentToPDF(row.id).then((res: any) => {
       if (res) {
-         // Create a Blob URL for the PDF
          const blob = new Blob([res.data], { type: "application/pdf" });
          const url = window.URL.createObjectURL(blob);
 
-         // Open the PDF in a new tab
          window.open(url, "_blank");
 
-         // Trigger a direct download with a predefined filename
-         // const link = document.createElement("a");
-         // link.href = url;
-         // link.download = `ใบคำร้อง-${row.docNumber}.pdf`; // Set the desired filename
-         // link.click();
-
-         // Optionally, revoke the Blob URL after some time
          setTimeout(() => {
             window.URL.revokeObjectURL(url);
          }, 1000);
@@ -770,10 +759,6 @@ const handleExportDocument = (row: any) => {
       }
    });
 };
-
-
-
-
 
 const columns =  [
    {
@@ -836,8 +821,6 @@ onMounted(() => {
    documentOptionsStore.getPurposesOptions();
    documentOptionsStore.getPurposeTypeOptions();
    vesselOptionsStore.getVesselFlagOption();
-
-   //getDocumentList(filter.value)
 
    getNewStatus();
    if (!route.query.status) {
@@ -1110,7 +1093,6 @@ watch(
             newQueryStatus === "PendingConfirmation,PendingConfirmation1,PendingConfirmation2"
                ? "PendingConfirmation,PendingConfirmation1,PendingConfirmation2"
                : newQueryStatus, Order: [{ column: sortField.value, dir: sortOrder.value }]
-
       });
 
       const matchedStatusId = newStatus.value.find((item: any) =>

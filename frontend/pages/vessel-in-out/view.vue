@@ -7,7 +7,6 @@
          <div>
             <div class="flex">
                <h1 class="font-semibold text-lg text-grayy-400 mr-4">ข้อมูลเรือเข้า-ออก</h1>
-               <!-- <Badge v-if="!isLoading" :label="vesselImportMapDetail.statusDes" :type="renderStatus(vesselImportMapDetail.status)" /> -->
                <BadgeVesselInOut v-if="!isLoading" :label="vesselImportMapDetail.statusDes"
                   :type="vesselImportMapDetail.status" />
             </div>
@@ -346,13 +345,6 @@
          </section>
          <UDivider class="my-4" />
 
-         <!-- <div id="containerUpload">
-                <h2 class="font-semibold text-grayy-400 mb-3">เอกสารแนบใบคำร้อง</h2>
-                <FileDropzone v-if="vesselImportMapDetail.filesAgency.length > 0" is-view
-                    :filesValue="vesselImportMapDetail.filesAgency" />
-                <div v-else>-</div>
-            </div> -->
-
          <div id="containerUpload">
             <h2 class="font-semibold text-grayy-400 mb-3">เอกสารแนบใบคำร้อง</h2>
             <FileDropzone v-if="vesselImportMapDetail.filesVS.length > 0" is-view
@@ -517,7 +509,6 @@ const renderOption = (type: any, id: number) => {
    return findData ? findData.name : "-";
 };
 
-
 const getVesselImportDetail = async (id: number) => {
    isLoading.value = true;
    const resp = await vesselImportService.getMapVesselImportDetail(id);
@@ -616,7 +607,6 @@ const handleClickRejectSendBack = () => {
 const validateGrossTonnageEquality = (grossTonnage: IGrossTonnage): boolean => {
    const { grossTonnageAgency, grossTonnageVS, grossTonnageVT } = grossTonnage;
 
-   // Check if all values are equal
    return grossTonnageAgency === grossTonnageVS && grossTonnageVS === grossTonnageVT;
 };
 

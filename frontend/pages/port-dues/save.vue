@@ -17,12 +17,6 @@
          </div>
       </header>
 
-      <!-- <div v-if="formGroup.notes.length" class="notes mt-5">
-         <p v-for="(note, indexMenu) in formGroup.notes" :key="`note-${indexMenu}`" class="mb-2 text-error-500">
-            {{ note.note }}
-         </p>
-      </div> -->
-
       <UDivider class="m-[22px_0_24px_0]" />
 
       <section id="request-form-section1" class="border rounded-xl border-solid border-[#D0D5DD] p-8">
@@ -78,11 +72,6 @@
                               icon="i-heroicons-magnifying-glass-20-solid" />
                         </div>
                         <div class="ml-2 mb-0.5">
-                           <!-- <VesselDialog>
-                              <template #activator="{ on }">
-                                 <UButton icon="i-heroicons-pencil" v-on="on" />
-                              </template>
-</VesselDialog> -->
                            <EditClientDetail :formGroup="formGroup">
                               <template #activator="{ on }">
                                  <UButton icon="i-heroicons-pencil" v-on="on" />
@@ -344,7 +333,6 @@ const getPortDuesPendingDetail = async () => {
    isLoading.value = true;
    const resp = await portDuesService.getPortDuesPendingDetail(documentId.value);
    if (resp.statusCode === 200) {
-      //formGroup.value = resp.data;
       formGroup.value = {
          ...resp.data,
          provinceId: resp.data.invoice.provinceId
@@ -394,14 +382,12 @@ watch(
          formGroup.value.invoice.paymentMethodName = paymentMethod.name
          formGroup.value.invoice.paymentPeriod = paymentMethod.paymentPeriodDay
 
-         // Calculate dueDate based on paymentPeriodDay
          const baseDate = new Date(dateValue.value);
          baseDate.setDate(baseDate.getDate() + paymentMethod.paymentPeriodDay - 1);
          formGroup.value.invoice.dueDate = baseDate.toISOString(); 
       }
    }
 );
-
 
 const isConfirmDialogOpen = ref(false);
 const dialogCancel = () => {

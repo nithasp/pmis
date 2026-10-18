@@ -6,7 +6,6 @@ import { clip } from '../utils/text';
 
 const ACTIONS: Record<string, string> = { POST: 'CREATE', PUT: 'UPDATE', PATCH: 'UPDATE', DELETE: 'DELETE' };
 
-// Every write by a signed-in user is recorded after the response has gone out; reads are not.
 export const recordActivity = (req: Request, res: Response, next: NextFunction): void => {
   res.on('finish', () => {
     const action = ACTIONS[req.method];

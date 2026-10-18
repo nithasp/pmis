@@ -1,7 +1,6 @@
 <template>
    <div>
       <slot name="activator" :on="{ click: openModal }">
-         <!-- Default activator can be defined here if needed -->
          <button v-if="!hideButton" class="py-2 px-4 rounded bg-primaryy" @click="openModal">เปิด</button>
       </slot>
       <UModal :modelValue="modal" :ui="{
@@ -153,47 +152,41 @@ const errors = ref<FormError[]>([]);
 const validate = (field: string, valueSelected: any = 0) => {
    const validationErrors: FormError[] = [];
 
-   // Name validation
    if (field === 'name') {
       if (!props.formGroup.invoice.name) {
          validationErrors.push({ path: 'name', message: t('please_enter_a_value') });
       }
    }
 
-   // Tax ID validation
    if (field === 'taxId') {
       if (!props.formGroup.invoice.taxId) {
          validationErrors.push({ path: 'taxId', message: t('please_enter_a_value') });
-      } else if (!regxNumber13Degit.test(props.formGroup.invoice.taxId)) {  // Replace with desired phone number validation
+      } else if (!regxNumber13Degit.test(props.formGroup.invoice.taxId)) {
          validationErrors.push({ path: 'taxId', message: t('taxpayer_identification_not_correct') });
       }
    }
 
-   // Contact Name validation
    if (field === 'contactName') {
       if (!props.formGroup.invoice.contactName) {
          validationErrors.push({ path: 'contactName', message: t('please_enter_a_value') });
       }
    }
 
-   // Phone Number validation
    if (field === 'phoneNumber') {
       if (!props.formGroup.invoice.phoneNumber) {
          validationErrors.push({ path: 'phoneNumber', message: t('please_enter_a_value') });
-      } else if (!regxPhone.test(props.formGroup.invoice.phoneNumber)) {  // Replace with desired phone number validation
+      } else if (!regxPhone.test(props.formGroup.invoice.phoneNumber)) {
          validationErrors.push({ path: 'phoneNumber', message: t('phone_format_validate_message') });
       }
    }
-   // Secondary Phone Number validation
    if (field === 'secondaryPhoneNumber') {
       if (!props.formGroup.invoice.secondaryPhoneNumber) {
          validationErrors.push({ path: 'secondaryPhoneNumber', message: t('please_enter_a_value') });
-      } else if (!regxPhone.test(props.formGroup.invoice.secondaryPhoneNumber)) {  // Replace with desired phone number validation
+      } else if (!regxPhone.test(props.formGroup.invoice.secondaryPhoneNumber)) {
          validationErrors.push({ path: 'secondaryPhoneNumber', message: t('phone_format_validate_message') });
       }
    }
 
-   // Payment Method ID validation
    if (field === 'paymentMethodId') {
       props.formGroup.invoice.paymentMethodId = valueSelected || props.formGroup.invoice.paymentMethodId;
       if (!props.formGroup.invoice.paymentMethodId || props.formGroup.invoice.paymentMethodId < 1) {
@@ -201,7 +194,6 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Payment Term ID validation
    if (field === 'paymentTermId') {
       props.formGroup.invoice.paymentTermId = valueSelected || props.formGroup.invoice.paymentTermId;
       if (!props.formGroup.invoice.paymentTermId || props.formGroup.invoice.paymentTermId < 1) {
@@ -209,7 +201,6 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Country ID validation
    if (field === 'countryId') {
       props.formGroup.invoice.countryId = valueSelected || props.formGroup.invoice.countryId;
       if (!props.formGroup.invoice.countryId || props.formGroup.invoice.countryId < 1) {
@@ -217,7 +208,6 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Province ID validation (dependent on isOtherInvoiceCountry)
    if (field === 'provinceId') {
       props.formGroup.provinceId = valueSelected || props.formGroup.provinceId;
       if (!isOtherInvoiceCountry.value && (!props.formGroup.provinceId || props.formGroup.provinceId < 1)) {
@@ -225,7 +215,6 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // District ID validation (dependent on isOtherInvoiceCountry)
    if (field === 'districtId') {
       props.formGroup.invoice.districtId = valueSelected || props.formGroup.invoice.districtId;
       if (!isOtherInvoiceCountry.value && (!props.formGroup.invoice.districtId || props.formGroup.invoice.districtId < 1)) {
@@ -233,7 +222,6 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // SubDistrict ID validation (dependent on isOtherInvoiceCountry)
    if (field === 'subDistrictId') {
       props.formGroup.invoice.subDistrictId = valueSelected || props.formGroup.invoice.subDistrictId;
       if (!isOtherInvoiceCountry.value && (!props.formGroup.invoice.subDistrictId || props.formGroup.invoice.subDistrictId < 1)) {
@@ -241,28 +229,24 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Post Code validation
    if (field === 'postCode') {
       if (!props.formGroup.invoice.postCode) {
          validationErrors.push({ path: 'postCode', message: t('please_enter_a_value') });
       }
    }
 
-   // Stage Province validation (dependent on isOtherInvoiceCountry)
    if (field === 'stageProvince') {
       if (isOtherInvoiceCountry.value && !props.formGroup.invoice.stageProvince) {
          validationErrors.push({ path: 'stageProvince', message: t('please_enter_a_value') });
       }
    }
 
-   // Address Validation
    if (field === 'address') {
       if (!props.formGroup.invoice.address) {
          validationErrors.push({ path: 'address', message: t('please_enter_a_value') });
       }
    }
 
-   // Clear previous errors for the specific field and add the new error if any
    errors.value = errors.value.filter(err => err.path !== field);
    if (validationErrors.length) {
       errors.value.push(...validationErrors);
@@ -315,32 +299,9 @@ async function submitForm(event: FormSubmitEvent<z.output<any>>) {
       Object.assign(props.formGroup, event.data);
       modal.value = false;
    }
-
-   // try {
-   //    isLoading.value = true;
-   //    let resp;
-   //    if (props.editMode) {
-   //       resp = await putVesselType(props.vesselId, { name: form.value.name });
-   //    } else {
-   //       resp = await postVesselType({ name: form.value.name });
-   //    }
-   //    console.log("submitted", resp);
-   //    if (resp.statusCode === 200) {
-   //       isDialogSuccessOpen.value = true;
-   //       emit("fetch");
-   //       closeModal();
-   //    } else {
-   //       toast.add({ title: resp?.message, color: "red" });
-   //    }
-   // } catch (error) {
-   //    console.error(error);
-   // } finally {
-   //    isLoading.value = false;
-   // }
 }
 const closeModal = () => {
    clearForm();
-   // emit("close");
    modal.value = false;
 };
 const clearForm = () => {

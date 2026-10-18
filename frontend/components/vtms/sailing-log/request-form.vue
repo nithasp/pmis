@@ -32,13 +32,11 @@
  
      <UDivider class="my-6" />
  
-     <!-- Section 1: Ship Information and Documents -->
      <section id="request-form-section1" class="border rounded-xl border-solid border-[#D0D5DD] p-6">
        <div class="ship-info-title">
          <h2 class="font-anuphan-semi-bold text-base text-gray-400">{{ $t("ship_info") }}</h2>
        </div>
        <div class="ship-info-content mt-4">
-         <!-- Grid for basic ship details -->
          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
            <div>
              <h3 class="font-anuphan-medium text-sm text-gray-400">{{ $t("request_number") }}</h3>
@@ -103,7 +101,6 @@
  
          <UDivider class="my-4" />
  
-         <!-- Grid for additional ship measurements -->
          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
            <div>
              <h3 class="font-anuphan-medium text-sm text-gray-400">{{ $t("cargo_weight") }}</h3>
@@ -141,7 +138,6 @@
  
          <UDivider class="my-4" />
  
-         <!-- Attached Documents -->
          <div>
            <h2 class="font-anuphan-semi-bold text-base text-gray-400">{{ $t("attached_documents") }}</h2>
            <div class="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-4" v-if="formGroupRequest.vessel.vesselUploadFiles.length">
@@ -166,13 +162,11 @@
        </div>
      </section>
  
-     <!-- Section 2: Estimated Entry and Exit Times -->
      <section id="request-form-section2" class="border rounded-xl border-solid border-[#D0D5DD] p-6 mt-5">
        <div class="est-time-title">
          <h2 class="font-anuphan-semi-bold text-base text-gray-400">{{ $t("estimated_entry_exit_time") }}</h2>
        </div>
        <div class="est-time-content mt-4">
-         <!-- Grid for entry/exit dates -->
          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
            <div>
              <h3 class="font-anuphan-medium text-sm text-gray-400">{{ $t("estimated_entry_date") }}</h3>
@@ -190,7 +184,6 @@
  
          <UDivider class="my-6" />
  
-         <!-- Loop through each berth -->
          <div :id="`harbour-${index}`" v-for="(berth, index) in formGroupRequest.berths" :key="index">
            <h2 class="font-anuphan-semi-bold text-base text-gray-400 mb-6">
              {{ $t("docking_vessel") }} {{ index + 1 }}
@@ -254,7 +247,6 @@
  
            <UDivider v-if="berth.products.length" class="my-4" />
  
-           <!-- Cargo List -->
            <div v-if="berth.products.length" id="cargo-list">
              <h2 class="font-anuphan-semi-bold text-base text-gray-400">{{ $t("cargo_list") }}</h2>
              <UTable
@@ -306,7 +298,6 @@
              </div>
            </div>
  
-           <!-- Attached Documents for Each Berth -->
            <div id="documents-container">
              <div
                id="attached-documents"
@@ -380,7 +371,6 @@
    </div>
  </template>
  
-
 <script setup lang="ts">
 import Select from "~/components/form/u-select.vue";
 import NuxtIcon from "~/components/ui/nuxtIcon.vue";

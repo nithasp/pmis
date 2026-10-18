@@ -189,7 +189,6 @@ export default function useVtmsTableService() {
          const response: AxiosResponse = await $api.delete(`/admin/vtms/log-book/${id}`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("delete vessel agent failed:", error);
          return wrapperErrorResp(error);
       }

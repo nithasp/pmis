@@ -15,7 +15,6 @@ function generatePDF() {
       format: "A4",
    });
 
-   // Add title and subtitles
    doc.setFont("THSarabunNew", "normal");
    doc.setFontSize(14);
    doc.text("สำนักงานท่าเรืออุตสาหกรรมมาบตาพุด", doc.internal.pageSize.getWidth() / 2, 30, { align: "center" });
@@ -26,7 +25,6 @@ function generatePDF() {
 
    const startY = 80;
 
-   // Your ship data array
    const shipData = [
       {
          companyName: "",
@@ -65,14 +63,13 @@ function generatePDF() {
       },
    ];
 
-   // Map the ship data to table rows
    const tableBody = shipData.map((ship, index) => [
-      index + 1, // ลำดับ
-      ship.companyName, // บริษัทเอเยน
-      ship.allDoc, // จำนวนเข้าท่าเทียบทั้งหมด
-      ship.hourDoc, // จำนวนที่ยื่นคำร้องไม่ถึง 24 ชม.
-      ship.percentageAllDoc, // คิดเป็นร้อยละของผู้ประกอบการทั้งหมด
-      ship.percentageHourDoc, // คิดเป็นร้อยละของจำนวนเรือเข้าท่า
+      index + 1,
+      ship.companyName,
+      ship.allDoc,
+      ship.hourDoc,
+      ship.percentageAllDoc,
+      ship.percentageHourDoc,
    ]);
 
    autoTable(doc, {
@@ -97,20 +94,19 @@ function generatePDF() {
          font: "THSarabunNew Bold",
          fontStyle: "normal",
          halign: "right",
-         fillColor: [255, 255, 255], // White background
-         textColor: [0, 0, 0], // Black text
-         lineColor: [0, 0, 0], // Black border
-         lineWidth: 0.1, // Border width
+         fillColor: [255, 255, 255],
+         textColor: [0, 0, 0],
+         lineColor: [0, 0, 0],
+         lineWidth: 0.1,
       },
       bodyStyles: {
-         halign: "center", // Center text for body cells
+         halign: "center",
          lineWidth: 0.1,
          lineColor: [0, 0, 0],
       },
       theme: "grid",
    });
 
-   // Save the PDF
    doc.save("mockup-report.pdf");
 }
 </script>

@@ -249,14 +249,10 @@ const createSchema = (isOtherCountry: boolean) => {
         grossTonnage: z.number({ invalid_type_error: t('please_enter_a_value') }).min(1, { message: t('please_enter_a_value') }),
         lengthOverall: z.number({ invalid_type_error: t('please_enter_a_value') }).min(1, { message: t('please_enter_a_value') }),
         loadWeight: z.number({ invalid_type_error: t('please_enter_a_value') }).min(1, { message: t('please_enter_a_value') }),
-        // loadWeight: z.number().min(1, { message: t('please_enter_a_value') }),
-        // mainEngine: z.string().nonempty({ message: t('please_enter_a_value') }),
-        // bandAndModel: z.string().nonempty({ message: t('please_enter_a_value') }),
         mmsiNumber: z.string().optional().refine((val) => !val || regxNumber10Degit.test(val), { message: t('mmsi_number_not_correct') }),
         netTonnage: z.number({ invalid_type_error: t('please_enter_a_value') }).min(1, { message: t('please_enter_a_value') }),
         officialNumber: z.string().nonempty({ message: t('please_enter_a_value') }).refine((val) => regxNumber9Degit.test(val), { message: t('official_number_not_correct') }),
         vesselFlagId: z.number({ invalid_type_error: t('please_enter_a_value') }).min(1, { message: t('please_enter_a_value') }),
-        // vesselTypeId: isOtherCountry ? z.number().min(1, { message: t('please_enter_a_value') }) : z.number().optional(),
         vesselTypeId: z.number({ invalid_type_error: t('please_enter_a_value') }).min(1, { message: t('please_enter_a_value') }),
         vesselLicenseExpiredDate: !isOtherCountry ? z.string().nonempty({ message: t('please_enter_a_value') }) : z.string().optional(),
     })
@@ -318,17 +314,15 @@ onMounted(() => {
     vesselOptionsStore.getVesselFlagOption()
 });
 
-
 onBeforeRouteLeave((to, from, next) => {
     if (notAllowNavigate.value) {
         isConfirmLeaveDialogOpen.value = true;
         nextRoute.value = to;
-        next(false); // Prevent navigation until confirmed
+        next(false);
     } else {
-        next(); // Allow navigation
+        next();
     }
 });
-
 
 watch(
     () => shipParticulars.value,
@@ -522,14 +516,12 @@ watch(
 const validate = (field: string, valueSelected: any = 0) => {
     const validationErrors: FormError[] = [];
 
-    // Vessel License Expired Date validation (dependent on isOtherCountry)
     if (field === 'vesselLicenseExpiredDate') {
         if (!formGroup.value.vesselLicenseExpiredDate && !isOtherCountry.value) {
             validationErrors.push({ path: 'vesselLicenseExpiredDate', message: t('please_enter_a_value') });
         }
     }
 
-    // Clear previous errors for the specific field and add the new error if any
     errors.value = errors.value.filter(err => err.path !== field);
     if (validationErrors.length) {
         errors.value.push(...validationErrors);
@@ -540,7 +532,7 @@ const daysRemaining = computed(() => {
     const currentDate = new Date();
     if (formGroup.value.vesselLicenseExpiredDate && !new Date(formGroup.value.vesselLicenseExpiredDate)) return 0;
     const diffTime = new Date(formGroup.value.vesselLicenseExpiredDate).getTime() - currentDate.getTime();
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert ms to days
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 });
 
 async function onSubmit(event: FormSubmitEvent<z.output<typeof formSchema.value>>) {

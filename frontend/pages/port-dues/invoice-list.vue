@@ -185,7 +185,6 @@ const paginationData = ref({
    totalPages: 0,
 });
 
-
 const limitRowTable = ref([
    {
       id: 10,
@@ -224,7 +223,6 @@ const handleClickResetFitler = () => {
       Order: [{ column: sortField.value, dir: sortOrder.value }]
    });
 };
-
 
 const columns = [
    {
@@ -272,8 +270,6 @@ const columns = [
 onMounted(() => {
    getPostDuesPendingList(filter.value);
    documentOptionsStore.getBerthsOptions()
-   // vesselOptionsStore.getVesselTypeOption();
-   // vesselOptionsStore.getVesselFlagOption();
 });
 
 const getPostDuesPendingList = async (filter: IFilterPortDuesPending = {

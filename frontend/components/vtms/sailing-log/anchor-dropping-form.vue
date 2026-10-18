@@ -193,7 +193,6 @@
    <Loading v-if="isLoading" />
  </template>
  
-
 <script setup lang="ts">
 import Input from "~/components/form/u-input.vue";
 import InputNumber from "~/components/form/input-number.vue";
@@ -258,7 +257,6 @@ const props = defineProps({
 onMounted(() => {
    getDocumentDetail();
    getPortList();
-   //getVtmsLogBookBerthDetail();
    getVtmsAnchorDocument();
 });
 
@@ -376,10 +374,7 @@ const dialogAnchorDroppingCancel = () => {
 
 const dialogAnchorDroppingConfirm = (status: boolean, type: string = "", anchorItem: any, anchorIndex: number) => {
    isDialogAnchorDroppingFormOpen.value = status;
-   if (type === "refresh") {
-      // filter.value.page = 1;
-      // getAnchorDroppingList();
-   }
+   if (type === "refresh") {}
    if (type === "create") {
       anchorsItem.value.push(anchorItem);
    } else {

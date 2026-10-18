@@ -9,7 +9,6 @@
                <UForm :state="formForgetPassword" @submit="onSubmit">
                   <div @click="onClickBackToLogin" id="forget-password"
                      class="cursor-pointer mb-6 text-primaryy-500 flex items-center">
-                     <!-- <img :src="AngleLeft" alt="UserIcon" /> -->
                      <NuxtIcon name="angle-left" />
                      <div class="ml-2">{{ $t('back_to_login') }}</div>
                   </div>
@@ -78,7 +77,6 @@ const validate = (field: string) => {
          validationErrors.push({ path: 'email', message: t('email_format_validate_message') });
       }
    }
-   // Clear previous errors for the specific field and add the new error if any
    errors.value = errors.value.filter(err => err.path !== field);
    if (validationErrors.length) {
       errors.value.push(...validationErrors);

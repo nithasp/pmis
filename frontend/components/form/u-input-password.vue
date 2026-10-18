@@ -10,9 +10,6 @@
                <NuxtIcon :name="isPasswordDisplay ? 'eye-crossed' : 'eye'" color="text-grayy-75"
                   class="cursor-pointer pointer-events-auto" @click="isPasswordDisplay = !isPasswordDisplay" />
             </template>
-            <!-- <template v-if="error" #trailing>
-                    <NuxtIcon name="exclamation" color="text-error-500" />
-            </template> -->
          </UInput>
       </template>
    </UFormGroup>
@@ -36,10 +33,8 @@ const props = defineProps({
    },
    onBlur: Function
 });
-// Define the internal state for the component
 const internalValue = ref(props.modelValue);
 
-// Emit the changes back to the parent component
 const emit = defineEmits(["update:modelValue"]);
 watch(internalValue, (newValue) => {
    emit("update:modelValue", newValue);

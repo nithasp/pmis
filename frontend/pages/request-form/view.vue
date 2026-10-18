@@ -606,7 +606,6 @@
    </div>
  </template>
  
-
 <script setup lang="ts">
 import USelect from "~/components/form/u-select.vue";
 import FileDropzone from "~/components/form/fileDropzone.vue";
@@ -892,11 +891,6 @@ const renderExpireDate = (date: string | null) => {
       return "";
    }
 };
-
-// const handleOpenVesselHistoryDialog = () => {
-//     isVesselHistoryDialogOpen.value = true
-//     vesselId.value = documentDataDetail.value.vessel.vesselId
-// }
 
 const renderStatus = (status: string) => {
    if ((status === DocumentStatusEnum.PendingApproval && isAgency) || status === DocumentStatusEnum.PendingReview) {

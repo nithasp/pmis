@@ -1,5 +1,3 @@
-// services/auth.ts
-
 import { useNuxtApp } from '#app'
 import type { AxiosResponse } from 'axios'
 import type { IVesselRequest } from '../interfaces/IVesselRequest'
@@ -18,7 +16,6 @@ export default function useRoleService() {
             const response: AxiosResponse = await $api.get(`/admin/roles?${filterParams}`)
             return wrapperSuccessResp(response.data)
         } catch (error) {
-            // Handle error (e.g., show a notification or throw an error)
             console.error('get roles failed:', error)
             return wrapperErrorResp(error)
         }
@@ -29,7 +26,6 @@ export default function useRoleService() {
             const response: AxiosResponse = await $api.get(`/admin/roles/${id}`)
             return wrapperSuccessResp(response.data)
         } catch (error) {
-            // Handle error (e.g., show a notification or throw an error)
             console.error('get role detail failed:', error)
             return wrapperErrorResp(error)
         }
@@ -40,7 +36,6 @@ export default function useRoleService() {
             const response: AxiosResponse = await $api.post('admin/roles', { ...body })
             return wrapperSuccessResp(response.data)
         } catch (error) {
-            // Handle error (e.g., show a notification or throw an error)
             console.error('create role failed:', error)
             return wrapperErrorResp(error)
         }
@@ -51,7 +46,6 @@ export default function useRoleService() {
             const response: AxiosResponse = await $api.put(`admin/roles/${id}`, { ...body })
             return wrapperSuccessResp(response.data)
         } catch (error) {
-            // Handle error (e.g., show a notification or throw an error)
             console.error('update role failed:', error)
             return wrapperErrorResp(error)
         }
@@ -62,7 +56,6 @@ export default function useRoleService() {
             const response: AxiosResponse = await $api.put(`admin/roles/${id}/status`, { enabled })
             return wrapperSuccessResp(response.data)
         } catch (error) {
-            // Handle error (e.g., show a notification or throw an error)
             console.error('update status role failed:', error)
             return wrapperErrorResp(error)
         }
@@ -74,7 +67,6 @@ export default function useRoleService() {
             const response: AxiosResponse = await $api.delete(url)
             return wrapperSuccessResp(response.data)
         } catch (error) {
-            // Handle error (e.g., show a notification or throw an error)
             console.error('cancel role failed:', error)
             return wrapperErrorResp(error)
         }

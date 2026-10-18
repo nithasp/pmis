@@ -435,12 +435,11 @@ const isRequiredFile = ref<boolean>(false);
 const uploadFiles = ref<IUploadFile[]>([]);
 
 const filteredYears = computed((): YearOption[] => {
-   if (!formGroup.value.start || !formGroup.value.end || !formGroup.value.rateChangeCycle) return []; // Ensure rateChangeCycle is available
+   if (!formGroup.value.start || !formGroup.value.end || !formGroup.value.rateChangeCycle) return [];
 
    const minYear = new Date(formGroup.value.start).getFullYear();
    const maxYear = new Date(formGroup.value.end).getFullYear();
 
-   // Ensure rateChangeCycle is greater than 0
    const cycle = Math.max(formGroup.value.rateChangeCycle, 1);
 
    const years: YearOption[] = [];
@@ -468,7 +467,6 @@ const toggleSelection = (e: boolean) => {
 };
 
 const handleEditRate = (row: IContractAnnualRate, index: number) => {
-   // console.log('handle edit rate', index, row);
    rateEditIndex.value = index;
    editRateDialogOpen.value = true;
 };
@@ -612,18 +610,15 @@ const isFieldError = (field: keyof ValidationFields) => {
    const value = formGroup.value[field as keyof IContractDetail];
    const pristine = fieldValidation.value[field].pristine;
 
-   // Validation for terminatedDate: Ensure it's only checked if isTerminateChecked is true
    if (field === "terminatedDate") {
       if (isTerminateChecked.value && !value) {
          fieldValidation.value[field].message = t("required");
          return true;
       }
-      // Validate terminatedDate is greater than start date
       if (value && new Date(value) <= new Date(formGroup.value.start)) {
          fieldValidation.value[field].message = t("วันที่สิ้นสุดก่อนสัญญาต้องมากกว่าระยะเวลาสัญญาเริ่มต้น");
          return true;
       }
-      // Validate terminatedDate is less than or equal to end date
       if (value && new Date(value) > new Date(formGroup.value.end)) {
          fieldValidation.value[field].message = t("วันที่สิ้นสุดก่อนสัญญาต้องน้อยกว่าหรือเท่ากับระยะเวลาสัญญาสิ้นสุด");
          return true;
@@ -631,13 +626,11 @@ const isFieldError = (field: keyof ValidationFields) => {
       return false;
    }
 
-   // Validation for other fields
    if (!value && pristine) {
       fieldValidation.value[field].message = t("required");
       return true;
    }
 
-   // Validate "end" date for contract period (start <= end)
    if (field === "end" && value && new Date(value) < new Date(formGroup.value.start)) {
       fieldValidation.value[field].message = t("ระยะเวลาสัญญาสิ้นสุดต้องมากกว่าหรือเท่ากับระยะเวลาสัญญาเริ่มต้น");
       return true;
@@ -646,22 +639,12 @@ const isFieldError = (field: keyof ValidationFields) => {
    return false;
 };
 
-// const isFormGroupValid = ({ annualRates, berthName, id, start, end, ...fieldsToCheck }: IContractDetail) => {
-//     return Object.values(fieldsToCheck).every((value) => value) && start && end && new Date(start) <= new Date(end);
-// };
-
 const isFormGroupValid = ({ annualRates, uploadFiles, berthName, id, start, end, terminatedDate, ...fieldsToCheck }: IContractDetail) => {
-   // Validate all other fields
    const allFieldsValid = Object.values(fieldsToCheck).every((value: string | number) => value);
-   // Validate date range (start <= end)
    const dateRangeValid = start && end && new Date(start) <= new Date(end);
-   // Validate terminatedDate only if isTerminateChecked is true
    const terminatedDateValid = !isTerminateChecked.value || (!!terminatedDate && terminatedDate !== null);
-   // Validate terminatedDate to be greater than start date
    const terminatedDateGreaterThanStart = !isTerminateChecked.value || (terminatedDate && new Date(terminatedDate) > new Date(start));
-   // Validate terminatedDate to be less than or equal to end date
    const terminatedDateLessThanOrEqualToEnd = !isTerminateChecked.value || (terminatedDate && new Date(terminatedDate) <= new Date(end));
-   // Return the combined validation result
    return allFieldsValid && dateRangeValid && terminatedDateValid && terminatedDateGreaterThanStart && terminatedDateLessThanOrEqualToEnd;
 };
 

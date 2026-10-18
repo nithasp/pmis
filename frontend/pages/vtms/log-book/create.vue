@@ -128,115 +128,11 @@
                      :disabled="!formGroup.details[0].berth_id"
                   />
                </div>
-               <!-- <div class="col-span-1">
-                  <Input
-                     :label="'Gross Tonnage (Confirm)'"
-                     name="grossTonnage"
-                     :placeholder="'grossTonnage'"
-                     required
-                     v-model="formGroup.gross_tonnage"
-                     type="number"
-                  />
-               </div> -->
-               <!-- <div class="col-span-1">
-                  <Input :label="'กินน้ำลึก (Confirm)'" name="Depth" :placeholder="'Depth'" required v-model="formGroup.depth" />
-               </div> -->
-               <!-- <div class="col-span-1">
-                  <USelect
-                     :label="'Last Port'"
-                     name="LastPort"
-                     :placeholder="'Last Port'"
-                     required
-                     :searchable-placeholder="'Last Port'"
-                     v-model="formGroup.port_id_last"
-                     searchable
-                     :options="portList"
-                  />
-               </div>
-               <div class="col-span-1">
-                  <USelect
-                     :label="'Next Port'"
-                     name="NextPort"
-                     :placeholder="'Next Port'"
-                     required
-                     :searchable-placeholder="'Next Port'"
-                     v-model="formGroup.port_id_next"
-                     searchable
-                     :options="portList"
-                  />
-               </div> -->
-               <!-- <div class="col-span-1">
-                  <Input :label="'Voyage'" name="voyage" :placeholder="'voyage'" required v-model="formGroup.voyage" />
-               </div> -->
             </div>
          </div>
          <div class="border border-grayy-100 p-8 rounded-xl mt-6">
             <h2 class="font-semibold text-grayy-400 mb-3">ข้อมูลเทียบท่า</h2>
             <div class="grid grid-cols-2 gap-4">
-               <!-- <div class="col-span-1">
-                  <USelect
-                     :label="'ท่าเทียบเรือ'"
-                     name="berth"
-                     :placeholder="'ค้นหา'"
-                     required
-                     :searchable-placeholder="'ค้นหา'"
-                     v-model="formGroup.details[0].berth_id"
-                     searchable
-                     :options="berthList"
-                     option-attribute="name_th"
-                     value-attribute="id"
-                  />
-               </div> -->
-               <!-- <div class="col-span-1">
-                  <USelect
-                     :label="'วันถุประสงค์เทียบท่า'"
-                     name="purpose"
-                     :placeholder="'ค้นหา'"
-                     required
-                     :searchable-placeholder="'ค้นหา'"
-                     v-model="formGroup.details[0].purpose_id"
-                     searchable
-                     option-attribute="purpose_name"
-                     :options="purposeList"
-                  />
-               </div> -->
-               <!-- <div class="col-span-1">
-                  <USelect
-                     :label="'ลักษณะสินค้า'"
-                     name="cargo_type"
-                     :placeholder="'ค้นหา'"
-                     required
-                     :searchable-placeholder="'ค้นหา'"
-                     v-model="formGroup.details[0].cargo_type_id"
-                     searchable
-                     :options="cargoTypeList"
-                  />
-               </div>
-               <div class="col-span-1">
-                  <USelect
-                     :label="'รูปแบบสินค้า'"
-                     name="cargo_wharfage"
-                     :placeholder="'ค้นหา'"
-                     required
-                     :searchable-placeholder="'ค้นหา'"
-                     v-model="formGroup.details[0].cargo_wharfage_id"
-                     searchable
-                     :options="cargoWharfageList"
-                  />
-               </div> -->
-               <!-- <div class="col-span-1">
-                  <USelect
-                     :label="'ท่าเทียบเรือย่อย'"
-                     name="jetty"
-                     :placeholder="'ค้นหา'"
-                     required
-                     :searchable-placeholder="'ค้นหา'"
-                     v-model="formGroup.details[0].jetty_id"
-                     searchable
-                     :options="jettyList"
-                     :disabled="!formGroup.details[0].berth_id"
-                  />
-               </div> -->
             </div>
 
             <UDivider class="my-4" />
@@ -411,8 +307,6 @@ const formGroup = ref({
          jetty_id: 0,
          mooring_date: "",
          departure_date: "",
-         // mooring_date: "2024-10-07T19:00:00+07:00",
-         // departure_date: "2024-10-08T19:00:00+07:00",
       },
    ],
    tugs: [],
@@ -427,7 +321,6 @@ const purposeList = ref([]);
 const cargoTypeList = ref([]);
 const cargoWharfageList = ref([]);
 const jettyList = ref([]);
-// const arrivalDate = ref(new Date())
 const arrivalDate = ref();
 
 watch(
@@ -482,7 +375,6 @@ const payload = ref<IVtmsLogBookAdd>({
 const addressOptionsStore = useAddressOptionsStore();
 
 onMounted(async () => {
-   // getVesselList();
    await getMasterList();
    await getPortList();
    if (logBookId) {
@@ -507,25 +399,6 @@ const getLogBookDetailById = async (id: number) => {
          };
          formGroup.value = { ...resp.data, details: [setDetail] };
          let vessel = resp.data.vessel;
-         // vesselData.value = {
-         //    owner: vessel.owner,
-         //    vesselFlagName: vessel.vessel_flag.name,
-         //    name: vessel.name,
-         //    vesselTypeName: vessel.vessel_type,
-         //    imoNumber: vessel.imo_number,
-         //    mmsiNumber: vessel.mmsi_number,
-         //    officialNumber: vessel.official_number,
-         //    callSign: vessel.call_sign,
-         //    licenseExpiredDate: vessel.license_expired_date,
-         //    loadWeight: vessel.load_weight,
-         //    grossTonnage: vessel.gross_tonnage,
-         //    netTonnage: vessel.net_tonnage,
-         //    lengthOverall: vessel.length_overall,
-         //    breadthExtreme: vessel.breadth_extreme,
-         //    depth: vessel.depth,
-         //    mainEngine: vessel.main_engine,
-         //    bandAndModel: vessel.band_and_model,
-         // };
          vesselData.value = {
             name: "",
             vesselFlagName: "",
@@ -539,7 +412,6 @@ const getLogBookDetailById = async (id: number) => {
          if (resp.data.details.berth_id) {
             await getJettyList(resp.data.details.berth_id);
          }
-         // console.log("get detail", formGroup.value);
       }
    } catch (error) {
       console.error(error);
@@ -552,9 +424,9 @@ onBeforeRouteLeave((to, from, next) => {
    if (notAllowNavigate.value) {
       isConfirmLeaveDialogOpen.value = true;
       nextRoute.value = to;
-      next(false); // Prevent navigation until confirmed
+      next(false);
    } else {
-      next(); // Allow navigation
+      next();
    }
 });
 
@@ -574,7 +446,6 @@ const getPortList = async () => {
 };
 const getBerthList = async () => {
    try {
-      // isLoading.value = true;
       const resp = await getBerth();
       if (resp.statusCode === 200) {
          const { data } = resp.data;
@@ -588,7 +459,6 @@ const getBerthList = async () => {
 };
 const getPurposeList = async () => {
    try {
-      // isLoading.value = true;
       const resp = await getPurpose();
       if (resp.statusCode === 200) {
          const { data } = resp.data;
@@ -604,7 +474,6 @@ const getPurposeList = async () => {
 };
 const getCargoTypeList = async () => {
    try {
-      // isLoading.value = true;
       const resp = await getCargoType();
       if (resp.statusCode === 200) {
          const { data } = resp.data;
@@ -618,7 +487,6 @@ const getCargoTypeList = async () => {
 };
 const getCargoWharfageList = async () => {
    try {
-      // isLoading.value = true;
       const resp = await getCargoWharfage();
       if (resp.statusCode === 200) {
          const { data } = resp.data;
@@ -633,12 +501,10 @@ const getCargoWharfageList = async () => {
 const getJettyList = async (id: number) => {
    try {
       console.log("jettys id", id);
-      // isLoading.value = true;
       if (id) {
          const resp = await getJetty(id);
          if (resp.statusCode === 200) {
             const { data, jettys } = resp.data;
-            // console.log("jettys id", jettys);
             jettyList.value = jettys;
          }
       }
@@ -654,12 +520,6 @@ async function onSubmit(event: FormSubmitEvent<z.output<typeof logBookSchema.val
          vesselType: vesselType,
          ...formGroup.value,
          vessel_id: vesselData.value.id,
-         // details: [
-         //    {
-         //       mooring_date: "2024-10-07T19:00:00+07:00",
-         //       departure_date: "2024-10-08T19:00:00+07:00",
-         //    },
-         // ],
       };
 
       payload.value = { ...newPayload };

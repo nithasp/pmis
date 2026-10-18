@@ -62,7 +62,7 @@ const formSchema = z.object({
    confirmPassword: z.string().nonempty({ message: 'กรุณากรอกข้อมูล' }).regex(regxPassword, "รหัสผ่านต้องมีความยาวอย่างน้อย 8 อักขระและประกอบด้วยตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลขผสมกัน"),
 }).refine((data) => data.password === data.confirmPassword, {
    message: "รหัสผ่านของคุณไม่ตรงกัน",
-   path: ["confirmPassword"], // This will show the error at the 'confirmPassword' field
+   path: ["confirmPassword"],
 });
 
 const formNewPassword = ref({
@@ -97,7 +97,6 @@ onMounted(async () => {
       titleModalAlert.value = 'ยืนตัวตนล้มเหลว'
       isOpenModalAlert.value = true
       modalAlertMessage.value = "ไม่มี token "
-
    }
 })
 
@@ -113,7 +112,6 @@ async function onSubmit(event: FormSubmitEvent<z.output<typeof formSchema>>) {
    }
    const resp = await resetPassword({ ...payloadReset })
    if (resp.statusCode === 200) {
-
       titleModalAlert.value = 'เปลี่ยนรหัสผ่านสำเร็จ'
       isOpenModalAlert.value = true
       modalAlertMessage.value = resp.message
@@ -124,6 +122,5 @@ async function onSubmit(event: FormSubmitEvent<z.output<typeof formSchema>>) {
       modalAlertMessage.value = resp.message
    }
 }
-
 
 </script>

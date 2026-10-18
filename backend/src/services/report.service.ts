@@ -40,7 +40,6 @@ const fmtDate = (value: unknown, era: ReportRange['era']): string => {
   return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${era === 'buddhist' ? d.getFullYear() + 543 : d.getFullYear()}`;
 };
 
-// Approved requests in the period with their agency, vessel and first berth
 async function approvedDocuments(r: ReportRange, foreignOnly = false): Promise<Row[]> {
   const params: unknown[] = [r.from, r.to];
   let where = "d.deleted_at IS NULL AND d.status = 'Approved' AND COALESCE(d.approved_at, d.request_date) BETWEEN $1 AND $2";
@@ -65,7 +64,6 @@ async function approvedDocuments(r: ReportRange, foreignOnly = false): Promise<R
   return rows;
 }
 
-// Submitted requests in the period (whatever happened to them afterwards)
 async function submittedDocuments(r: ReportRange): Promise<Row[]> {
   const { rows } = await pool.query(
     `SELECT d.*, dv.vessel_name, dv.vessel_gross_tonnage, u.id AS user_id, COALESCE(NULLIF(u.company, ''), u.full_name) AS company_name, u.full_name AS contact_name,
@@ -86,7 +84,6 @@ const isLate = (doc: Row): boolean => {
 
 export function createReportService() {
   const builders: Record<ReportName, (r: ReportRange) => Promise<Row | Row[]>> = {
-    // 1. share of late submissions per agency
     async 'sum-submit-late-order'(r) {
       const docs = await submittedDocuments(r);
       const total = docs.length;
@@ -104,7 +101,6 @@ export function createReportService() {
         .sort((a, b) => num(b.hourDoc) - num(a.hourDoc) || num(b.allDoc) - num(a.allDoc));
     },
 
-    // 2. every late submission
     async 'sum-submit-late-list'(r) {
       const docs = await submittedDocuments(r);
       return docs.filter(isLate).map((d) => {
@@ -122,7 +118,6 @@ export function createReportService() {
       });
     },
 
-    // 3. requests per agency
     async 'user-document-count'(r) {
       const docs = await submittedDocuments(r);
       const byAgency = new Map<string, Row>();
@@ -135,7 +130,6 @@ export function createReportService() {
       return [...byAgency.values()].sort((a, b) => b.document_count - a.document_count);
     },
 
-    // 6. per approval day: GRT bands, cancellations and vessels that never berthed
     async 'document-count'(r) {
       const params: unknown[] = [r.from, r.to];
       let berthFilter = '';
@@ -176,7 +170,6 @@ export function createReportService() {
       return { items: [...byDay.values()], total };
     },
 
-    // 7. agencies approved in the period
     async 'approved-agency'(r) {
       const { rows } = await pool.query(
         `SELECT id, approved_at, COALESCE(NULLIF(company, ''), full_name) AS company_name, full_name, phone, mobile_phone, email FROM users
@@ -186,7 +179,6 @@ export function createReportService() {
       return rows.map((u) => ({ userId: u.id, approvedDate: iso(u.approved_at), companyName: str(u.company_name), contactName: str(u.full_name), phone: str(u.phone), mobilePhone: str(u.mobile_phone), email: str(u.email) }));
     },
 
-    // 4-1 / 5-1: vessels, port dues and cargo per agency
     async 'sum-vessel-agency'(r) {
       return perAgencyVessels(await approvedDocuments(r));
     },
@@ -194,7 +186,6 @@ export function createReportService() {
       return perAgencyVessels(await approvedDocuments(r, true));
     },
 
-    // 4-2 / 5-2: port dues per vessel
     async 'sum-port-due-agency'(r) {
       return (await approvedDocuments(r)).map(portDueRow);
     },
@@ -202,7 +193,6 @@ export function createReportService() {
       return (await approvedDocuments(r, true)).map(portDueRow);
     },
 
-    // 4-3 / 5-3: cargo value through the berth per agency
     async 'sum-cargo-value-port-agency'(r) {
       return (await approvedDocuments(r)).map(cargoRow);
     },

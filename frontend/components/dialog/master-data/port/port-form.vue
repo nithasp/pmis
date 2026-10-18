@@ -130,7 +130,6 @@ const handleGetPortDetail = async () => {
    if (resp.statusCode === 200) {
       form.value = {
          ...resp.data,
-         // locode: "locode test",
       };
    } else {
       console.error("get port detail error:", resp);

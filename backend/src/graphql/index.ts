@@ -32,7 +32,6 @@ const disableIntrospection = (context: ValidationContext): ASTVisitor => ({
   },
 });
 
-// Same JWT as the REST API: send `Authorization: Bearer <token>` with every GraphQL request.
 export const graphqlHandler: RequestHandler = createHandler<GraphQLContext>({
   schema,
   context: async (req) => ({ user: await userFromRequest(req.raw), source: requestSource(req.raw) }),

@@ -116,11 +116,6 @@ const tugItem = ref<any>({
 });
 
 const tugList = ref<any>([]);
-// const tugListMock = ref([
-//    { id: 1, name: "Tug 1", type: "Small Tug1" },
-//    { id: 2, name: "Tug 2", type: "Small Tug2" },
-//    { id: 3, name: "Tug 3", type: "Small Tug3" },
-// ]);
 
 const clearForm = () => {
    formData.value = {
@@ -139,7 +134,6 @@ watch(
    (newValue) => {
       if (props.isDialogOpen) {
          getTugList();
-         //console.log("item", props.itemId, props.itemData);
          if (props.mode === "edit") {
             const { id, tug_id, tug_name, tug_type } = props.itemData;
             tugItem.value = {

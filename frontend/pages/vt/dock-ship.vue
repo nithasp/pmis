@@ -7,10 +7,6 @@
                <div class="rounded-full bg-purple-25 text-sm py-1 px-2 ml-2">{{ total }} {{ $t("dock_ship_total") }}
                </div>
             </div>
-            <!-- <div>
-                       <UButton class="" outlined icon="i-heroicons-plus-circle" size="md" label="เรือกิจกรรม  />
-                 
-              </div> -->
          </div>
          <UTable @select="selectRow" :columns="columns" :rows="vtList" :ui="{
             base: 'u-table-list',
@@ -123,7 +119,6 @@ const router = useRouter();
 const dateValue = ref<any>("");
 const selectedDate = ref({ start: new Date(), end: new Date() });
 
-// const { getVt } = vtService();
 const sortField = ref("");
 const sortOrder = ref("");
 const columns = [
@@ -252,8 +247,6 @@ const getVtList = async () => {
       let query = {
          limit: filter.value.limit,
          page: filter.value.page,
-         // search: filter.value.keyword,
-         // status: filter.value.status,
          log_type: "dock",
          Order: [{ column: sortField.value, dir: sortOrder.value }]
       };

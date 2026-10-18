@@ -47,12 +47,6 @@
                     </div>
                 </div>
                 <div class="relative">
-                    <!-- <div class="overflow-hidden h-2 text-xs flex rounded bg-purple-200">
-                        <div :style="{ width: file.progress + '%' }"
-                            class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-purple-500">
-                        </div>
-                    </div>
-                    <p class="text-right text-xs text-purple-600 mt-1">{{ file.progress }}%</p> -->
                 </div>
             </div>
         </div>
@@ -99,7 +93,7 @@ const props = defineProps({
 })
 
 const masterDataService = useMasterDataService()
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const errorMessage = ref(props.error || '')
 const files = ref(props.filesValue || [])
 const maximumFileLimitRemain = ref(props.maximumFileLimit)
@@ -174,8 +168,6 @@ watch(
     }
 );
 
-
-
 const handleClickDeleteFile = (index) => {
     const deletedFile = files.value.splice(index, 1)[0];
     deletedFiles.value.push(deletedFile);
@@ -195,5 +187,4 @@ function back() {
 </script>
 
 <style scoped>
-/* Add any custom styles if necessary */
 </style>

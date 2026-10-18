@@ -6,7 +6,6 @@
                <h1 class="font-anuphan-semi-bold text-lg text-gray-400">{{ $t("settings_invoice_address_title") }}</h1>
                <div class="mt-1 text-[#667085] text-sm">{{ $t("settings_invoice_address_subtitle") }}</div>
             </div>
-            <!-- <SaveButton @click="setDialog(true)" type="button" class="mt-4 sm:mt-0" /> -->
             <SaveButton type="submit" class="mt-4 sm:mt-0" />
          </div>
          <div class="mt-[21px]">
@@ -16,7 +15,6 @@
                   <span class="font-anuphan-semi-bold text-sm text-gray-400">{{ $t("country") }} </span>
                   <span class="text-[#F00]">*</span>
                </div>
-               <!-- <SelectMenu class="max-w-[512px]" placeholder="ประเทศ" name="countrySelected" required v-model="formGroup.countrySelected" :options="countryOption" /> -->
 
                <UFormGroup name="countryId">
                   <USelectMenu class="max-w-[512px]" variant="outline" color="purple" v-model="formGroup.countryId"
@@ -33,16 +31,6 @@
                   <span class="font-anuphan-semi-bold text-sm text-gray-400">{{ $t("province") }}</span>
                   <span class="text-[#F00]">*</span>
                </div>
-               <!-- <SelectMenu
-                  class="max-w-[512px] "
-                  name="provinceId"
-                  v-model="formGroup.provinceId"
-                  :options="provincesOption"
-                  attributeValue="id"
-                  attributeOption="name"
-                  searchable
-                  searchable-placeholder="ค้นหาจังหวัด..."
-               /> -->
 
                <UFormGroup name="provinceId">
                   <USelectMenu class="max-w-[512px]" variant="outline" color="purple" v-model="formGroup.provinceId"
@@ -60,7 +48,6 @@
                   <span class="font-anuphan-semi-bold text-sm text-gray-400">{{ $t("district") }}</span>
                   <span class="text-[#F00]">*</span>
                </div>
-               <!-- <SelectMenu class="max-w-[512px] " name="districtId" v-model="formGroup.districtId" searchable :options="districtOption" /> -->
 
                <UFormGroup name="districtId">
                   <USelectMenu class="max-w-[512px]" variant="outline" color="purple" v-model="formGroup.districtId"
@@ -78,7 +65,6 @@
                   <span class="font-anuphan-semi-bold text-sm text-gray-400">{{ $t("subdistrict") }}</span>
                   <span class="text-[#F00]">*</span>
                </div>
-               <!-- <SelectMenu class="max-w-[512px] " name="subDistrictId" v-model="formGroup.subDistrictId" searchable :options="subDistrictOption" /> -->
 
                <UFormGroup name="subDistrictId">
                   <USelectMenu class="max-w-[512px]" variant="outline" color="purple" v-model="formGroup.subDistrictId"
@@ -195,7 +181,6 @@ const invoiceAddressSchema = z
     }
   });
 
-
 const { locale } = useI18n();
 const toast = useToast();
 const authStore = useAuthStore();
@@ -276,16 +261,6 @@ const getSubDistrictsOptions = async (districtId: number) => {
       return resp.data.map((item: ISubDistrict) => ({ ...item, id: item.id, name: locale.value === "en" ? item.nameEn : item.nameTh }));
    }
 };
-
-// const getVesselAgenciesDetail = async (userId: number) => {
-//    const resp = await adminService.getVesselAgenciesDetail(userId);
-//    if (resp.statusCode === 200) {
-//       formGroup.value = {
-//          ...resp?.data,
-//          zipCodeTemp: resp.data?.zipCode,
-//       };
-//    }
-// };
 
 const fetchUserDetail = async (userId: number) => {
    const resp = await getUserDetail(userId);

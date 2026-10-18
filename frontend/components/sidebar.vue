@@ -302,15 +302,6 @@ onMounted(async () => {
    getMenu();
    redirectFromRole();
 
-   // if (isStatOfficer || isStatApprove) {
-   //    getVesselImportListTypeSend();
-   // }
-   // if (!isAgency) {
-   //    getDocumentListType();
-   // }
-   // if (isAgency) {
-   //    getDocumentListTypeAgency();
-   // }
    getVesselImportListTypeSend();
    getDocumentListType();
    getDocumentListTypeAgency();
@@ -378,29 +369,6 @@ const menus = ref([
       ],
    },
 
-   // {
-   //    topic: "ตารางเรือ",
-   //    key: "ship_table",
-   //    text: "",
-   //    icon: "home",
-   //    path: "",
-   //    id: ["ship-table"],
-   //    subMenus: [
-   //       {
-   //          icon: "",
-   //          text: "ตารางเรือ MIT",
-   //          path: "/ship-table/mit",
-   //          id: ["ship-table-mit"],
-   //       },
-   //       {
-   //          icon: "",
-   //          text: "ตารางเรือ TCT",
-   //          path: "/ship-table/tct",
-   //          id: ["ship-table-tct"],
-   //       },
-   //    ],
-   // },
-
    {
       topic: "ตารางเรือ",
       key: "mit_table",
@@ -459,13 +427,6 @@ const menus = ref([
       path: "",
       id: [""],
       subMenus: [
-         // {
-         //    icon: "",
-         //    key: "document_create",
-         //    text: "สร้างใบคำร้อง",
-         //    path: "/request-form/create",
-         //    id: ["request-form-create", "request-form-mode"],
-         // },
          {
             icon: "",
             key: "document_list",
@@ -571,37 +532,6 @@ const menus = ref([
       ],
    },
 
-
-   // {
-   //    topic: "ท่าเรือ",
-   //    key: "view_dashboard_ship_in_out",
-   //    text: "เรือเข้า-ออก",
-   //    icon: "inbox",
-   //    path: "",
-   //    id: [""],
-   //    subMenus: [
-   //       {
-   //          icon: "",
-   //          text: "นำเข้าข้อมูลเรือเข้า-ออก",
-   //          path: "/ship-entry/vessel-import",
-   //          id: ["ship-entry-vessel-import"],
-   //       },
-   //       // {
-   //       //    icon: "",
-   //       //    text: "รายการรอเรือนำเข้า",
-   //       //    path: "/vessel-awaiting-import/list",
-   //       //    id: ["vessel-awaiting-import-list", "vessel-awaiting-import-mode", "vessel-awaiting-import-view"],
-   //       // },
-   //       // {
-   //       //    icon: "",
-   //       //    text: "รายการเรือเข้า-ออก",
-   //       //    path: "/vessel-in-out/list",
-   //       //    id: ["vessel-in-out-list", "vessel-in-out-mode", "vessel-in-out-view"],
-   //       //    key: "vessel_in_out_list"
-   //       // },
-   //    ],
-   // },
-
    {
       topic: "ท่าเรือ",
       key: "vessel_import",
@@ -621,41 +551,6 @@ const menus = ref([
       id: [""],
       count: true,
       subMenus: [
-         // {
-         //    icon: "",
-         //    text: "ตรวจรายงานและเอกสารแนบ",
-         //    path: "",
-         //    id: [""],
-         //    count: true,
-         //    countType: "PendingSend",
-         // },
-         // {
-         //    icon: "",
-         //    text: "ตรวจรายงานและเอกสารแนบ",
-         //    path: "",
-         //    id: [""],
-         //    count: true,
-         //    countType: "Send",
-         //    type: "report_vessel",
-         // },
-         // {
-         //    icon: "",
-         //    text: "ตรวจรายงานเรือเข้า-ออก",
-         //    path: "",
-         //    id: [""],
-         //    count: true,
-         //    countType: "PendingApproval",
-         //    type: "report_vessel",
-         // },
-         // {
-         //    icon: "",
-         //    text: "รายงานเรือเข้า-ออก ตรวจแล้ว",
-         //    path: "",
-         //    id: [""],
-         //    count: true,
-         //    countType: "Approved",
-         //    type: "report_vessel",
-         // },
          {
             icon: "",
             text: "รายงานเรือเข้า-ออก รอแก้ไข",
@@ -705,14 +600,6 @@ const menus = ref([
       id: [""],
       count: true,
       subMenus: [
-         // {
-         //    icon: "",
-         //    text: "ตรวจรายงานและเอกสารแนบ",
-         //    path: "",
-         //    id: [""],
-         //    count: true,
-         //    countType: "PendingSend",
-         // },
          {
             icon: "",
             text: "ตรวจรายงานและเอกสารแนบ",
@@ -815,22 +702,6 @@ const menus = ref([
          },
       ],
    },
-   // {
-   //    topic: "ท่าเรือ",
-   //    key: "warehouse",
-   //    text: "โกดังสินค้า",
-   //    icon: "cube",
-   //    path: "",
-   //    id: [""],
-   //    subMenus: [
-   //       {
-   //          icon: "",
-   //          text: "จัดการโกดังสินค้า",
-   //          path: "/manage-warehouse/list",
-   //          id: ["manage-warehouse-list"],
-   //       },
-   //    ],
-   // },
    {
       topic: "",
       key: "manage",
@@ -851,12 +722,6 @@ const menus = ref([
             path: "/permission-management/list",
             id: ["permission-management-list", "permission-management-mode"],
          },
-         // {
-         //    icon: "",
-         //    text: "ตัวแทนเรือ",
-         //    path: "/manage-ship-agents/list",
-         //    id: ["manage-ship-agents-list", "manage-ship-agents-mode", "manage-ship-agents-view"],
-         // },
       ],
    },
 
@@ -916,12 +781,6 @@ const menus = ref([
             path: "/master-data/products",
             id: ["master-data-products"],
          },
-         // {
-         //    icon: "",
-         //    text: "บัญชี",
-         //    path: "/master-data/account",
-         //    id: ["master-data-account"],
-         // },
       ],
    },
    {
@@ -1140,7 +999,6 @@ const getMenu = async () => {
     }
   }
 };
-
 
 const isMainMenuActive = (menu) => {
    return route.name === menu.key || (menu.path && route.path === menu.path);

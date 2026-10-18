@@ -1,5 +1,3 @@
-// services/auth.ts
-
 import { useNuxtApp } from '#app'
 import type { AxiosResponse } from 'axios'
 export default function useReportService() {
@@ -13,11 +11,9 @@ export default function useReportService() {
                 { responseType: 'blob' }
             );
     
-            // Step 1: Create a Blob URL
             const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             const url = window.URL.createObjectURL(blob);
     
-            // Step 2: Trigger a download
             const link = document.createElement('a');
             link.href = url;
             link.download = filename;
@@ -25,7 +21,6 @@ export default function useReportService() {
             link.click();
             document.body.removeChild(link);
     
-            // Step 3: Revoke the Blob URL to release memory
             window.URL.revokeObjectURL(url);
     
             return {
@@ -69,7 +64,6 @@ export default function useReportService() {
         }
       };
       
-    // Download Reports
     const downloadExcelReport1 = (filter = {}) => downloadExcelReport('/reports/sum-submit-late-order', 'sum_submit_late_order.xlsx', filter);
     const downloadExcelReport2 = (filter = {}) => downloadExcelReport('/reports/sum-submit-late-list', 'sum_submit_late_list.xlsx', filter);
 
@@ -81,14 +75,10 @@ export default function useReportService() {
     const downloadExcelReportPortDues4 = (filter = {}) => downloadExcelReport('/reports/sum-port-due-agency', 'sum_port_due_by_agent_report.xlsx', filter);
     const downloadExcelReportPortDues4_3 = (filter = {}) => downloadExcelReport('/reports/sum-cargo-value-port-agency', 'sum_cargo_value_port_by_agent_report.xlsx', filter);
 
-
     const downloadExcelReportPortDues5_1 = (filter = {}) => downloadExcelReport('/reports/sum-foreigner-agency', 'sum_foreigner_agency_by_agent.xlsx', filter);
     const downloadExcelReportPortDues5 = (filter = {}) => downloadExcelReport('/reports/sum-foreigner-port-due-agency', 'sum_foreigner_port_due_by_agent.xlsx', filter);
     const downloadExcelReportPortDues5_3 = (filter = {}) => downloadExcelReport('/reports/sum-foreigner-cargo-value-port-agency', 'sum_foreigner_cargo_value_port_by_agent.xlsx', filter);
 
-
-
-    // Preview Reports
     const previewExcelReport1 = (filter = {}) => previewExcelReport('/reports/sum-submit-late-order', filter);
     const previewExcelReport2 = (filter = {}) => previewExcelReport('/reports/sum-submit-late-list', filter);
 
@@ -103,8 +93,6 @@ export default function useReportService() {
     const previewExcelReportPortDues5_1 = (filter = {}) => previewExcelReport('/reports/sum-foreigner-agency', filter);
     const previewExcelReportPortDues5 = (filter = {}) => previewExcelReport('/reports/sum-foreigner-port-due-agency', filter);
     const previewExcelReportPortDues5_3 = (filter = {}) => previewExcelReport('/reports/sum-foreigner-cargo-value-port-agency', filter);
-
-
 
     return {
         downloadExcelReport1,

@@ -203,7 +203,6 @@ export function createVesselService(vessels: VesselRepository, files: FileServic
       };
     },
 
-    // ---- government vessels ---------------------------------------------------------------
     async listGovernment(query: ListQuery): Promise<PagedResult<Row>> {
       const page = await vessels.listGovernment(query);
       const refs = await Promise.all(page.data.map(async (r) => (r.file_id ? await files.find(r.file_id as number) : null)));

@@ -1,5 +1,3 @@
-// services/auth.ts
-
 import { useNuxtApp } from '#app'
 import type { AxiosResponse } from 'axios'
 import type { IFilter } from '../interfaces/IFilter'
@@ -17,7 +15,6 @@ export default function useUserOfficerService() {
             const response: AxiosResponse = await $api.get(`/admin/users?${filterParams}`)
             return wrapperSuccessResp(response.data)
         } catch (error) {
-            // Handle error (e.g., show a notification or throw an error)
             console.error('get user failed:', error)
             return wrapperErrorResp(error)
         }
@@ -28,7 +25,6 @@ export default function useUserOfficerService() {
             const response: AxiosResponse = await $api.get(`/admin/users/${id}`)
             return wrapperSuccessResp(response.data)
         } catch (error) {
-            // Handle error (e.g., show a notification or throw an error)
             console.error('get user detail failed:', error)
             return wrapperErrorResp(error)
         }
@@ -39,7 +35,6 @@ export default function useUserOfficerService() {
             const response: AxiosResponse = await $api.post('admin/users', { ...body })
             return wrapperSuccessResp(response.data)
         } catch (error) {
-            // Handle error (e.g., show a notification or throw an error)
             console.error('create user failed:', error)
             return wrapperErrorResp(error)
         }
@@ -50,7 +45,6 @@ export default function useUserOfficerService() {
             const response: AxiosResponse = await $api.put(`admin/users/${id}`, { ...body })
             return wrapperSuccessResp(response.data)
         } catch (error) {
-            // Handle error (e.g., show a notification or throw an error)
             console.error('update user failed:', error)
             return wrapperErrorResp(error)
         }
@@ -61,7 +55,6 @@ export default function useUserOfficerService() {
             const response: AxiosResponse = await $api.put(`admin/users/${id}/status`, { enabled })
             return wrapperSuccessResp(response.data)
         } catch (error) {
-            // Handle error (e.g., show a notification or throw an error)
             console.error('update status user failed:', error)
             return wrapperErrorResp(error)
         }
@@ -72,7 +65,6 @@ export default function useUserOfficerService() {
             const response: AxiosResponse = await $api.delete(`admin/users/${id}`)
             return wrapperSuccessResp(response.data)
         } catch (error) {
-            // Handle error (e.g., show a notification or throw an error)
             console.error('cancel user failed:', error)
             return wrapperErrorResp(error)
         }

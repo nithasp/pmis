@@ -68,7 +68,6 @@ const formNewPassword = reactive({
 const errors = ref<FormError[]>([]);
 const validate = (field: string) => {
    const validationErrors: FormError[] = [];
-   // Password validation
    if (field === 'password') {
       if (!formNewPassword.password) {
          validationErrors.push({ path: 'password', message: t('please_enter_a_value') });
@@ -77,7 +76,6 @@ const validate = (field: string) => {
       }
    }
 
-   // Confirm Password validation
    if (field === 'confirmPassword') {
       if (!formNewPassword.confirmPassword) {
          validationErrors.push({ path: 'confirmPassword', message: t('please_enter_a_value') });
@@ -85,7 +83,6 @@ const validate = (field: string) => {
          validationErrors.push({ path: 'confirmPassword', message: t('password_not_match') });
       }
    }
-   // Clear previous errors for the specific field and add the new error if any
    errors.value = errors.value.filter(err => err.path !== field);
    if (validationErrors.length) {
       errors.value.push(...validationErrors);

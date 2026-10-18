@@ -73,7 +73,6 @@ const internalValue = ref(props.modelValue);
 const valueDisplay = ref(props.modelValue);
 const textHistoryValue = ref(props.textHistory)
 
-// Emit the changes back to the parent component
 const emit = defineEmits(["update:modelValue"]);
 watch(internalValue, (newValue) => {
    emit("update:modelValue", newValue);
@@ -102,7 +101,6 @@ const renderValueDisplay = (value) => {
    }
    return value;
 };
-// Watch for changes from the parent to sync with local state
 watch(
    () => props.modelValue,
    async (newValue) => {
@@ -110,7 +108,6 @@ watch(
          const findData = await props.options.find((e) => e.id === newValue);
          if (findData) {
             valueDisplay.value = findData.name;
-
          }
          internalValue.value = newValue;
          if (props.textHistory) {

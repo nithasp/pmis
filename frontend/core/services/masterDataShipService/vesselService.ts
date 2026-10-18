@@ -69,7 +69,6 @@ export default function useMasterDataShipService() {
    };
    const uploadFileVessel = async (file: File) => {
       const formData = new FormData();
-      // console.log('file.name',file)
       formData.append("file", file[0], file[0].name);
       let percentCompleted = null;
       try {

@@ -67,9 +67,6 @@ async function insert(db: Queryable, table: string, data: Row): Promise<number> 
 const daysAgo = (days: number, hour = 9): Date => atHour(addDays(NOW, -days), hour, rnd.int(0, 5) * 10);
 const money = (n: number): number => Math.round(n * 100) / 100;
 
-// ---------------------------------------------------------------------------------------------
-// Placeholder documents, written through the configured storage driver (local folder or R2)
-// ---------------------------------------------------------------------------------------------
 const PLACEHOLDER_FILES: { key: string; title: string; type: string }[] = [
   { key: 'ship_particulars', title: "Ship's Particulars", type: 'ship_particulars' },
   { key: 'ship_registry', title: 'Certificate of Registry', type: 'ship_registry' },
@@ -118,9 +115,6 @@ async function seedFiles(ctx: SeedContext): Promise<void> {
   }
 }
 
-// ---------------------------------------------------------------------------------------------
-// Master data
-// ---------------------------------------------------------------------------------------------
 async function seedMaster(ctx: SeedContext): Promise<void> {
   const { db } = ctx;
   for (const c of COUNTRIES) await db.query('INSERT INTO countries (id, code, name_th, name_en) VALUES ($1, $2, $3, $4)', [c.id, c.code, c.nameTh, c.nameEn]);
@@ -212,9 +206,6 @@ async function seedMaster(ctx: SeedContext): Promise<void> {
   await insert(db, 'terms', { version: '1.0', content: TERMS_CONTENT });
 }
 
-// ---------------------------------------------------------------------------------------------
-// Roles and accounts
-// ---------------------------------------------------------------------------------------------
 async function seedAccounts(ctx: SeedContext): Promise<void> {
   const { db } = ctx;
   for (const preset of ROLE_PRESETS) {
@@ -262,9 +253,6 @@ async function seedAccounts(ctx: SeedContext): Promise<void> {
   }
 }
 
-// ---------------------------------------------------------------------------------------------
-// Vessels
-// ---------------------------------------------------------------------------------------------
 async function seedVessels(ctx: SeedContext): Promise<void> {
   const { db } = ctx;
   const approvedAgencies = ctx.agencies.slice(0, 11);
@@ -293,9 +281,6 @@ async function seedVessels(ctx: SeedContext): Promise<void> {
   }
 }
 
-// ---------------------------------------------------------------------------------------------
-// Request forms with berths, products, invoices and the VTMS logs that follow an approval
-// ---------------------------------------------------------------------------------------------
 const STATUS_PLAN: string[] = [
   ...Array<string>(6).fill('Draft'),
   ...Array<string>(8).fill('PendingReview'),
@@ -318,7 +303,6 @@ async function seedDocuments(ctx: SeedContext): Promise<void> {
     const vessel = ctx.vessels[vesselIndex]!;
     const agency = ctx.agencies.find((a) => a.id === vessel.ownerId)!;
     const isApproved = status === 'Approved';
-    // Approved requests spread over the past year; pending ones were filed in the last two weeks
     const requestDate = isApproved ? daysAgo(rnd.int(3, 330)) : ['Canceled', 'AdminCanceled'].includes(status) ? daysAgo(rnd.int(10, 200)) : daysAgo(rnd.int(0, 14));
     const eta = addHours(requestDate, rnd.int(26, 200));
     const docNumber = status === 'Draft' ? '' : `PMIS-${thaiYear}-${String(++counter).padStart(5, '0')}`;
@@ -415,7 +399,6 @@ async function seedLogBooks(ctx: SeedContext): Promise<void> {
     await db.query('UPDATE document_berths SET etb = $2, etd = $3, jetty_id = $4 WHERE id = $1', [doc.docBerthIds[0], mooring, departure ?? addHours(mooring, 36), jettyId]);
   }
 
-  // Government vessels logged by VTMS itself
   for (const [i, govId] of ctx.governmentVessels.entries()) {
     const mooring = daysAgo(rnd.int(1, 60), rnd.int(6, 18));
     const departure = rnd.chance(0.6) ? addHours(mooring, rnd.int(4, 30)) : null;
@@ -427,7 +410,6 @@ async function seedLogBooks(ctx: SeedContext): Promise<void> {
     await insert(db, 'log_book_details', { log_book_id: id, type_doc: departure ? 'Departure' : 'Arrival', berth_id: berth.id, jetty_id: rnd.pick(berth.jetties), purpose_id: ctx.purposes.find((p) => p.type === 'Other')!.id, cargo_type_id: rnd.pick(ctx.cargoTypes), locate_id: rnd.pick(ctx.locates), use_berth_id: rnd.pick(ctx.useBerths), mooring_date: mooring, departure_date: departure });
   }
 
-  // Anchor drops while waiting for a berth
   const anchorDocs = rnd.sample(ctx.documents.filter((d) => ['Approved', 'PendingConfirmation', 'PendingApproval'].includes(d.status)), 10);
   for (const doc of anchorDocs) {
     const vessel = ctx.vessels[doc.vesselIndex]!;
@@ -442,9 +424,6 @@ async function seedLogBooks(ctx: SeedContext): Promise<void> {
   }
 }
 
-// ---------------------------------------------------------------------------------------------
-// Vessel in-out reports (statistics)
-// ---------------------------------------------------------------------------------------------
 const IMPORT_PLAN = [...Array<string>(3).fill('PendingSend'), ...Array<string>(3).fill('PendingEdit'), ...Array<string>(6).fill('Send'), ...Array<string>(4).fill('PendingCheck'), ...Array<string>(3).fill('RequestEdit'), ...Array<string>(5).fill('PendingApproval'), ...Array<string>(8).fill('Approved')];
 
 async function seedVesselImports(ctx: SeedContext): Promise<void> {
@@ -484,16 +463,13 @@ async function seedVesselImports(ctx: SeedContext): Promise<void> {
   }
 }
 
-// ---------------------------------------------------------------------------------------------
-// Port dues (invoices) for vessels that have berthed
-// ---------------------------------------------------------------------------------------------
 async function seedPortDues(ctx: SeedContext): Promise<void> {
   const { db } = ctx;
   const thaiYear = NOW.getFullYear() + 543;
   const candidates = ctx.logBooks.filter((l) => l.departure);
   let counter = 0;
   for (const [i, log] of candidates.entries()) {
-    if (i % 4 === 3) continue; // leave some for the "pending invoice" page
+    if (i % 4 === 3) continue;
     const doc = ctx.documents.find((d) => d.id === log.documentId)!;
     const berth = ctx.berths.find((b) => b.id === log.berthId)!;
     const { rows: inv } = await db.query(
@@ -525,9 +501,6 @@ async function seedPortDues(ctx: SeedContext): Promise<void> {
   }
 }
 
-// ---------------------------------------------------------------------------------------------
-// Contracts, surveys and AIS
-// ---------------------------------------------------------------------------------------------
 async function seedContracts(ctx: SeedContext): Promise<void> {
   const { db } = ctx;
   for (const [i, berth] of ctx.berths.slice(0, 8).entries()) {
@@ -601,7 +574,6 @@ async function seedAis(ctx: SeedContext): Promise<void> {
     });
     shipIds.push({ id, vesselId: vessel?.id ?? null, mmsi: String(s.MMSI ?? ''), callSign: String(s.CallSgn ?? ''), lat: String(s.Lat ?? ''), lon: String(s.Lon ?? '') });
   }
-  // Ships without a registered vessel get a lightweight vessel record so the lists can show a name
   for (const [i, ship] of shipIds.entries()) {
     const s = ships[i]!;
     if (!ship.vesselId) {
@@ -624,7 +596,6 @@ async function seedAis(ctx: SeedContext): Promise<void> {
   }
 }
 
-// ---------------------------------------------------------------------------------------------
 async function main(): Promise<void> {
   const started = Date.now();
   const client = await pool.connect();

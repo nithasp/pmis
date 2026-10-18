@@ -8,8 +8,6 @@ import { SqlBuilder } from '../utils/sql';
 
 const AUDIT = 'created_at, created_by, updated_at, updated_by';
 
-// Simple name + status tables share one spec; the richer tables (berths, ports, purposes,
-// products) add their joins on top of it.
 const simpleSpec = (table: string, alias = 't'): ListSpec => ({
   select: `${alias}.id, ${alias}.name, ${alias}.status, ${alias}.created_at, ${alias}.created_by, ${alias}.updated_at, ${alias}.updated_by`,
   from: `FROM ${table} ${alias}`,

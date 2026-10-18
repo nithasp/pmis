@@ -65,7 +65,6 @@ export const recall = asyncHandler(async (req: Request, res: Response) => sendDa
 
 export const reviews = asyncHandler(async (req: Request, res: Response) => sendData(res, await documentService.history(paramId(req), currentUser(req))));
 
-// ---- berths -----------------------------------------------------------------------------------
 export const berthDetail = asyncHandler(async (req: Request, res: Response) =>
   sendData(res, await documentService.berthDetail(paramId(req), paramId(req, 'berthId'), currentUser(req))),
 );
@@ -80,7 +79,6 @@ export const berthDelete = asyncHandler(async (req: Request, res: Response) => {
   sendData(res, { success: true });
 });
 
-// ---- products ---------------------------------------------------------------------------------
 export const productDetail = asyncHandler(async (req: Request, res: Response) =>
   sendData(res, await documentService.productDetail(paramId(req), paramId(req, 'berthId'), paramId(req, 'productId'), currentUser(req))),
 );
@@ -102,7 +100,6 @@ export const invoice = asyncHandler(async (req: Request, res: Response) =>
   sendData(res, await documentService.saveInvoice(paramId(req), currentUser(req), parse(documentInvoiceSchema, req.body), by(req))),
 );
 
-// ---- ship table -------------------------------------------------------------------------------
 export const berthQueue = asyncHandler(async (req: Request, res: Response) => sendData(res, await documentService.berthQueue(String(req.params.berthAlt), listQuery(req))));
 export const berthEtd = asyncHandler(async (req: Request, res: Response) =>
   sendData(res, await documentService.updateBerthEtd(paramId(req, 'documentBerthId'), parse(berthEtdSchema, req.body), by(req))),

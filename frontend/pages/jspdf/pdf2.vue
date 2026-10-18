@@ -60,16 +60,16 @@ const formatDuration = (duration: string) => {
 
 const formatShipData = (data: any[]): any[] => {
    return data.map((item, index) => [
-      { content: index + 1, styles: { halign: "center" } }, // ลำดับ
-      { content: formatDate(item.mooringDate), styles: { halign: "center" } }, // วันที่
-      { content: item.name, styles: { halign: "left" } }, // ชื่อเรือ
-      { content: item.companyName, styles: { halign: "left" } }, // บริษัทเอเยน
-      { content: item.phone, styles: { halign: "left" } }, // เบอร์โทร
-      { content: formatDate(item.mooringDate), styles: { halign: "center" } }, // เรือเข้าเทียบท่า – วันที่
-      { content: formatTime(item.mooringDate), styles: { halign: "center" } }, // เรือเข้าเทียบท่า – เวลา
-      { content: formatDate(item.requestDate), styles: { halign: "center" } }, // วันที่ยื่นระบบคำร้อง – วันที่
-      { content: formatTime(item.requestDate), styles: { halign: "center" } }, // วันที่ยื่นระบบคำร้อง – เวลา
-      { content: formatDuration(item.dateDiff), styles: { halign: "center" } }, // ชม. (HH:mm)
+      { content: index + 1, styles: { halign: "center" } },
+      { content: formatDate(item.mooringDate), styles: { halign: "center" } },
+      { content: item.name, styles: { halign: "left" } },
+      { content: item.companyName, styles: { halign: "left" } },
+      { content: item.phone, styles: { halign: "left" } },
+      { content: formatDate(item.mooringDate), styles: { halign: "center" } },
+      { content: formatTime(item.mooringDate), styles: { halign: "center" } },
+      { content: formatDate(item.requestDate), styles: { halign: "center" } },
+      { content: formatTime(item.requestDate), styles: { halign: "center" } },
+      { content: formatDuration(item.dateDiff), styles: { halign: "center" } },
    ]);
 };
 

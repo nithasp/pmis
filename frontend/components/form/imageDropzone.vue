@@ -55,12 +55,6 @@
                   <p>{{ percentCompleted }}%</p>
                </div>
                <div class="relative">
-                  <!-- <div class="overflow-hidden h-2 text-xs flex rounded bg-purple-200">
-                           <div :style="{ width: file.progress + '%' }"
-                              class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-purple-500">
-                           </div>
-                     </div>
-                     <p class="text-right text-xs text-purple-600 mt-1">{{ file.progress }}%</p> -->
                </div>
             </div>
          </div>
@@ -106,8 +100,7 @@ const props = defineProps({
    },
 });
 
-// const { uploadFileVessel } = masterDataShipService();
-const MAX_FILE_SIZE = 100 * 1024 * 1024; // 10MB in bytes
+const MAX_FILE_SIZE = 100 * 1024 * 1024;
 const errorMessage = ref(props.error || "");
 const files = ref(props.filesValue || []);
 const isRequired = ref<boolean>(false);
@@ -144,7 +137,6 @@ async function onDrop(acceptedFiles, rejectedFiles) {
             });
             const resp = await uploadFileVessel(acceptedFiles);
             console.log("resp", resp);
-            // progressShow.value = percentCompleted;
             if (resp.statusCode === 200) {
                const { id } = resp.data.data;
                files.value[0] = {
@@ -167,7 +159,6 @@ const uploadFileVessel = async (file: any) => {
    progressShow.value = true;
    percentCompleted.value = 0;
    const formData = new FormData();
-   // console.log('file.name',file)
    formData.append("file", file[0], file[0].name);
    try {
       const response: AxiosResponse<IUploadResponse> = await $api.post("/admin/master-data/upload", formData, {
@@ -175,9 +166,7 @@ const uploadFileVessel = async (file: any) => {
             "Content-Type": "multipart/form-data",
          },
          onUploadProgress: (progressEvent) => {
-            // console.log("progressEvent", progressEvent);
             percentCompleted.value = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            // console.log(`Upload progress: ${percentCompleted}%`);
          },
       });
       return wrapperSuccessResp(response);
@@ -214,9 +203,7 @@ const handleClickDeleteFile = (index) => {
 const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
    onDrop,
    accept: props.accept,
-   // accept: "image/*",
 });
-
 
 function downloadFile(filePath) {
    window.open(filePath,'_blank');
@@ -227,5 +214,4 @@ function back() {
 </script>
 
 <style scoped>
-/* Add any custom styles if necessary */
 </style>

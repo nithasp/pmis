@@ -3,7 +3,6 @@
       <div class="mb-8">
          <h1 class="font-bold text-[30px]">Log Book</h1>
       </div>
-      <!-- <UForm :schema="logBookSchema" :state="formGroup" @submit="onSubmit"> -->
       <div id="log-book-mode-form-content" class="bg-white px-8 py-6 rounded-[0px_0px_20px_20px]">
          <div class="flex items-center justify-between mb-5">
             <div>
@@ -12,7 +11,6 @@
             </div>
             <div class="">
                <UButton @click="handleCancleCreateVessel" class="mx-2 border border-grayy-100" size="md" color="gray" :label="isEdit ? $t('close') : $t('cancel')" />
-               <!-- <UButton size="md" :label="$t('save')" type="submit" /> -->
                <UButton
                   class="border border-primaryy-500 bg-primaryy-500 hover:bg-primaryy-500 text-grayy-25 w-[82px] h-[36px] justify-center"
                   size="md"
@@ -192,32 +190,6 @@
                      :options="purposeList"
                   />
                </div>
-               <!-- <div class="col-span-1">
-                  <USelect
-                     :label="'ลักษณะสินค้า'"
-                     name="cargo_type"
-                     :placeholder="'ค้นหา'"
-                     required
-                     :searchable-placeholder="'ค้นหา'"
-                     v-model="formGroup.details[0].cargo_type_id"
-                     :error="isFieldError('cargo_type_id') ? fieldValidation.cargo_type_id.message : ''"
-                     searchable
-                     :options="cargoTypeList"
-                  />
-               </div>
-               <div class="col-span-1">
-                  <USelect
-                     :label="'รูปแบบสินค้า'"
-                     name="cargo_wharfage"
-                     :placeholder="'ค้นหา'"
-                     required
-                     :searchable-placeholder="'ค้นหา'"
-                     v-model="formGroup.details[0].cargo_wharfage_id"
-                     :error="isFieldError('cargo_wharfage_id') ? fieldValidation.cargo_wharfage_id.message : ''"
-                     searchable
-                     :options="cargoWharfageList"
-                  />
-               </div> -->
                <div class="col-span-1">
                   <USelect
                      :label="'ท่าเทียบเรือย่อย'"
@@ -392,7 +364,6 @@
             </UTable>
          </section>
       </div>
-      <!-- </UForm> -->
    </div>
    <TugBoatForm
       :isDialogOpen="isDialogTugBoatFormOpen"
@@ -520,34 +491,6 @@ const modalAlertType = ref("");
 const nextRoute = ref<any>(null);
 const notAllowNavigate = ref(true);
 
-// const createSchema = () => {
-//    return z.object({
-//       gross_tonnage: z
-//          .union([z.string().min(1, { message: t("required") }), z.number()])
-//          .refine((value) => (typeof value === "string" && value.trim() !== "" && !value.startsWith("0")) || (typeof value === "number" && value > 0), {
-//             message: t("required"),
-//          }),
-//       depth: z
-//          .union([z.string().min(1, { message: t("required") }), z.number()])
-//          .refine((value) => (typeof value === "string" && value.trim() !== "" && !value.startsWith("0")) || (typeof value === "number" && value > 0), {
-//             message: t("required"),
-//          }),
-//       port_id_next: z.number().min(1, { message: t("required") }),
-//       port_id_last: z.number().min(1, { message: t("required") }),
-//       voyage: z.string().min(1, t("required")),
-//       berth_id: z.number().min(1, t("required")),
-//       purpose_id: z.number().min(1, t("required")),
-//       cargo_type_id: z.number().min(1, t("required")),
-//       cargo_wharfage_id: z.number().min(1, t("required")),
-//       jetty_id: z.number().min(1, t("required")),
-//       mooring_date: z.string().min(1, t("required")),
-//       departure_date: z.string().min(1, t("required")),
-//       // vesselId: z.string().min(1, t("required")),
-//    });
-// };
-
-// const logBookSchema = ref(createSchema());
-
 const vesselData = ref({
    owner: "",
    vesselFlagName: "",
@@ -604,8 +547,6 @@ const formGroup = ref({
          jetty_id: 0,
          mooring_date: "",
          departure_date: "",
-         // mooring_date: "2024-10-07T19:00:00+07:00",
-         // departure_date: "2024-10-08T19:00:00+07:00",
       },
    ],
    tugs: [],
@@ -619,7 +560,6 @@ const cargoTypeList = ref([]);
 const cargoWharfageList = ref([]);
 const jettyList = ref([]);
 
-// const arrivalDate = ref(new Date())
 const arrivalDate = ref();
 const actionMode = ref<string>("");
 const vesselType = ref<string>("");
@@ -635,7 +575,6 @@ watch(
 watch(
    () => formGroup.value.details[0].berth_id,
    (value) => {
-     
       console.log('berth', formGroup.value.details[0].jetty_id)
       if (value) {
          getJettyList(value);
@@ -686,10 +625,8 @@ const payload = ref<IVtmsLogBookAdd>({
 const addressOptionsStore = useAddressOptionsStore();
 
 onMounted(async () => {
-   // getVesselList();
    await getMasterList();
    await getPortList();
-   // console.log("logBookId", logBookId, isEdit);
    if (logBookId) {
       await getLogBookDetailById(+logBookId);
    }
@@ -714,7 +651,6 @@ const getLogBookDetailById = async (id: number) => {
             mooring_date: resp.data.details[0].mooring_date ? new Date(resp.data.details[0].mooring_date) : "",
             departure_date: resp.data.details[0].departure_date ? new Date(resp.data.details[0].departure_date) : "",
          };
-         // console.log('setDetail',resp.data.details)
          formGroup.value = { ...resp.data, details: [setDetail] };
          let vessel = resp.data.vessel;
          vesselData.value = {
@@ -763,9 +699,9 @@ onBeforeRouteLeave((to, from, next) => {
    if (notAllowNavigate.value) {
       isConfirmLeaveDialogOpen.value = true;
       nextRoute.value = to;
-      next(false); // Prevent navigation until confirmed
+      next(false);
    } else {
-      next(); // Allow navigation
+      next();
    }
 });
 
@@ -785,7 +721,6 @@ const getPortList = async () => {
 };
 const getBerthList = async () => {
    try {
-      // isLoading.value = true;
       const resp = await getBerth();
       if (resp.statusCode === 200) {
          const { data } = resp.data;
@@ -799,7 +734,6 @@ const getBerthList = async () => {
 };
 const getPurposeList = async () => {
    try {
-      // isLoading.value = true;
       const resp = await getPurpose();
       if (resp.statusCode === 200) {
          const { data } = resp.data;
@@ -815,7 +749,6 @@ const getPurposeList = async () => {
 };
 const getCargoTypeList = async () => {
    try {
-      // isLoading.value = true;
       const resp = await getCargoType();
       if (resp.statusCode === 200) {
          const { data } = resp.data;
@@ -829,7 +762,6 @@ const getCargoTypeList = async () => {
 };
 const getCargoWharfageList = async () => {
    try {
-      // isLoading.value = true;
       const resp = await getCargoWharfage();
       if (resp.statusCode === 200) {
          const { data } = resp.data;
@@ -843,13 +775,10 @@ const getCargoWharfageList = async () => {
 };
 const getJettyList = async (id: number) => {
    try {
-      // console.log("jettys id", id);
-      // isLoading.value = true;
       if (id) {
          const resp = await getJetty(id);
          if (resp.statusCode === 200) {
             const { data, jettys } = resp.data;
-            // console.log("jettys id", jettys);
             jettyList.value = jettys;
          }
       }
@@ -873,12 +802,6 @@ async function onSubmit() {
       tugs: portList1.value,
       pilots: portList2.value,
       products: portList3.value,
-      // details: [
-      //    {
-      //       mooring_date: "2024-10-07T19:00:00+07:00",
-      //       departure_date: "2024-10-08T19:00:00+07:00",
-      //    },
-      // ],
       purpose_type: "Government"
    };
 
@@ -938,7 +861,6 @@ const handleCloseAlertDialog = () => {
 const handleCloseAlertDialogUpdate = () => {
    isAlertDialogUpdateOpen.value = false;
    navigateTo("/vtms/log-book");
-   // getLogBookDetailById(logBookId);
 };
 
 const handleConfirmLeave = () => {
@@ -982,7 +904,6 @@ const onSearchVessels = async (q: any) => {
    return [];
 };
 
-//tug boat
 const isDialogTugBoatFormOpen = ref(false);
 const handleTugBoatForm = (status: boolean, mode: string, vesselTypeValue: string) => {
    actionMode.value = mode;
@@ -994,13 +915,9 @@ const dialogTugBoatCancel = () => {
 };
 const dialogTugBoatConfirm = (status: boolean, type: string = "") => {
    isDialogTugBoatFormOpen.value = status;
-   if (type === "refresh") {
-      // filter.value.page = 1;
-      // getTugBoatList();
-   }
+   if (type === "refresh") {}
 };
 
-// navigate
 const isDialogNavigateFormOpen = ref(false);
 const handleNavigateForm = (status: boolean, mode: string, vesselTypeValue: string) => {
    actionMode.value = mode;
@@ -1012,13 +929,8 @@ const dialogNavigateCancel = () => {
 };
 const dialogNavigateConfirm = (status: boolean, type: string = "") => {
    isDialogNavigateFormOpen.value = status;
-   if (type === "refresh") {
-      // filter.value.page = 1;
-      // getNavigateList();
-   }
+   if (type === "refresh") {}
 };
-
-// inventory
 
 const isDialogInventoryFormOpen = ref(false);
 const handleInventoryForm = (status: boolean, mode: string, vesselTypeValue: string) => {
@@ -1031,10 +943,7 @@ const dialogInventoryCancel = () => {
 };
 const dialogInventoryConfirm = (status: boolean, type: string = "") => {
    isDialogInventoryFormOpen.value = status;
-   if (type === "refresh") {
-      // filter.value.page = 1;
-      // getInventoryList();
-   }
+   if (type === "refresh") {}
 };
 const addTug = (tugs: any[]) => {
    tugs.forEach((tug: any) => {
@@ -1131,7 +1040,6 @@ const addProduct = (event) => {
          product_group_name: event.product_group_name,
          product_type_name: event.product_type_name,
          status: "",
-         // unit : 'MTon',
          mTonQty: event.mTonQty,
          rTonQty: event.rTonQty,
          is_delete: false,
@@ -1151,7 +1059,6 @@ const editProduct = (event) => {
          product_group_name: event.product_group_name,
          product_type_name: event.product_type_name,
          status: "",
-         // unit : 'MTon',
          mTonQty: event.mTonQty,
          rTonQty: event.rTonQty,
          is_delete: false,
@@ -1179,7 +1086,6 @@ const deleteProduct = (id: any) => {
    }
 };
 
-// Table 1
 const columnsTable1 = [
    {
       key: "id",
@@ -1189,7 +1095,6 @@ const columnsTable1 = [
    {
       key: "status",
       label: t("navigation_status"),
-      // class: "text-center",
    },
    {
       key: "tug_name",
@@ -1243,7 +1148,6 @@ const getMenuTable1 = (row: any, index: number) => {
    return items;
 };
 
-// Table 2
 const columnsTable2 = [
    {
       key: "id",
@@ -1253,7 +1157,6 @@ const columnsTable2 = [
    {
       key: "status",
       label: t("navigation_status"),
-      // class: "text-center",
    },
    {
       key: "pilot_number",
@@ -1305,7 +1208,6 @@ const getMenuTable2 = (row: any, index: number) => {
    return items;
 };
 
-// Table 3
 const columnsTable3 = [
    {
       key: "id",

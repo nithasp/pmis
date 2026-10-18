@@ -1,6 +1,5 @@
 import { SampleOperation } from '../types/graphql.types';
 
-// The tabs Altair opens with. They run as-is against the seeded database with the demo token.
 export const SAMPLE_OPERATIONS: SampleOperation[] = [
   {
     name: 'Me',

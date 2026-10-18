@@ -125,7 +125,6 @@ export default function useVtmsTableService() {
           const response: AxiosResponse = await $api.delete(`/admin/vtms/anchor/${id}`)
           return wrapperSuccessResp(response.data)
       } catch (error) {
-          // Handle error (e.g., show a notification or throw an error)
           console.error('delete anchor failed:', error)
           return wrapperErrorResp(error)
       }

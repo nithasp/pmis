@@ -1,7 +1,6 @@
 <template>
    <div>
       <slot name="activator" :on="{ click: openModal }">
-         <!-- Default activator can be defined here if needed -->
          <button v-if="!hideButton" class="py-2 px-4 rounded bg-primaryy" @click="openModal">เปิด</button>
       </slot>
       <UModal
@@ -21,7 +20,6 @@
                   <p class="text-sm my-1">{{ $t("vessel_flag_form_name") }}<span class="text-red-500"> *</span> </p>
                   <Input type="text" :placeholder="$t('vessel_flag_form_placeholder')" class="" v-model="form.name" name="name" :error="messageError" />
                </div>
-               <!-- อัพโหลด -->
                <div class="max-w-[512px] mt-4">
                   <p class="font-anuphan-semi-bold my-1">{{ $t("vessel_flag_form_upload") }}</p>
                   <ImageDropzone
@@ -181,6 +179,5 @@ const handleCloseSuccessDialog = (status: boolean) => {
 };
 const getFiles = (value: any) => {
    uploadFile.value = value.map(({ isError, ...i }: { isError: boolean }) => ({ ...i, extension: "image/*" }));
-   // console.log(uploadFile.value[0]);
 };
 </script>

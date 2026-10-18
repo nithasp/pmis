@@ -367,7 +367,6 @@ const activateProductType = async (status) => {
 
 const isOpenForm = ref(false);
 const setDialogEdit = (status: boolean) => {
-   // console.log("setDialogEdit", status);
    isOpenForm.value = status;
 };
 const isOpenStatus = ref(false);

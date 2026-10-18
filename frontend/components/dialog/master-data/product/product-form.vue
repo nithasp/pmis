@@ -1,7 +1,6 @@
 <template>
    <div>
       <slot name="activator" :on="{ click: openModal }">
-         <!-- Default activator can be defined here if needed -->
          <button v-if="!hideButton" class="py-2 px-4 rounded bg-primaryy" @click="openModal">เปิด</button>
       </slot>
       <UModal
@@ -159,18 +158,14 @@ watch(
       }
    }
 );
-// const setForm = function () {
-// };
 const emit = defineEmits(["fetch,close"]);
 async function getProductDetail() {
    try {
       console.log("getProductDetail", props.productId);
       let resp = await getProductDetailById(props.productId);
-      //    console.log('getProductDetail',resp)
       if (resp.statusCode === 200) {
          console.log("getProductDetail", resp.data);
          form.value = resp.data;
-         // getProductTypeList(form.value.product_group_id);
       }
    } catch (error) {
       console.error(error);

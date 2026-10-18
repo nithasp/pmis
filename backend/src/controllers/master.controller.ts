@@ -41,7 +41,6 @@ const productTypeSchema = z.looseObject({
 });
 const flagSchema = z.looseObject({ name: requiredText(150), file_id: z.any().optional(), fileId: z.any().optional(), filePath: optionalText(1000), status: statusField });
 
-// ---- simple tables: locate, use-berth, cargo-type, cargo-wharfage, vessel-type ----------------
 export const simpleList = asyncHandler(async (req: Request, res: Response) => {
   sendData(res, await masterService.listSimple(String(req.params.key), listQuery(req), q(req).status));
 });
@@ -55,7 +54,6 @@ export const simpleUpdate = asyncHandler(async (req: Request, res: Response) => 
   sendData(res, await masterService.updateSimple(String(req.params.key), paramId(req), parse(simpleSchema, req.body), by(req)));
 });
 
-// ---- ports ------------------------------------------------------------------------------------
 export const portList = asyncHandler(async (req: Request, res: Response) => {
   sendData(res, await masterService.listPorts(listQuery(req), { country_id: q(req).country_id, status: q(req).status }));
 });
@@ -65,7 +63,6 @@ export const portUpdate = asyncHandler(async (req: Request, res: Response) =>
   sendData(res, await masterService.savePort(paramId(req), parse(portSchema, req.body), by(req))),
 );
 
-// ---- berths -----------------------------------------------------------------------------------
 export const berthList = asyncHandler(async (req: Request, res: Response) => {
   sendData(res, await masterService.listBerths(listQuery(req), { vessel_type_id: q(req).vessel_type_id, status: q(req).status, berth_type: q(req).berth_type }));
 });
@@ -75,7 +72,6 @@ export const berthUpdate = asyncHandler(async (req: Request, res: Response) =>
   sendData(res, await masterService.saveBerth(paramId(req), parse(berthSchema, req.body), by(req))),
 );
 
-// ---- purposes ---------------------------------------------------------------------------------
 export const purposeList = asyncHandler(async (req: Request, res: Response) => {
   sendData(res, await masterService.listPurposes(listQuery(req), { status: q(req).status, purpose_type: q(req).purpose_type, purpose_type_id: q(req).purpose_type_id }));
 });
@@ -88,7 +84,6 @@ export const purposeUpdate = asyncHandler(async (req: Request, res: Response) =>
 );
 export const purposeTypes = asyncHandler(async (_req: Request, res: Response) => sendData(res, await masterService.purposeTypes()));
 
-// ---- products ---------------------------------------------------------------------------------
 export const productList = asyncHandler(async (req: Request, res: Response) => sendData(res, await masterService.listProducts(listQuery(req), q(req).status)));
 export const productDetail = asyncHandler(async (req: Request, res: Response) => sendData(res, await masterService.productDetail(paramId(req))));
 export const productCreate = asyncHandler(async (req: Request, res: Response) =>
@@ -109,7 +104,6 @@ export const productTypeUpdate = asyncHandler(async (req: Request, res: Response
 );
 export const productGroupOptions = asyncHandler(async (_req: Request, res: Response) => sendData(res, await masterService.productGroupOptions()));
 
-// ---- vessel flags -----------------------------------------------------------------------------
 export const flagList = asyncHandler(async (req: Request, res: Response) => sendData(res, await masterService.listFlags(listQuery(req), q(req).status)));
 export const flagDetail = asyncHandler(async (req: Request, res: Response) => sendData(res, await masterService.flagDetail(paramId(req))));
 export const flagCreate = asyncHandler(async (req: Request, res: Response) => sendData(res, await masterService.saveFlag(null, parse(flagSchema, req.body), by(req))));

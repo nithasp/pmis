@@ -103,7 +103,6 @@ export function createMasterService(master: MasterRepository, files: FileService
   });
 
   return {
-    // ---- simple name/status tables ------------------------------------------------------------
     async listSimple(key: string, query: ListQuery, status: unknown): Promise<PagedResult<Row>> {
       const def = simple(key);
       const page = await master.list(SPECS.simple(def.table), query, (b) => statusFilter(b, 't', status));
@@ -133,7 +132,6 @@ export function createMasterService(master: MasterRepository, files: FileService
       return this.simpleDetail(key, id);
     },
 
-    // ---- ports --------------------------------------------------------------------------------
     async listPorts(query: ListQuery, filter: { country_id?: unknown; status?: unknown }): Promise<PagedResult<Row>> {
       const page = await master.list(SPECS.port(), query, (b) => {
         b.eq('p.country_id', idOrNull(filter.country_id));
@@ -159,7 +157,6 @@ export function createMasterService(master: MasterRepository, files: FileService
       return this.portDetail(id);
     },
 
-    // ---- berths -------------------------------------------------------------------------------
     async listBerths(query: ListQuery, filter: { vessel_type_id?: unknown; status?: unknown; berth_type?: unknown }): Promise<PagedResult<Row>> {
       const page = await master.list(SPECS.berth(), query, (b) => {
         b.eq('b.vessel_type_id', idOrNull(filter.vessel_type_id));
@@ -205,7 +202,6 @@ export function createMasterService(master: MasterRepository, files: FileService
       return this.berthDetail(berthId);
     },
 
-    // ---- purposes -----------------------------------------------------------------------------
     async listPurposes(query: ListQuery, filter: { status?: unknown; purpose_type?: unknown; purpose_type_id?: unknown }): Promise<PagedResult<Row>> {
       const page = await master.list(SPECS.purpose(), query, (b) => {
         statusFilter(b, 'p', filter.status);
@@ -239,7 +235,6 @@ export function createMasterService(master: MasterRepository, files: FileService
       return rows.map((r) => ({ id: r.id, name: r.code, type: r.code, code: r.code, nameEn: r.name_en, nameTh: r.name_th }));
     },
 
-    // ---- products -----------------------------------------------------------------------------
     async listProducts(query: ListQuery, status: unknown): Promise<PagedResult<Row>> {
       const page = await master.list(SPECS.product(), query, (b) => statusFilter(b, 'p', status));
       return { ...page, data: page.data.map(toProduct) };
@@ -316,7 +311,6 @@ export function createMasterService(master: MasterRepository, files: FileService
       return rows.map((r) => ({ id: r.id, name: r.name }));
     },
 
-    // ---- vessel flags -------------------------------------------------------------------------
     async listFlags(query: ListQuery, status: unknown): Promise<PagedResult<Row>> {
       const page = await master.list(SPECS.vesselFlag(), query, (b) => statusFilter(b, 'f', status));
       return { ...page, data: page.data.map(toFlag) };
@@ -349,7 +343,6 @@ export function createMasterService(master: MasterRepository, files: FileService
       return this.flagDetail(id);
     },
 
-    // ---- plain lists --------------------------------------------------------------------------
     pilots(): Promise<Row[]> {
       return master.query('SELECT id, name, number, tel FROM pilots WHERE status = TRUE ORDER BY id');
     },

@@ -105,7 +105,6 @@ export function createFileService(files: FileRepository) {
       return null;
     },
 
-    // Replaces the links of a record with the given upload list (ids or paths), keeping the order
     async syncLinks(link: FileLink, entityId: number, items: Row[] | undefined, db?: Queryable): Promise<void> {
       if (!Array.isArray(items)) return;
       await files.unlinkAll(link, entityId, db);

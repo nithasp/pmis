@@ -26,7 +26,6 @@ const props = defineProps({
     }
 });
 
-// Filter items to show only those without "visible" or where visible is not false
 const filteredItems = computed(() => {
     const items = props.items
         .flat()
@@ -35,7 +34,6 @@ const filteredItems = computed(() => {
         });
     return [items];
 });
-
 
 </script>
 

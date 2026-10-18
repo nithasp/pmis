@@ -269,10 +269,6 @@ async function onSubmit(event: FormSubmitEvent<z.output<any>>) {
 
 watch(
     () => props.isDialogOpen,
-    () => {
-        // if (props.vesselImportMapDetail) {
-        //     getGrossOption()
-        // }
-    }
+    () => {}
 );
 </script>

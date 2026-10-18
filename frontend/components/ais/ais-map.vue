@@ -56,12 +56,6 @@ const initMap = () => {
          '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>',
    }).addTo(map2.value);
 
-   // L.circle([12.5849, 101.222], {
-   //    color: "#e6f2f5",
-   //    fillColor: "#e6f2f5",
-   //    fillOpacity: 0.8,
-   //    radius: 1852,
-   // }).addTo(map.value);
    L.circle([12.5849, 101.222], {
       color: "#e6f2f5",
       fillColor: "#e6f2f5",

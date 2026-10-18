@@ -40,7 +40,6 @@ export function pagedResult<T>(items: T[], total: number, query: ListQuery): Pag
   };
 }
 
-// In-memory paging for lists that are assembled in code rather than SQL (dashboards, reports).
 export function pageInMemory<T>(items: T[], query: ListQuery): PagedResult<T> {
   const slice = query.limit ? items.slice(query.offset, query.offset + query.limit) : items;
   return pagedResult(slice, items.length, query);

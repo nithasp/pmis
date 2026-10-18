@@ -14,8 +14,6 @@
          },
       }" class="sm:hidden">
          <template #item="{ item }">
-            <!-- <PencilIcon v-if="item.id == 'edit'" />
-            <LockIcon v-if="item.id == 'lock'" /> -->
             <LogoutIcon v-if="item.id == 'logout'" />
             <span class="truncate">{{ item.label }}</span>
          </template>
@@ -49,8 +47,6 @@
    </header>
    <DialogConfirm :isOpen="isOpen" :setDialog="setDialog" title="ออกจากระบบ" desc="คุณต้องการออกจากระบบใช่หรือไม่"
       icon="warning" :btnAction="fnLogout" />
-   <!-- <DialogEditProfile :isOpen="isOpenEditProfile" :setDialog="setDialogEditProfile" />
-   <DialogChangePassword :isOpen="isOpenChangePassword" :setDialog="setDialogChangePassword" /> -->
    <Loading v-if="isLoading" />
 </template>
 
@@ -58,31 +54,11 @@
 import Logo from "~/assets/images/logo.png";
 import Avatar from "~/assets/images/header/avatar.png";
 import DialogConfirm from "~/components/dialog/confirm";
-// import DialogEditProfile from "~/components/dialog/profile/editProfile";
-// import DialogChangePassword from "~/components/dialog/profile/changePassword";
-// import PencilIcon from "~/assets/icons/pencil";
-// import LockIcon from "~/assets/icons/lock";
 import LogoutIcon from "~/assets/icons/logout";
 import Loading from "~/components/loading";
 const authStore = useAuthStore()
 
 const items = [
-   // [
-   //    {
-   //       id: "edit",
-   //       label: "แก้ไขโปรไฟล์",
-   //       click: () => {
-   //          setDialogEditProfile(true);
-   //       },
-   //    },
-   //    {
-   //       id: "lock",
-   //       label: "เปลี่ยนรหัสผ่าน",
-   //       click: () => {
-   //          setDialogChangePassword(true);
-   //       },
-   //    },
-   // ],
    [
       {
          id: "logout",
@@ -114,13 +90,4 @@ const setDialog = (status) => {
    isOpen.value = status;
 };
 
-// const isOpenEditProfile = ref(false);
-// const setDialogEditProfile = (status) => {
-//    isOpenEditProfile.value = status;
-// };
-
-// const isOpenChangePassword = ref(false);
-// const setDialogChangePassword = (status) => {
-//    isOpenChangePassword.value = status;
-// };
 </script>

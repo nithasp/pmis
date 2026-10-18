@@ -35,7 +35,6 @@ function requireOfficer(ctx: GraphQLContext): AuthUser {
   return user;
 }
 
-// Service errors keep their Thai message and English translation in the error extensions
 async function run<T>(fn: () => Promise<T>): Promise<T> {
   try {
     return await fn();

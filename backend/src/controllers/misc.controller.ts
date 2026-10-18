@@ -25,7 +25,6 @@ export const vesselImportTemplate = asyncHandler(async (_req: Request, res: Resp
   res.end(await templateService.vesselImportTemplate());
 });
 
-// GET /admin/template/:fileTemplate answers the download link the import page fetches
 export const templateLink = asyncHandler(async (req: Request, res: Response) => {
   const name = String(req.params.fileTemplate ?? '');
   const known: Record<string, { path: string; fileName: string }> = {

@@ -50,13 +50,13 @@ function prepareGroupedTableData(shipData: any) {
       const formattedDate = `${day}/${month}/${year}`;
 
       return [
-         index + 1, // ลำดับ (order number)
-         formattedDate, // วันที่อนุมัติลงทะเบียน (approved date)
-         ship.companyName, // ชื่อบริษัท (company name)
-         ship.contactName, // ชื่อผู้ติดต่อ (contact name)
-         ship.phone, // เบอร์โทรศัพท์ (phone)
-         ship.mobilePhone, // เบอร์โทรศัพท์สำรอง (mobile phone)
-         ship.email, // E-mail
+         index + 1,
+         formattedDate,
+         ship.companyName,
+         ship.contactName,
+         ship.phone,
+         ship.mobilePhone,
+         ship.email,
       ];
    });
 }

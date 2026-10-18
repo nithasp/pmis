@@ -59,7 +59,6 @@ export default function useMasterDataShipService() {
          console.error("get vessel type:", error);
          return wrapperErrorResp(error);
       }
-      
    };
    const getVesselFlag = async (query: any) => {
       try {
@@ -81,7 +80,6 @@ export default function useMasterDataShipService() {
    };
    const uploadFileVessel = async (file: File) => {
       const formData = new FormData();
-      // console.log('file.name',file)
       formData.append("file", file[0], file[0].name);
       let percentCompleted = null;
       try {
@@ -104,7 +102,6 @@ export default function useMasterDataShipService() {
       }
    };
    
-
    return {
       getVesselGovernment,
       postVesselGovernment,

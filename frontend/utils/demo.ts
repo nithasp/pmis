@@ -37,9 +37,7 @@ export const isNewTab = (): boolean => {
 export const markTabSeen = (): void => {
    try {
       sessionStorage.setItem(TAB_KEY, String(Date.now()));
-   } catch {
-      // ignore
-   }
+   } catch {}
 };
 
 export const storedProfile = (): any => {

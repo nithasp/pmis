@@ -24,45 +24,11 @@
                </UFormGroup>
             </div>
             <div class="col-span-3">
-               <!-- <UFormGroup :label="$t('berth_select')">
-                  <USelectMenu
-                     class="max-w-[512px]"
-                     color="purple"
-                     variant="outline"
-                     v-model="filter.port"
-                     value-attribute="status"
-                     option-attribute="text"
-                     :options="portList"
-                     :placeholder="$t('berth_select')"
-                     :ui="{
-                        base: 'h-[36px] bg-white',
-                        wrapper: 'rounded-md bg-white',
-                     }"
-                     @change="() => getVtList()"
-                  />
-               </UFormGroup> -->
                <USelect :label="$t('berth')" name="berth_id" placeholder="" :options="berthList"
                   v-model="filter.berthId" class="max-w-[240px] w-full" />
             </div>
             <div class="col-span-3">
                <div class="flex">
-                  <!-- <UFormGroup :label="$t('vtms_request_table_status_request')" class="" style="width: 100%">
-                     <USelectMenu
-                        class="max-w-[512px]"
-                        color="purple"
-                        variant="outline"
-                        v-model="filter.status"
-                        value-attribute="status"
-                        option-attribute="text"
-                        :options="statusList"
-                        :placeholder="$t('vtms_request_table_status_request')"
-                        :ui="{
-                           base: 'h-[36px] bg-white',
-                           wrapper: 'rounded-md bg-white',
-                        }"
-                        @change="() => getVtList()"
-                     />
-                  </UFormGroup> -->
                   <USelect :label="$t('status_request')" name="status" placeholder="" :options="statusList"
                      v-model="filter.status" class="max-w-[240px] w-full" />
                   <div class="ml-2 mt-7">
@@ -78,13 +44,6 @@
                <h1 class="font-normal text-lg text-white">{{ $t("vtList_topic") }}</h1>
                <div class="rounded-full bg-purple-25 text-sm py-1 px-2 ml-2">{{ total }} {{ $t("vtList_total") }}</div>
             </div>
-            <!-- <div>
-               <RequestListDialog @fetch="getVtList">
-                  <template #activator="{ on }">
-                     <UButton class="" outlined icon="i-heroicons-plus-circle" size="md" label="เพิ่ม" v-on="on" />
-                  </template>
-               </RequestListDialog>
-            </div> -->
          </div>
          <UTable @select="selectRow" :columns="columns" :rows="vtList" :ui="{
             base: 'u-table-list',
@@ -272,11 +231,9 @@ const filterBerth = ref<IFilterBerth>({
 });
 const statusList = ref<any>([
    { id: "", name: `${locale.value === "en" ? "All" : "ทุกประเภท"}` },
-   //{ id: "PendingReview", name: `${locale.value === "en" ? "Pending Review" : "รอตรวจ"}` },
    { id: "PendingEdit", name: `${locale.value === "en" ? "Pending Edit" : "รอแก้ไข"}` },
    { id: "PendingConfirmation", name: `${locale.value === "en" ? "Pending Confirmation" : "รอยืนยันท่า"}` },
    { id: "PendingApproval", name: `${locale.value === "en" ? "Pending Approval" : "รออนุมัติ"}` },
-   //{ id: "Approved", name: `${locale.value === "en" ? "Approved" : "รอแก้ไข"}` },
    { id: "Canceled", name: `${locale.value === "en" ? "Canceled" : "ตัวแทนยกเลิก"}` },
    { id: "AdminCanceled", name: `${locale.value === "en" ? "Admin Canceled" : "เจ้าหน้าที่ยกเลิก"}` },
 ]);
@@ -298,16 +255,11 @@ watch(
    () => selectedDate.value,
    (value) => {
       dateValue.value = value;
-      // getVtList();
    }
 );
 watch(
    () => dateValue.value,
    (value) => {
-      // const beginDate = value ? new Date(value.start).toISOString() : "";
-      // const endDate = value ? new Date(value.end).toISOString() : "";
-      // filter.value.etaBegin = beginDate;
-      // filter.value.etaEnd = endDate;
       if (value) {
          const beginDate = value && value.start ? new Date(value.start) : null;
          const endDate = value && value.end ? new Date(value.end) : null;
@@ -468,12 +420,6 @@ watch([() => filter.value.status, () => filter.value.berthId, () => filter.value
 const getVtList = async () => {
    try {
       isLoading.value = true;
-      // let queryString = convertObjToQueryString({
-      //    limit: filter.value.limit,
-      //    page: filter.value.page,
-      //    search: filter.value.keyword,
-      //    status: filter.value.status,
-      // });
       const resp = await getVt(filter.value);
       if (resp.statusCode === 200) {
          const { data, totalItems, totalPages } = resp.data;

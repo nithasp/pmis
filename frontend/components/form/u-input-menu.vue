@@ -51,13 +51,11 @@ const props = defineProps({
 const internalValue = ref(props.modelValue);
 const valueDisplay = ref(props.modelValue)
 
-// Emit the changes back to the parent component
 const emit = defineEmits(['update:modelValue']);
 watch(internalValue, (newValue) => {
     emit('update:modelValue', newValue);
 });
 
-// Watch for changes from the parent to sync with local state
 watch(() => props.modelValue, async (newValue) => {
     if (props.isView) {
         const findData = await props.options.find(e => e.id === newValue)

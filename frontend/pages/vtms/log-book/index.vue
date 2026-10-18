@@ -37,44 +37,10 @@
                </UFormGroup>
             </div>
             <div class="col-span-3">
-               <!-- <UFormGroup :label="'ท่าเรือ'">
-                  <USelectMenu
-                     class="max-w-[512px]"
-                     color="purple"
-                     variant="outline"
-                     v-model="filter.berth_id"
-                     value-attribute="id"
-                     option-attribute="name_th"
-                     :options="berthList"
-                     :placeholder="$t('search_status_placeholder')"
-                     :ui="{
-                        base: 'h-[36px] bg-white',
-                        wrapper: 'rounded-md bg-white',
-                     }"
-                     @change="() => getLogBookList()"
-                  />
-               </UFormGroup> -->
                <USelect :label="$t('berth')" name="berth_id" placeholder="" :options="berthList" v-model="filter.berth_id" class="max-w-[240px] w-full" />
             </div>
             <div class="col-span-3">
                <div class="flex">
-                  <!-- <UFormGroup :label="'สถานะ'" class="" style="width: 100%">
-                     <USelectMenu
-                        class="max-w-[512px]"
-                        color="purple"
-                        variant="outline"
-                        v-model="filter.status"
-                        value-attribute="status"
-                        option-attribute="text"
-                        :options="statusList"
-                        :placeholder="$t('search_status_placeholder')"
-                        :ui="{
-                           base: 'h-[36px] bg-white',
-                           wrapper: 'rounded-md bg-white',
-                        }"
-                        @change="() => getLogBookList()"
-                     />
-                  </UFormGroup> -->
                   <USelect :label="$t('status_request')" name="status" placeholder="" :options="statusList" v-model="filter.status" class="max-w-[240px] w-full" />
 
                   <div class="ml-2 mt-7">
@@ -355,10 +321,6 @@ watch(
    () => dateValue.value,
    (value) => {
       console.log("watch", dateValue.value);
-      // const beginDate = value ? new Date(value.start).toISOString() : "";
-      // const endDate = value ? new Date(value.end).toISOString() : "";
-      // filter.value.begin = beginDate;
-      // filter.value.end = endDate;
       if (value) {
          const beginDate = value && value.start ? new Date(value.start) : null;
          const endDate = value && value.end ? new Date(value.end) : null;
@@ -462,14 +424,6 @@ const getLogBookList = async () => {
    try {
       console.log("getLogBookList");
       isLoading.value = true;
-      // let query = {
-      //    limit: filter.value.limit,
-      //    page: filter.value.page,
-      //    search: filter.value.keyword,
-      //    status: filter.value.status,
-      //    berth_id: filter.value.berth_id,
-      //    date: dateValue.value,
-      // };
       const resp = await getVtmsLogBook(filter.value);
       if (resp.statusCode === 200) {
          const { data, totalItems, totalPages } = resp.data;

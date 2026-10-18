@@ -473,14 +473,7 @@ watch(
 
 watch(
    () => dateValue.value,
-   (value) => {
-      // const beginDate = value ? new Date(value.start).toISOString() : ''
-      // const endDate = value ? new Date(value.end).toISOString() : ''
-      // filter.value.begin = beginDate
-      // filter.value.end = endDate
-      // filter.value.page = 1
-      // getLogBookList({ ...filter.value, begin: beginDate, end: endDate, page: 1 })
-   }
+   (value) => {}
 );
 
 watch(
@@ -498,15 +491,6 @@ watch(
       getLogBookList({ ...filter.value, limit: value, page: 1 });
    }
 );
-
-// watch(
-//    () => berthId.value,
-//    (value) => {
-//       sortOrder.value = "";
-//       filter.value.berth_id = value;
-//       getLogBookList({ ...filter.value, berth_id: value, page: 1 });
-//    }
-// );
 
 watch(
    () => mooringDateValue.value,

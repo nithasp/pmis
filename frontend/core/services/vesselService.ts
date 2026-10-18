@@ -1,5 +1,3 @@
-// services/auth.ts
-
 import { useNuxtApp } from '#app'
 import type { AxiosResponse } from 'axios'
 import type { IVesselRequest } from '../interfaces/IVesselRequest'
@@ -12,7 +10,6 @@ export default function useVesselService() {
             const response: AxiosResponse = await $api.get(`/admin/vessels?${filterParams}`)
             return wrapperSuccessResp(response.data)
         } catch (error) {
-            // Handle error (e.g., show a notification or throw an error)
             console.error('get vessel failed:', error)
             return wrapperErrorResp(error)
         }
@@ -23,19 +20,16 @@ export default function useVesselService() {
             const response: AxiosResponse = await $api.get(`/admin/vessels/${id}`)
             return wrapperSuccessResp(response.data)
         } catch (error) {
-            // Handle error (e.g., show a notification or throw an error)
             console.error('get vessel failed:', error)
             return wrapperErrorResp(error)
         }
     }
-
 
     const createVessel = async (body: IVesselRequest) => {
         try {
             const response: AxiosResponse = await $api.post('admin/vessels', { ...body })
             return wrapperSuccessResp(response.data)
         } catch (error) {
-            // Handle error (e.g., show a notification or throw an error)
             console.error('create vessel failed:', error)
             return wrapperErrorResp(error)
         }
@@ -47,13 +41,11 @@ export default function useVesselService() {
            const response: AxiosResponse = await $api.get(`/admin/vessels/${vesselId}/history?${filterParams}`);
            return wrapperSuccessResp(response.data);
         } catch (error) {
-           // Handle error (e.g., show a notification or throw an error)
            console.error("get vessel history list failed:", error);
            return wrapperErrorResp(error);
         }
      };
   
-
     return {
         getVesselList,
         createVessel,

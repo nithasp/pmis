@@ -25,7 +25,6 @@ export interface IProductDetail {
    updated_by: string;
 }
 export interface IProductAdd {
-   // status?: boolean | undefined;
    name: string;
    product_type_id: number;
    product_group_id?: number;

@@ -96,16 +96,6 @@ onMounted(() => {
    fetchUserDetail(profileUser.value?.id);
 });
 
-// const getVesselAgenciesDetail = async (userId: number) => {
-//    const resp = await adminService.getVesselAgenciesDetail(userId);
-//    if (resp.statusCode === 200) {
-//       formGroup.value = {
-//          ...resp?.data,
-//       };
-//       defaultEmail.value = resp.data?.email;
-//    }
-// };
-
 const fetchUserDetail = async (userId: number) => {
    const resp = await getUserDetail(userId);
    if (resp.statusCode === 200) {
@@ -138,7 +128,6 @@ const setDialogChangeEmail = (status: boolean) => {
 const dialogChangeEmailCancel = () => {
    setDialogChangeEmail(false);
    fetchUserDetail(profileUser.value?.id);
-
 };
 const dialogChangeEmailConfirm = () => {
    setDialogChangeEmail(false);

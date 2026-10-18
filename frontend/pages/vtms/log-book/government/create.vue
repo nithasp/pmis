@@ -2,7 +2,6 @@
    <div class="mb-8">
       <h1 class="font-bold text-[30px]">Log Book</h1>
    </div>
-   <!-- <UForm :schema="logBookSchema" :state="formGroupTest" @submit="onSubmit"> -->
    <div id="log-book-create-form-content" class="bg-white px-8 py-6 rounded-[0px_0px_20px_20px]">
       <div class="flex items-center justify-between mb-5">
          <div>
@@ -11,7 +10,6 @@
          </div>
          <div class="">
             <UButton @click="handleCancleCreateVessel" class="mx-2 border border-grayy-100" size="md" color="gray" :label="isEdit ? $t('close') : $t('cancel')" />
-            <!-- <UButton size="md" :label="$t('save')" type="submit" /> -->
             <UButton
                class="border border-primaryy-500 bg-primaryy-500 hover:bg-primaryy-500 text-grayy-25 w-[82px] h-[36px] justify-center"
                size="md"
@@ -101,64 +99,7 @@
                   :options="purposeList"
                />
             </div>
-            <!-- <div class="col-span-1">
-               <USelect
-                     :label="'ลักษณะสินค้า'"
-                     name="cargo_type"
-                     :placeholder="'ค้นหา'"
-                     required
-                     :searchable-placeholder="'ค้นหา'"
-                     v-model="formGroup.details[0].cargo_type_id"
-                     searchable
-                     :options="cargoTypeList"
-                  />
-               <USelect
-                  :label="'ลักษณะสินค้า'"
-                  name="cargo_type"
-                  :placeholder="'ค้นหา'"
-                  required
-                  :searchable-placeholder="'ค้นหา'"
-                  v-model="formGroup.details[0].cargo_type_id"
-                  :error="isFieldError('cargo_type_id') ? fieldValidation.cargo_type_id.message : ''"
-                  searchable
-                  :options="cargoTypeList"
-               />
-            </div>
             <div class="col-span-1">
-               <USelect
-                     :label="'รูปแบบสินค้า'"
-                     name="cargo_wharfage"
-                     :placeholder="'ค้นหา'"
-                     required
-                     :searchable-placeholder="'ค้นหา'"
-                     v-model="formGroup.details[0].cargo_wharfage_id"
-                     searchable
-                     :options="cargoWharfageList"
-                  />
-               <USelect
-                  :label="'รูปแบบสินค้า'"
-                  name="cargo_wharfage"
-                  :placeholder="'ค้นหา'"
-                  required
-                  :searchable-placeholder="'ค้นหา'"
-                  v-model="formGroup.details[0].cargo_wharfage_id"
-                  :error="isFieldError('cargo_wharfage_id') ? fieldValidation.cargo_wharfage_id.message : ''"
-                  searchable
-                  :options="cargoWharfageList"
-               />
-            </div> -->
-            <div class="col-span-1">
-               <!-- <USelect
-                     :label="'ท่าเทียบเรือย่อย'"
-                     name="jetty"
-                     :placeholder="'ค้นหา'"
-                     required
-                     :searchable-placeholder="'ค้นหา'"
-                     v-model="formGroup.details[0].jetty_id"
-                     searchable
-                     :options="jettyList"
-                     :disabled="!formGroup.details[0].berth_id"
-                  /> -->
                <USelect
                   :label="'ท่าเทียบเรือย่อย'"
                   name="jetty"
@@ -250,17 +191,12 @@
             />
             <div class="flex justify-between col-span-2">
                <div class="flex items-center">
-                  <!-- <NuxtIcon v-if="errorFileMessage" name="exclamation" color="text-error-500" />
-                     <span v-if="errorFileMessage" class="text-red-500 ml-2 my-3">
-                        {{ errorFileMessage }}
-                     </span> -->
                </div>
                <span class="text-grayy-500 mr-2 my-3">รองรับสกุลไฟล์ .pdf, .jpg และอัปโหลดได้สูงสุด 1 ไฟล์</span>
             </div>
          </div>
       </div>
    </div>
-   <!-- </UForm> -->
    <DialogConfirm
       :title="isEdit ? $t('save_logbook_government') : $t('add_logbook_government')"
       :desc="isEdit ? $t('confirm_save_logbook_government') : $t('confirm_add_logbook_government')"
@@ -346,17 +282,8 @@ const nextRoute = ref<any>(null);
 const notAllowNavigate = ref(true);
 
 const logBookSchema = z.object({
-   // berth_id: z.number().min(1, t("required")),
-   // purpose_id: z.number().min(1, t("required")),
-   // cargo_type_id: z.number().min(1, t("required")),
-   // cargo_wharfage_id: z.number().min(1, t("required")),
-   // jetty_id: z.number().min(1, t("required")),
-   // mooring_date: z.string().min(1, t("required")),
-   // departure_date: z.string().min(1, t("required")),
-   // vesselId: z.string().min(1, t("required")),
 });
 
-// const logBookSchema = ref(createSchema());
 const vesselData = ref<IVtmsLogBookGovernmentVesselCreate>({
    owner: "",
    name: "",
@@ -398,8 +325,6 @@ const formGroup = ref({
          jetty_id: 0,
          mooring_date: "",
          departure_date: "",
-         // mooring_date: "2024-10-07T19:00:00+07:00",
-         // departure_date: "2024-10-08T19:00:00+07:00",
       },
    ],
    tugs: [],
@@ -418,7 +343,6 @@ const purposeList = ref([]);
 const cargoTypeList = ref([]);
 const cargoWharfageList = ref([]);
 const jettyList = ref([]);
-// const arrivalDate = ref(new Date())
 const arrivalDate = ref();
 
 watch(
@@ -479,7 +403,6 @@ const payload = ref<IVtmsLogBookAdd>({
 const addressOptionsStore = useAddressOptionsStore();
 
 onMounted(async () => {
-   // getVesselList();
    await getMasterList();
    await getPortList();
    if (logBookId) {
@@ -528,20 +451,9 @@ const getLogBookDetailById = async (id: number) => {
          };
          mooringDate.value = resp.data.details[0].mooring_date ? new Date(resp.data.details[0].mooring_date) : "";
          departureDate.value = resp.data.details[0].departure_date ? new Date(resp.data.details[0].departure_date) : "";
-         // vesselData.value = {
-         //    name: "",
-         //    vesselFlagName: "",
-         //    officialNumber: "",
-         //    loa: 0,
-         //    breadth: 0,
-         //    draft: 0,
-         //    displacement: 0,
-         // };
-         // vesselSelect.value = vesselData.value;
          if (resp.data.details.berth_id) {
             await getJettyList(resp.data.details.berth_id);
          }
-         // console.log("get detail", formGroup.value);
       }
    } catch (error) {
       console.error(error);
@@ -554,9 +466,9 @@ onBeforeRouteLeave((to, from, next) => {
    if (notAllowNavigate.value) {
       isConfirmLeaveDialogOpen.value = true;
       nextRoute.value = to;
-      next(false); // Prevent navigation until confirmed
+      next(false);
    } else {
-      next(); // Allow navigation
+      next();
    }
 });
 
@@ -576,7 +488,6 @@ const getPortList = async () => {
 };
 const getBerthList = async () => {
    try {
-      // isLoading.value = true;
       const resp = await getBerth();
       if (resp.statusCode === 200) {
          const { data } = resp.data;
@@ -590,7 +501,6 @@ const getBerthList = async () => {
 };
 const getPurposeList = async () => {
    try {
-      // isLoading.value = true;
       const resp = await getPurpose(filterPurposeList.value);
       if (resp.statusCode === 200) {
          const { data } = resp.data;
@@ -606,7 +516,6 @@ const getPurposeList = async () => {
 };
 const getCargoTypeList = async () => {
    try {
-      // isLoading.value = true;
       const resp = await getCargoType();
       if (resp.statusCode === 200) {
          const { data } = resp.data;
@@ -620,7 +529,6 @@ const getCargoTypeList = async () => {
 };
 const getCargoWharfageList = async () => {
    try {
-      // isLoading.value = true;
       const resp = await getCargoWharfage();
       if (resp.statusCode === 200) {
          const { data } = resp.data;
@@ -635,12 +543,10 @@ const getCargoWharfageList = async () => {
 const getJettyList = async (id: number) => {
    try {
       console.log("jettys id", id);
-      // isLoading.value = true;
       if (id) {
          const resp = await getJetty(id);
          if (resp.statusCode === 200) {
             const { data, jettys } = resp.data;
-            // console.log("jettys id", jettys);
             jettyList.value = jettys;
          }
       }
@@ -653,7 +559,6 @@ const getJettyList = async (id: number) => {
 async function onSubmit() {
    await allFieldPristine();
    const fieldsWithErrors = await checkFieldErrors(fieldValidation.value);
-   // console.log("fieldsWithErrors", fieldsWithErrors);
    if (fieldsWithErrors.length > 0) {
       return;
    }
@@ -675,9 +580,7 @@ async function onSubmit() {
    };
 
    payload.value = { ...newPayload };
-   // console.log("Payload", payload.value);
    isConfirmDialogOpen.value = true;
-   // }
 }
 const mooringDate = ref<any>(new Date());
 const onMooringDateChange = (newDate: any) => {
@@ -732,7 +635,6 @@ const handleCloseAlertDialog = () => {
 const handleCloseAlertDialogUpdate = () => {
    isAlertDialogUpdateOpen.value = false;
    navigateTo("/vtms/log-book");
-   // getLogBookDetailById(logBookId);
 };
 
 const handleConfirmLeave = () => {
@@ -782,7 +684,6 @@ const uploadFile = ref([]);
 
 const getFiles = (value: any) => {
    uploadFile.value = value.map(({ isError, ...i }: { isError: boolean }) => ({ ...i, extension: "pdf/*" }));
-   // console.log(uploadFile.value[0]);
 };
 
 const fieldValidation = ref<any>({

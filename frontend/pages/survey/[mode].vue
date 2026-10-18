@@ -526,7 +526,6 @@
    </div>
  </template>
  
-
 <script setup lang="ts">
 import Input from "~/components/form/u-input.vue";
 import Select from "~/components/form/u-select.vue";
@@ -723,7 +722,6 @@ const allFieldPristine = (pristineValue: boolean = true) => {
    });
 
    formGroup.value.sections.forEach((section, sectionIndex) => {
- 
       if (section.typeSection === "heading" || section.typeSection === "evaluation") {
          const key = `section_${sectionIndex}_title`;
          if (!fieldValidation.value[key]) {
@@ -751,7 +749,6 @@ const allFieldPristine = (pristineValue: boolean = true) => {
       }
    });
 };
-
 
 const isFieldError = (
    field: "name" | "description" | "publishDate" | "endDate" | "questions" | "optionName" | "sectionTitle",
@@ -971,7 +968,6 @@ const removeSection = (section: ISurveyPayloadSection) => {
 };
 
 const removeOption = (sectionId: number | string, questionIndex: number, optionIndex: number) => {
- 
    const sectionIndex = formGroup.value.sections.findIndex((s: ISurveyDetailSection) => s.id === sectionId);
    if (sectionIndex !== -1) {
       const section = formGroup.value.sections[sectionIndex];
@@ -979,13 +975,11 @@ const removeOption = (sectionId: number | string, questionIndex: number, optionI
          if (section.questions[questionIndex].options.length > 1) {
             section.questions[questionIndex].options.splice(optionIndex, 1);
          } else {
-            // Prevent removing the last option if at least one is required
             section.questions[questionIndex].options[0].optionName = "";
          }
       }
    }
 };
-
 
 const removeQuestion = (sectionIndex: number, questionIndex: number, question: ISurveyPayloadQuestion, sectionItem: ISurveyPayloadSection) => {
    if (sectionItem.hasOwnProperty("id")) {

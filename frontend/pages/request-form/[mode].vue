@@ -370,26 +370,16 @@ const errors = ref<FormError[]>([]);
 const validate = (field: string, valueSelected: any = 0) => {
    const validationErrors: FormError[] = [];
 
-   // Vessel Name validation
    if (field === "vesselName") {
       if (!formVesselGroup.vesselName) {
          validationErrors.push({ path: "vesselName", message: t("please_enter_a_value") });
       }
    }
 
-   // Vessel Call Sign validation (dependent on isOtherCountry)
-   // if (field === 'vesselCallSign') {
-   //     if (isOtherCountry.value && !formVesselGroup.vesselCallSign) {
-   //         validationErrors.push({ path: 'vesselCallSign', message: t('please_enter_a_value') });
-   //     }
-   // }
-
-   // Vessel IMO Number validation (dependent on isOtherCountry)
    if (field === "vesselImoNumber") {
       if (isOtherCountry.value && !formVesselGroup.vesselImoNumber) {
          validationErrors.push({ path: "vesselImoNumber", message: t("please_enter_a_value") });
       } else if (isOtherCountry.value && !regxNumber7Degit.test(formVesselGroup.vesselImoNumber)) {
-         // Replace with desired phone number validation
          validationErrors.push({ path: "vesselImoNumber", message: t("imo_number_not_correct") });
       }
    }
@@ -402,14 +392,12 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Vessel Owner validation
    if (field === "vesselOwner") {
       if (!formVesselGroup.vesselOwner) {
          validationErrors.push({ path: "vesselOwner", message: t("please_enter_a_value") });
       }
    }
 
-   // Numeric fields validation (vesselBreadthExtreme, vesselDepth, etc.)
    const numericFields = [
       "vesselBreadthExtreme",
       "vesselDepth",
@@ -428,60 +416,50 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Vessel Type ID validation (dependent on isOtherCountry)
    if (field === "vesselTypeId") {
       if (isOtherCountry.value && !formVesselGroup.vesselTypeId && !valueSelected) {
          validationErrors.push({ path: "vesselTypeId", message: t("please_enter_a_value") });
       }
    }
 
-   // Vessel vesselFlagId validation (dependent on isOtherCountry)
    if (field === "vesselFlagId") {
       if (!formVesselGroup.vesselFlagId && !valueSelected) {
          validationErrors.push({ path: "vesselFlagId", message: t("please_enter_a_value") });
       }
    }
 
-   // Vessel License Expired Date validation (dependent on isOtherCountry)
    if (field === "vesselLicenseExpiredDate") {
       if (!formVesselGroup.vesselLicenseExpiredDate && !isOtherCountry.value) {
          validationErrors.push({ path: "vesselLicenseExpiredDate", message: t("please_enter_a_value") });
       }
    }
 
-   // Add other field validations (vesselMainEngine, vesselBandAndModel, etc.)
    if (["vesselMainEngine", "vesselBandAndModel", "vesselOfficialNumber"].includes(field) && !formVesselGroup[field]) {
       validationErrors.push({ path: field, message: t("please_enter_a_value") });
    } else if (field === "vesselOfficialNumber" && !regxNumber9Degit.test(formVesselGroup.vesselOfficialNumber)) {
-      // Replace with desired phone number validation
       validationErrors.push({ path: "vesselOfficialNumber", message: t("official_number_not_correct") });
    }
 
-   // Name validation
    if (field === "name") {
       if (!formInvoiceGroup.name) {
          validationErrors.push({ path: "name", message: t("please_enter_a_value") });
       }
    }
 
-   // Tax ID validation
    if (field === "taxId") {
       if (!formInvoiceGroup.taxId) {
          validationErrors.push({ path: "taxId", message: t("please_enter_a_value") });
       } else if (!regxNumber13Degit.test(formInvoiceGroup.taxId)) {
-         // Replace with desired phone number validation
          validationErrors.push({ path: "taxId", message: t("taxpayer_identification_not_correct") });
       }
    }
 
-   // Contact Name validation
    if (field === "contactName") {
       if (!formInvoiceGroup.contactName) {
          validationErrors.push({ path: "contactName", message: t("please_enter_a_value") });
       }
    }
 
-   // Payment Method ID validation
    if (field === "paymentMethodId") {
       formInvoiceGroup.paymentMethodId = valueSelected || formInvoiceGroup.paymentMethodId;
       if (!formInvoiceGroup.paymentMethodId || formInvoiceGroup.paymentMethodId < 1) {
@@ -489,7 +467,6 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Payment Term ID validation
    if (field === "paymentTermId") {
       formInvoiceGroup.paymentTermId = valueSelected || formInvoiceGroup.paymentTermId;
       if (!formInvoiceGroup.paymentTermId || formInvoiceGroup.paymentTermId < 1) {
@@ -497,7 +474,6 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Country ID validation
    if (field === "countryId") {
       formInvoiceGroup.countryId = valueSelected || formInvoiceGroup.countryId;
       if (!formInvoiceGroup.countryId || formInvoiceGroup.countryId < 1) {
@@ -505,7 +481,6 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Province ID validation (dependent on isOtherInvoiceCountry)
    if (field === "provinceId") {
       formInvoiceGroup.provinceId = valueSelected || formInvoiceGroup.provinceId;
       if (!isOtherInvoiceCountry.value && (!formInvoiceGroup.provinceId || formInvoiceGroup.provinceId < 1)) {
@@ -513,7 +488,6 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // District ID validation (dependent on isOtherInvoiceCountry)
    if (field === "districtId") {
       formInvoiceGroup.districtId = valueSelected || formInvoiceGroup.districtId;
       if (!isOtherInvoiceCountry.value && (!formInvoiceGroup.districtId || formInvoiceGroup.districtId < 1)) {
@@ -521,7 +495,6 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // SubDistrict ID validation (dependent on isOtherInvoiceCountry)
    if (field === "subDistrictId") {
       formInvoiceGroup.subDistrictId = valueSelected || formInvoiceGroup.subDistrictId;
       if (!isOtherInvoiceCountry.value && (!formInvoiceGroup.subDistrictId || formInvoiceGroup.subDistrictId < 1)) {
@@ -529,28 +502,24 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Post Code validation
    if (field === "postCode") {
       if (!formInvoiceGroup.postCode) {
          validationErrors.push({ path: "postCode", message: t("please_enter_a_value") });
       }
    }
 
-   // Stage Province validation (dependent on isOtherInvoiceCountry)
    if (field === "stageProvince") {
       if (isOtherInvoiceCountry.value && !formInvoiceGroup.stageProvince) {
          validationErrors.push({ path: "stageProvince", message: t("please_enter_a_value") });
       }
    }
 
-   // Address Validation
    if (field === "address") {
       if (!formInvoiceGroup.address) {
          validationErrors.push({ path: "address", message: t("please_enter_a_value") });
       }
    }
 
-   // Clear previous errors for the specific field and add the new error if any
    errors.value = errors.value.filter((err) => err.path !== field);
    if (validationErrors.length) {
       errors.value.push(...validationErrors);
@@ -719,7 +688,6 @@ const getDocumentDraftOrDetail = async (docId: number = 0) => {
 
       berths.value = data.berths || [];
 
-      // invoice
       formInvoiceGroup.customerId = data.invoice.customerId;
       formInvoiceGroup.name = data.invoice.name;
       formInvoiceGroup.taxId = data.invoice.taxId;
@@ -762,19 +730,19 @@ onBeforeRouteLeave((to, from, next) => {
    if (notAllowNavigate.value) {
       isConfirmLeaveDialogOpen.value = true;
       nextRoute.value = to;
-      next(false); // Prevent navigation until confirmed
+      next(false);
    } else {
-      next(); // Allow navigation
+      next();
    }
 });
 
-const countdown = ref(5); // Countdown duration (seconds)
+const countdown = ref(5);
 const isCounting = ref(false);
 let timer: string | number | NodeJS.Timeout | null | undefined = null;
 const startCountdown = () => {
-   if (isCounting.value) return; // Prevent multiple clicks
+   if (isCounting.value) return;
    isCounting.value = true;
-   countdown.value = 5; // Reset countdown
+   countdown.value = 5;
 
    timer = setInterval(() => {
       if (countdown.value > 0) {
@@ -783,7 +751,7 @@ const startCountdown = () => {
          if (timer !== null) {
             clearInterval(timer);
          }
-         isCounting.value = false; // Enable button
+         isCounting.value = false;
       }
    }, 1000);
 };
@@ -839,7 +807,6 @@ const isSelectedVesselTrigger = (isTrigger: boolean) => {
          "vesselGrossTonnage",
          "vesselLengthOverall",
          "vesselLoadWeight",
-         // 'vesselMainEngine', 'vesselBandAndModel',
          "vesselOfficialNumber",
          "vesselFlagId",
          "vesselTypeId",
@@ -857,7 +824,7 @@ const daysRemaining = computed(() => {
    const currentDate = new Date();
    if (formVesselGroup.vesselLicenseExpiredDate && !new Date(formVesselGroup.vesselLicenseExpiredDate)) return 0;
    const diffTime = new Date(formVesselGroup.vesselLicenseExpiredDate).getTime() - currentDate.getTime();
-   return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert ms to days
+   return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 });
 
 async function onSubmit(event: FormSubmitEvent<z.output<any>>) {
@@ -871,7 +838,6 @@ async function onSubmit(event: FormSubmitEvent<z.output<any>>) {
       "vesselGrossTonnage",
       "vesselLengthOverall",
       "vesselLoadWeight",
-      // 'vesselMainEngine', 'vesselBandAndModel',
       "vesselOfficialNumber",
       "vesselFlagId",
       "vesselTypeId",
@@ -882,7 +848,6 @@ async function onSubmit(event: FormSubmitEvent<z.output<any>>) {
    fieldsToValidate.forEach((field) => {
       validate(field);
    });
-   // Check if there are any errors
    if (errors.value.length === 0) {
       if (!isOtherCountry.value) {
          if (daysRemaining.value > 0) {
@@ -984,7 +949,6 @@ async function onInvoiceSubmit(event: FormSubmitEvent<z.output<any>>) {
    fieldsToValidate.forEach((field) => {
       validate(field);
    });
-   // Check if there are any errors
    if (errors.value.length === 0) {
       const newPayload: IInvoiceDocumentRequest = {
          ...invoicePayload.value,
@@ -1123,14 +1087,12 @@ const handleClickNextStepRequestForm = async () => {
          if (formVesselRef.value) {
             formVesselRef.value.validate().then((isValid: any) => {
                if (isValid) {
-                  // All required fields are filled
                   formVesselRef.value.submit();
                } else {
                   console.log("Form is not fully filled out.");
                }
             });
          }
-         // currentStep.value = 1
          break;
       case 1:
          await getDocumentDraftOrDetail(documentId.value);
@@ -1144,7 +1106,6 @@ const handleClickNextStepRequestForm = async () => {
          if (formInvoiceRef.value) {
             formInvoiceRef.value.validate().then((isValid: any) => {
                if (isValid) {
-                  // All required fields are filled
                   formInvoiceRef.value.submit();
                } else {
                   console.log("Form is not fully filled out.");
@@ -1190,9 +1151,7 @@ const handleClickBackStep = async () => {
    }
 };
 
-
 const stepperDirection = computed(() => (width.value <= 1024 ? "horizontal" : "vertical"));
-
 
 watch(
    () => filesUpload.value,

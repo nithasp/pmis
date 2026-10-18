@@ -1,7 +1,5 @@
 <template>
    <div v-if="!isLoading" id="survey-answer" class="max-w-[1143px] mx-auto my-0">
-      <!-- <h1 @click="console.log(formGroup)">formGroup</h1>
-      <h1 @click="console.log(selectedOptions)">selectedOptions</h1> -->
       <div class="inner">
          <div class="bg-top shadow-[0px_1px_4px_0px_rgba(0,0,0,0.16)] rounded-[20px] bg-white p-6">
             <div
@@ -315,7 +313,6 @@ const dialogConfirmCancel = () => {
    isDialogConfirmOpen.value = false;
 };
 </script>
-
 
 <style lang="scss" scoped>
 .highlight-section {

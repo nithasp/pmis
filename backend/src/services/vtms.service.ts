@@ -214,7 +214,6 @@ export function createVtmsService(vtms: VtmsRepository, documents: DocumentRepos
       return vtms.summary().then((r) => ({ vessel_in: num(r.vessel_in), vessel_out: num(r.vessel_out), vessel_dock: num(r.vessel_dock), anchor: num(r.anchor) }));
     },
 
-    // The VTMS request list: every request that is past review, with the vessel status the pilots care about
     async documents(filter: Row, query: ListQuery): Promise<PagedResult<Row>> {
       const page = await documents.list(
         {
@@ -229,7 +228,6 @@ export function createVtmsService(vtms: VtmsRepository, documents: DocumentRepos
       return { ...page, data: page.data.map(toDocumentListItem) };
     },
 
-    // ---- log books ---------------------------------------------------------------------------
     async listLogBooks(filter: Row, query: ListQuery): Promise<PagedResult<Row>> {
       const page = await vtms.listLogBooks(
         {
@@ -385,7 +383,6 @@ export function createVtmsService(vtms: VtmsRepository, documents: DocumentRepos
       });
     },
 
-    // ---- anchors -----------------------------------------------------------------------------
     async listAnchors(filter: Row, query: ListQuery): Promise<PagedResult<Row>> {
       const page = await vtms.listAnchors({ status: filter.status }, query);
       return {
@@ -486,7 +483,6 @@ export function createVtmsService(vtms: VtmsRepository, documents: DocumentRepos
       };
     },
 
-    // One request may hold several anchor drops: the POST upserts every item of `anchors`
     async saveAnchors(id: number | null, user: AuthUser, input: Row, by: string): Promise<Row> {
       const vesselId = idOrNull(input.vessel_id ?? input.vesselId) ?? idOrNull(input.vessel?.id);
       if (!vesselId || !(await vessels.findById(vesselId))) throw notFound('ข้อมูลเรือ', 'vessel not found');

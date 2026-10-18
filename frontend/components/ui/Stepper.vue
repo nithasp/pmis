@@ -3,9 +3,7 @@
     <div :class="direction === 'horizontal' ? 'flex' : 'flex flex-col items-start'">
       <div v-for="(step, index) in steps" :key="index"
         :class="direction === 'horizontal' ? 'w-1/3' : 'w-full flex items-start mb-16'">
-        <!-- Step Indicator -->
         <div class="relative mb-2" :class="direction === 'horizontal' ? '' : 'flex flex-col items-center'">
-          <!-- Connector line -->
           <div v-if="index > 0" :class="direction === 'horizontal'
             ? 'absolute flex align-center items-center align-middle content-center'
             : 'absolute w-[2px]'" :style="direction === 'horizontal'
@@ -13,7 +11,7 @@
               : { height: 'calc(100% - -2rem)', top: '-178%', left: '50%' }">
             <div
               :class="direction === 'horizontal' ? 'w-full bg-[#D0D5DD] rounded items-center align-middle align-center flex-1' : 'h-full rounded items-center align-middle align-center flex-1'"
-              :style="{ backgroundColor: currentStep >= index ? '#704a9e' : '#D0D5DD' }"> <!-- Adjust the color here -->
+              :style="{ backgroundColor: currentStep >= index ? '#704a9e' : '#D0D5DD' }">
               <div :class="direction === 'horizontal' ? 'bg-primaryy-500 rounded' : ''" :style="direction === 'horizontal'
                 ? { width: `${currentStep >= index ? 100 : 0}%`, padding_bottom: '1px', paddingTop: '1px' }
                 : { height: `${currentStep >= index ? 100 : 0}%`, width: '100%' }">
@@ -34,7 +32,6 @@
           </div>
         </div>
 
-        <!-- Step Label -->
         <div
           :class="direction === 'horizontal' ? 'text-xs text-center md:text-base font-bold' : 'ml-4 flex flex-col justify-center'">
           <div class="text-xs md:text-base font-bold">
@@ -57,7 +54,7 @@ const props = defineProps({
   steps: Array,
   direction: {
     type: String,
-    default: 'horizontal', // Default layout
+    default: 'horizontal',
     validator: value => ['horizontal', 'vertical'].includes(value),
   },
 });
@@ -74,5 +71,4 @@ const renderStepStyle = (currentStep, index) => {
 </script>
 
 <style scoped>
-/* Optional: Additional styling if needed */
 </style>

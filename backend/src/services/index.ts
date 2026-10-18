@@ -26,7 +26,6 @@ import { createVesselService } from './vessel.service';
 import { createVesselImportService } from './vesselImport.service';
 import { createVtmsService } from './vtms.service';
 
-// Repositories and services are wired once here; routes and GraphQL resolvers import the instances.
 export const userRepository = new UserRepository();
 export const roleRepository = new RoleRepository();
 export const refreshTokenRepository = new RefreshTokenRepository();

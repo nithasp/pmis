@@ -37,12 +37,12 @@ function prepareGroupedTableData(shipData: any) {
    const formatNumber = (num: any) =>
       num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
    const tableRows = shipData.map((item: any, index: any) => [
-      index + 1, // ลำดับ
-      item.vesselName, // ตัวแทนเรือ
-      formatNumber(item.grossTonnage), // GRT with formatting
-      formatNumber(item.fee), // ไม่รวม VAT with formatting
-      formatNumber(item.vat), // VAT with formatting
-      formatNumber(item.total), // รวม VAT with formatting
+      index + 1,
+      item.vesselName,
+      formatNumber(item.grossTonnage),
+      formatNumber(item.fee),
+      formatNumber(item.vat),
+      formatNumber(item.total),
    ]);
 
    const totalGrossTonnage = shipData.reduce((sum: any, item: any) => sum + item.grossTonnage, 0);

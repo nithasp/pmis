@@ -88,9 +88,6 @@ watch(
    () => props.isDialogOpen,
    (newValue) => {
       resetForm();
-      // if (props.isDialogOpen) {
-      //    form.value.rejectNote = props.itemData?.rejectNote;
-      // }
    }
 );
 

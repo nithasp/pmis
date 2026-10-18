@@ -116,10 +116,6 @@ export const personTypeOption = [
 ];
 
 export const statusOption = [
-   // {
-   //    id: "WaitingReview",
-   //    name: "รอตรวจ",
-   // },
    {
       id: "WaitingApproved",
       name: "รออนุมัติ",

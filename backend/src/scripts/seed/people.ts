@@ -1,6 +1,5 @@
 import { AgencySeed, OfficerSeed, VesselSeed } from '../../types/seed.types';
 
-// Officer accounts: one per role so every menu of the frontend has someone who can use it
 export const OFFICERS: OfficerSeed[] = [
   { email: 'reviewer@pmis.local', fullName: 'นางสาวกนกวรรณ ตรวจคำร้อง', roleType: 'DocumentReviewer', phone: '038-683-305' },
   { email: 'approver@pmis.local', fullName: 'นายวีรพล อนุมัติคำร้อง', roleType: 'DocumentApprove', phone: '038-683-306' },

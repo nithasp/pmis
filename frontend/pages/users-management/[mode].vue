@@ -106,7 +106,6 @@ const nextRoute = ref<any>(null);
 const notAllowNavigate = ref(true)
 const userEnabled = ref(false)
 
-
 const userSchema = z.object({
     email: z.string().nonempty({ message: t('please_enter_a_value') }).email(t('email_format_validate_message')),
     roleId: z.number().min(1, { message: t('please_enter_a_value') }),
@@ -137,7 +136,6 @@ const validate = (field: string) => {
         }
     }
 
-    // Clear previous errors for the specific field and add the new error if any
     errors.value = errors.value.filter(err => err.path !== field);
     if (validationErrors.length) {
         errors.value.push(...validationErrors);
@@ -156,7 +154,6 @@ const payload = ref<IUserRequest>({
     phone: '',
     mobilePhone: '',
 })
-
 
 onMounted(() => {
     rolesOptionsStore.getRolesOptions()
@@ -177,8 +174,6 @@ const getUserDetail = async (id: number) => {
         formGroup.phone = data.phone
         formGroup.mobilePhone = data.mobilePhone
         userEnabled.value = data.enabled
-        // selectedPermissions.value = data.permissions
-        // payload.value = { ...payload.value, activated: data.activated }
     }
 }
 
@@ -187,14 +182,13 @@ onBeforeRouteLeave((to, from, next) => {
         if (notAllowNavigate.value) {
             isConfirmLeaveDialogOpen.value = true;
             nextRoute.value = to;
-            next(false); // Prevent navigation until confirmed
+            next(false);
         } else {
-            next(); // Allow navigation
+            next();
         }
     } else {
         next()
     }
-
 });
 
 async function onSubmit(event: FormSubmitEvent<z.output<typeof userSchema>>) {
@@ -273,7 +267,6 @@ const dialogConfirmResetPasword = async () => {
 const handleCloseAlertDialogResetPassword = () => {
     isAlertDialogResetPasswordOpen.value = false
 }
-
 
 const handleCloseAlertDialog = () => {
     if (modalAlertType.value === 'success') {

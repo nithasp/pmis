@@ -84,20 +84,6 @@ const formGroup = reactive<any>({
 })
 
 async function onSubmit(event: FormSubmitEvent<z.output<typeof formSchema.value>>) {
-    // const findData: any = grossTonnageOptions.value.map(e => e.id === event.data.grossTonnage)
-    // if (findData) {
-    //     const payload = {
-    //         grossTonnage: findData.name
-    //     }
-    //     const resp = await vesselImportService.approveVesselImport(vesselImportId.value, payload)
-    //     if (resp.statusCode === 200) {
-    //         props.confirmApproveWithSelectedGrossTonnage(true, resp)
-    //     } else {
-    //         props.confirmApproveWithSelectedGrossTonnage(false, resp)
-    //     }
-    // }
-
-    // New logic updated 2025-01-12
     const findData: any = grossTonnageOptions.value.find(e => e.id === formGroup.grossTonnage)
     if (findData) {
         const files = deletedFiles.value?.map((e: any) => ({
@@ -116,34 +102,9 @@ async function onSubmit(event: FormSubmitEvent<z.output<typeof formSchema.value>
             props.confirmApproveWithSelectedGrossTonnage(false, resp)
         }
     }
-
 }
 
 const getGrossOption = () => {
-    // const arrays = [
-    //     {
-    //         id: 1,
-    //         name: formatNumber(vesselImportMapDetail.value.grossTonnageAgency)
-    //     },
-    //     {
-    //         id: 2,
-    //         name: formatNumber(vesselImportMapDetail.value.grossTonnageVT)
-    //     },
-    //     {
-    //         id: 3,
-    //         name: formatNumber(vesselImportMapDetail.value.grossTonnageVS)
-    //     },
-    // ]
-    // const newArray = Array.from(
-    //     new Map(arrays.map(item => [item.name, item])).values()
-    // ).map((item, index) => ({
-    //     ...item,
-    //     id: index + 1 // Renumber IDs sequentially
-    // }));
-    // grossTonnageOptions.value = newArray
-
-
-    // New logic updated 2025-01-12
     const arrays = [
         {
             id: 1,

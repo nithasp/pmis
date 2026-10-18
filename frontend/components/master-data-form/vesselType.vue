@@ -1,7 +1,6 @@
 <template>
    <div>
       <slot name="activator" :on="{ click: openModal }">
-         <!-- Default activator can be defined here if needed -->
          <button v-if="!hideButton" class="py-2 px-4 rounded bg-primaryy" @click="openModal">เปิด</button>
       </slot>
       <UModal

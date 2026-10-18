@@ -20,7 +20,6 @@ import * as misc from '../controllers/misc.controller';
 
 const api = Router();
 
-// Public
 api.use('/auth', authRouter);
 api.use('/verify', verifyRouter);
 api.use('/options', publicOptionsRouter);
@@ -30,7 +29,6 @@ api.use('/upload', uploadRouter);
 api.use('/survey', publicSurveyRouter);
 api.use('/user', userRouter_);
 
-// Signed in
 api.use('/options', optionsRouter);
 api.use('/customers', customersRouter);
 api.use('/contracts', contractsRouter);

@@ -44,16 +44,6 @@ const tabName = [
       nameEn: "Port",
       key: "port",
    },
-   // {
-   //    nameTh: "ตำแหน่งเทียบท่า",
-   //    nameEn: "Locate",
-   //    key: "locate",
-   // },
-   // {
-   //    nameTh: "การใช้ท่าสินค้า",
-   //    nameEn: "Use Berth",
-   //    key: "use-berth",
-   // },
 ];
 const currentTab = ref("");
 

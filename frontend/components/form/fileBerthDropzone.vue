@@ -25,7 +25,6 @@
             </div>
         </div>
 
-
         <div v-if="files.length" class="my-4">
             <div v-for="(file, index) in files" :key="index"
                 :class="`bg-white rounded-lg shadow p-3 mb-4 border ${file.isError ? 'border-error-500' : 'border-grayy-50'}`">
@@ -92,7 +91,7 @@ const props = defineProps({
 })
 
 const masterDataService = useMasterDataService()
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const errorMessage = ref(props.error || '')
 const files = ref(props.filesValue || [])
 const documentId = ref(props.documentId)
@@ -177,5 +176,4 @@ function back() {
 </script>
 
 <style scoped>
-/* Add any custom styles if necessary */
 </style>

@@ -153,11 +153,9 @@ const filterBerth = ref<IFilterBerth>({
    search: "",
    vessel_type_id: "",
    personType: "",
- 
 });
 const statusList = ref<any>([
    { id: "", name: `${locale.value === "en" ? "All" : "ทุกประเภท"}` },
-   //{ id: "PendingReview", name: `${locale.value === "en" ? "PendingReview" : "รอตรวจ"}` },
    { id: "PendingEdit", name: `${locale.value === "en" ? "PendingEdit" : "รอแก้ไข"}` },
    { id: "PendingConfirmation", name: `${locale.value === "en" ? "PendingConfirmation" : "รอยืนยันท่า"}` },
    { id: "PendingApproval", name: `${locale.value === "en" ? "PendingApproval" : "รออนุมัติ"}` },
@@ -232,7 +230,6 @@ const columns = [
    {
       key: "eta",
       label: t("eta"),
-      //sortable: true,
    },
    {
       key: "statusDes",
@@ -314,7 +311,6 @@ watch(
       } else {
          handleFilterSearch(0);
       }
-
    }
 );
 

@@ -6,7 +6,6 @@ import { pagedResult } from '../utils/paging';
 import { requireRow } from '../utils/rows';
 import { SqlBuilder, csvIds, csvList } from '../utils/sql';
 
-// A log book joined with its vessel (registered or government), the first detail row and the document
 const LOG_BOOK_SELECT = `
   lb.*, d.doc_number AS document_number, d.status AS document_status, d.agency_user_id,
   COALESCE(NULLIF(u.company, ''), u.full_name, lb.agency_name) AS agency_display_name,
@@ -175,7 +174,6 @@ export class VtmsRepository {
     return (rowCount ?? 0) > 0;
   }
 
-  // Berths of a document with the state of their VTMS log: which actions are still open
   async documentBerthLog(documentId: number, db: Queryable = pool): Promise<Row[]> {
     const { rows } = await db.query(
       `SELECT b.id AS doc_berth_id, b.berth_id, bb.name_alt AS berth_name, b.jetty_id, j.name AS jetty_name, b.purpose_id, p.name AS purpose_name,
@@ -194,7 +192,6 @@ export class VtmsRepository {
     return rows;
   }
 
-  // ---- anchors -------------------------------------------------------------------------------
   async listAnchors(filter: { status?: unknown; documentId?: number | null }, query: ListQuery, db: Queryable = pool): Promise<PagedResult<Row>> {
     const b = new SqlBuilder();
     b.where('a.deleted_at IS NULL');

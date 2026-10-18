@@ -137,10 +137,6 @@ import useVesselGovernmentService from "~/core/services/masterDataShipService/ve
 import type { IVesselGovernmentData } from "~/core/interfaces/IVesselGovernmentData";
 import EmptyNotFoundTable from "~/components/ui/emptyNotFoundTable.vue";
 
-// const canCreate = allowPermission('create_vessel_data')
-// const canView = allowPermission('view_vessel_data')
-// const canEdit = allowPermission('edit_vessel_data')
-// const canDelete = allowPermission('delete_vessel_data')
 const canCreate = true;
 const canView = true;
 const canEdit = true;

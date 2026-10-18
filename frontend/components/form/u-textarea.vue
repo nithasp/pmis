@@ -1,9 +1,3 @@
-<!-- :ui="{
-   wrapper: `border-[1px] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] 
-   ${errorMsg ? 'border-[2px] border-[#F7A29B] -mb-1' : 'border-[#9477B6]'} 
-   rounded-lg focus:!ring-0`,
-   base: `focus:!ring-0`,
-}" -->
 <template>
     <UFormGroup :label="label" :name="name" :error="error">
         <template #default="{ error }">
@@ -54,10 +48,8 @@ const props = defineProps({
         default: false
     }
 });
-// Define the internal state for the component
 const internalValue = ref(props.modelValue);
 
-// Emit the changes back to the parent component
 const emit = defineEmits(["update:modelValue"]);
 watch(internalValue, (newValue) => {
     emit("update:modelValue", newValue);

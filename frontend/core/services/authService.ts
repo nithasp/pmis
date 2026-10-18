@@ -1,5 +1,3 @@
-// services/auth.ts
-
 import { useNuxtApp } from '#app'
 import type { ILogin } from '../interfaces/ILogin'
 import type { IRegisterRequest } from '../interfaces/IRegisterRequest';
@@ -15,17 +13,13 @@ export default function useAuthService() {
       const { email, password } = body;
       try {
          const response = await $api.post('/auth/login', { email, password })
-         // Save the token or user data in a store or localStorage
-         // For example: localStorage.setItem('token', response.data.token)
          return wrapperSuccessResp(response.data)
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error('Login failed:', error)
          return wrapperErrorResp(error)
       }
    }
 
-   // Demo entry: signs the visitor in as the shared demo account (POST /auth/demo)
    const enterDemo = async () => {
       try {
          const response = await $api.post('/auth/demo')
@@ -39,10 +33,7 @@ export default function useAuthService() {
    const logout = async () => {
       try {
          await $api.post('/auth/logout')
-         // Remove token or user data from store or localStorage
-         // For example: localStorage.removeItem('token')
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error('Logout failed:', error)
          throw error
       }

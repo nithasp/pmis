@@ -102,7 +102,6 @@
    <Loading v-if="isLoading" />
 </template>
 
-
 <script setup lang="ts">
 import Loading from "~/components/loading.vue";
 import DoughnutChart from "~/components/chart/survey/DoughnutChart.vue";
@@ -139,8 +138,6 @@ const getSurveyResult = async () => {
    isLoading.value = false;
 };
 
-
-
 const getChartData = (section: any, question: any) => {
    const labels = question.values.map((item: any) => `${item.point}`);
    const datasets = [{
@@ -150,7 +147,6 @@ const getChartData = (section: any, question: any) => {
       backgroundColor: `#A698EB`,
       borderColor: `#A698EB`,
       borderWidth: 1,
-      //barThickness: 90,
       maxBarThickness: 90
    }]
    return { labels, datasets };

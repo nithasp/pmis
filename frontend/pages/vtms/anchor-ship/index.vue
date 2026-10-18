@@ -26,45 +26,11 @@
                </UFormGroup>
             </div>
             <div class="col-span-3">
-               <!-- <UFormGroup :label="'ท่าเรือ'">
-                  <USelectMenu
-                     class="max-w-[512px]"
-                     color="purple"
-                     variant="outline"
-                     v-model="filter.port"
-                     value-attribute="status"
-                     option-attribute="text"
-                     :options="statusList"
-                     :placeholder="$t('search_status_placeholder')"
-                     :ui="{
-                        base: 'h-[36px] bg-white',
-                        wrapper: 'rounded-md bg-white',
-                     }"
-                     @change="() => getAnchorShipList()"
-                  />
-               </UFormGroup> -->
                <USelect :label="$t('berth')" name="berth_id" placeholder="" :options="berthList"
                   v-model="filter.berth_id" class="max-w-[240px] w-full" />
             </div>
             <div class="col-span-3">
                <div class="flex">
-                  <!-- <UFormGroup :label="'สถานะ'" class="" style="width: 100%">
-                     <USelectMenu
-                        class="max-w-[512px]"
-                        color="purple"
-                        variant="outline"
-                        v-model="filter.status"
-                        value-attribute="status"
-                        option-attribute="text"
-                        :options="statusList"
-                        :placeholder="$t('search_status_placeholder')"
-                        :ui="{
-                           base: 'h-[36px] bg-white',
-                           wrapper: 'rounded-md bg-white',
-                        }"
-                        @change="() => getAnchorShipList()"
-                     />
-                  </UFormGroup> -->
                   <USelect :label="$t('status')" name="status" placeholder="" :options="statusList"
                      v-model="filter.status" class="max-w-[240px] w-full" />
                   <div class="ml-2 mt-7">
@@ -121,7 +87,6 @@
                </div>
             </template>
             <template #status-data="{ row }">
-               <!-- <Badge :label="getVtmsStatus(row.status, 'label')" :type="getVtmsStatus(row.status, 'type')" /> -->
                <BadgeCr :label="row.status" :type="row.status" />
             </template>
             <template #anchor_date-data="{ row }">
@@ -293,13 +258,7 @@ const filterBerth = ref<IFilterBerth>({
    vessel_type_id: "",
    personType: "",
    Order: [{ column: sortField.value, dir: sortOrder.value }]
-
 });
-// const statusList = ref([
-//    { status: "", text: "ทุกประเภท" },
-//    { status: "true", text: "เปิดใช้งาน" },
-//    { status: "false", text: "ปิดใช้งาน" },
-// ]);
 const statusList = ref<any>([
    { id: "", name: `${locale.value === "en" ? "All" : "ทุกประเภท"}` },
    { id: "anchor", name: `${locale.value === "en" ? "Anchor" : "Anchor"}` },
@@ -328,10 +287,6 @@ watch(
 watch(
    () => dateValue.value,
    (value) => {
-      // const beginDate = value ? new Date(value.start).toISOString() : "";
-      // const endDate = value ? new Date(value.end).toISOString() : "";
-      // filter.value.begin = beginDate;
-      // filter.value.end = endDate;
       if (value) {
          const beginDate = value && value.start ? new Date(value.start) : null;
          const endDate = value && value.end ? new Date(value.end) : null;
@@ -430,13 +385,6 @@ watch([() => filter.value.status, () => filter.value.berth_id, () => filter.valu
 const getAnchorShipList = async () => {
    try {
       isLoading.value = true;
-      // let queryString = convertObjToQueryString({
-      //    limit: filter.value.limit,
-      //    page: filter.value.page,
-      //    search: filter.value.keyword,
-      //    status: filter.value.status,
-      //    port: filter.value.port,
-      // });
       const resp = await getVtmsAnchor(filter.value);
       if (resp.statusCode === 200) {
          const { data, totalItems, totalPages } = resp.data;

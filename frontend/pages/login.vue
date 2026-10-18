@@ -104,7 +104,6 @@ const { login } = useAuthService();
 const roleService = useRoleService();
 const { $api } = useNuxtApp();
 
-// Demo entry for visitors: same session handling as a real login
 const onEnterDemo = async () => {
    isLoading.value = true;
    loginMessageError.value = "";
@@ -140,7 +139,6 @@ const validate = (field: string) => {
       }
    }
 
-   // Clear previous errors for the specific field and add the new error if any
    errors.value = errors.value.filter((err) => err.path !== field);
    if (validationErrors.length) {
       errors.value.push(...validationErrors);

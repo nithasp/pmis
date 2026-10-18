@@ -197,7 +197,6 @@ export function createPortDueService(documents: DocumentRepository, files: FileS
       return pagedResult(rows.map(pendingRow), Number(countRows[0]?.count ?? 0), query);
     },
 
-    // The invoice preview for one request: rate, fee and VAT worked out from the berth and GRT
     async pendingDetail(documentId: number): Promise<Row> {
       const doc = await documents.findById(documentId);
       if (!doc) throw notFound('ใบคำร้อง', 'document not found');

@@ -34,7 +34,6 @@ export function createAuthService({ users, roles, verifications, files, tokens, 
       return startSession(user, user.is_demo === true, source);
     },
 
-    // Guest entry: signs a visitor in as the one shared demo account and nothing else
     async demoLogin(source: SessionSource): Promise<LoginResult> {
       const user = config.demo.loginEnabled ? await users.findByEmail(config.demo.email) : null;
       if (!user || !user.enabled || !user.is_demo) {
@@ -52,7 +51,6 @@ export function createAuthService({ users, roles, verifications, files, tokens, 
       await tokens.revokeSession(sessionId);
     },
 
-    // ---- registration (e-mail verification first, then the form) -----------------------------
     async sendRegisterEmail(email: string): Promise<Row> {
       if (await users.findByEmail(email)) throw conflict('อีเมลนี้มีผู้ใช้งานแล้ว', 'email_already_exist');
       await verifications.invalidate('register', email);
@@ -111,7 +109,6 @@ export function createAuthService({ users, roles, verifications, files, tokens, 
       return userService.profileOf(created.id as number);
     },
 
-    // ---- forgotten password ----------------------------------------------------------------
     async forgotPassword(email: string): Promise<Row> {
       const user = await users.findByEmail(email);
       if (!user) throw new AppError('อีเมลนี้ไม่มีในระบบ', 404, 'not_found', 'auth_email_not_found');
@@ -147,7 +144,6 @@ export function createAuthService({ users, roles, verifications, files, tokens, 
       await tokens.revokeAllSessions(user.id as number);
     },
 
-    // ---- signed-in password change (settings + first-login page) ------------------------------
     async verifyCurrentPassword(userId: number, password: string): Promise<void> {
       const user = await users.findById(userId);
       if (!user || !(await verifyPassword(password, str(user.password_hash)))) {

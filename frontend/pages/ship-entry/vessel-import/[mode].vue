@@ -578,7 +578,6 @@
    <Loading v-if="isLoading" />
  </template>
  
-
 <script setup lang="ts">
 import Input from "~/components/form/u-input.vue";
 import InputNumber from "~/components/form/input-number.vue";
@@ -1009,11 +1008,11 @@ const renderColumnsProductTable = () => {
    if (isDocumentBerthOfficer) {
       columnsProductTable.value = [
          { key: "id", label: t("id"), class: "min-w-[65px] text-center" },
-         { key: "purposeTypeId", label: t("purpose") }, // ประเภทวัตถุประสงค์
-         { key: "cargoTypeId", label: t("berth_position") }, // ตำแหน่งเทียบท่า
-         { key: "productName", label: t("product_name") }, // ชื่อสินค้า
-         { key: "productGroupId", label: t("product_group") }, // กลุ่มสินค้า
-         { key: "productTypeId", label: t("product_kind") }, // ชนิดสินค้า
+         { key: "purposeTypeId", label: t("purpose") },
+         { key: "cargoTypeId", label: t("berth_position") },
+         { key: "productName", label: t("product_name") },
+         { key: "productGroupId", label: t("product_group") },
+         { key: "productTypeId", label: t("product_kind") },
          { key: "mTonQty", label: t("mt") },
          { key: "rTonQty", label: t("rt") },
          { key: "blProduct", label: t("B/L") },
@@ -1027,12 +1026,12 @@ const renderColumnsProductTable = () => {
    } else {
       columnsProductTable.value = [
          { key: "id", label: t("id"), class: "min-w-[65px] text-center" },
-         { key: "purposeTypeId", label: t("purpose") }, // ประเภทวัตถุประสงค์
-         { key: "cargoTypeId", label: t("berth_position") }, // ตำแหน่งเทียบท่า
-         { key: "cargoWharfageId", label: t("cargo_wharfage") }, // รูปแบบสินค้า
-         { key: "productName", label: t("product_name") }, // ชื่อสินค้า
-         { key: "productGroupId", label: t("product_group") }, // กลุ่มสินค้า
-         { key: "productTypeId", label: t("product_kind") }, // ชนิดสินค้า
+         { key: "purposeTypeId", label: t("purpose") },
+         { key: "cargoTypeId", label: t("berth_position") },
+         { key: "cargoWharfageId", label: t("cargo_wharfage") },
+         { key: "productName", label: t("product_name") },
+         { key: "productGroupId", label: t("product_group") },
+         { key: "productTypeId", label: t("product_kind") },
          { key: "mTonQty", label: t("mt") },
          { key: "rTonQty", label: t("rt") },
          { key: "blProduct", label: t("B/L") },
@@ -1249,12 +1248,9 @@ const isFormGroupValid = ({
    vesselFlagImage,
    vesselTypeId,
    vesselTypeName,
-   //grossTonnage,
    mooringDate,
    unmooringDate,
-   //berthId,
    berthName,
-   //jettyId,
    jettyName,
    note,
    notes,

@@ -1,7 +1,6 @@
 <template>
    <div>
       <slot name="activator" :on="{ click: openModal }">
-         <!-- Default activator can be defined here if needed -->
          <button v-if="!hideButton" class="py-2 px-4 rounded bg-primaryy" @click="openModal">เปิด</button>
       </slot>
       <UModal
@@ -16,13 +15,9 @@
             <img :src="ShipIcon" :alt="ShipIcon" class="w-12" />
             <p class="text-xl font-anuphan-semi-bold my-4">{{ $t("product_type_form_topic") }}</p>
             <p class="my-4">{{ $t("product_type_form_description") }}</p>
-            <!-- form {{ form }}
-            productTypeList {{productTypeList}} -->
             <UForm :schema="productTypeSchema" :state="form" @submit="submitForm">
                <div class="my-5">
                   <UFormGroup :label="$t('product_type_form_group_name')" required>
-                     <!-- form {{ form }} -->
-                     <!-- <p class="text-sm my-1">{{ $t("product_type_form_group_name") }}<span class="text-red-500"> *</span> :</p> -->
                      <USelectMenu
                         :label="$t('product_type_form_group_name')"
                         color="purple"
@@ -122,26 +117,11 @@ const { t } = useI18n();
 
 const productTypeOption = ref<IProductTypeGet[]>([]);
 
-// const productTypeSchema = z.object({
-//    product_type_name: z.string().min(1, "กรุณากรอกข้อมูล"),
-//    product_group_id : z.number().min(0, "กรุณาเลือกข้อมูล"),
-//    product_group_name : z.string().min(1, "กรุณาเลือกข้อมูล"),
-// });
 const productTypeSchema = z.object({
    product_type_name: z.string().min(1, t("required")),
    product_group_id: z.number().min(0, t("required")),
    product_group_name: z.string().min(1, t("required")).optional(),
 });
-//    .refine(data => {
-//   // If product_group_name is provided, then product_group_id must also be provided
-//   if (data.product_group_name !== undefined) {
-//     return data.product_group_id !== undefined;
-//   }
-//   return true;
-// }, {
-//   message: t("product_group_id_required_if_name_provided"),
-//   path: ["product_group_id"],
-// });
 
 watch(
    () => props.setOpen,
@@ -173,24 +153,14 @@ const formProductType = ref({
    name: "",
    id: 0,
 });
-// const setForm = function () {
-//    form.value.name = props.data.name;
-// };
 const emit = defineEmits(["fetch,close"]);
 function handleItemCreated(newProductName) {
-   // console.log("createa", newProductName.product_group_name);
-   // Create a new product with id 0
    const newItem = {
       product_group_id: 0,
       product_group_name: newProductName.product_group_name,
       product_type_name: "",
    };
    form.value = newItem;
-   // Add the newly created item to your options list
-   // productTypeList.value.push(newItem);
-
-   // Optionally, set the new item as the selected value
-   //   selectedProduct.value = newItem.product_group_id;
 }
 async function getProductTypeDetailById() {
    try {

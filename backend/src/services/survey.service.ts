@@ -187,7 +187,6 @@ export function createSurveyService() {
       return { sent: links.length, links };
     },
 
-    // The public answer page: the survey behind a token, or a marker when it was answered already
     async byToken(token: string): Promise<Row> {
       const { rows } = await pool.query('SELECT t.*, s.end_date, s.publish_date, s.deleted_at AS survey_deleted FROM survey_tokens t JOIN surveys s ON s.id = t.survey_id WHERE t.token = $1', [token]);
       const t = rows[0];

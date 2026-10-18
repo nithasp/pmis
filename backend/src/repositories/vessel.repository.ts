@@ -71,7 +71,6 @@ export class VesselRepository {
     return rows[0] ?? null;
   }
 
-  // Previous versions of a vessel: the snapshot stored on every document it was requested with
   async history(vesselId: number, filter: { begin?: unknown; end?: unknown }, query: ListQuery, db: Queryable = pool): Promise<PagedResult<Row>> {
     const b = new SqlBuilder();
     b.where('dv.vessel_id = $1');
@@ -92,7 +91,6 @@ export class VesselRepository {
     return pagedResult(rows, Number(countRows[0]?.count ?? 0), query);
   }
 
-  // ---- government vessels ---------------------------------------------------------------------
   async listGovernment(query: ListQuery, db: Queryable = pool): Promise<PagedResult<Row>> {
     const b = new SqlBuilder();
     b.where('g.deleted_at IS NULL');

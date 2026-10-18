@@ -30,7 +30,7 @@ const props = defineProps({
   helpText: String,
   decimalPlaces: {
     type: [Number, String],
-    default: 2, // Default decimal places
+    default: 2,
   },
   modelValue: {
     type: [String, Number],
@@ -38,13 +38,10 @@ const props = defineProps({
   },
 });
 
-// Define the internal state for the component
 const internalValue = ref(props.modelValue);
 
-// Internal state for the formatted value
 const formattedValue = ref(formatValue(props.modelValue));
 
-// Emit changes back to the parent component
 const emit = defineEmits(["update:modelValue", "blur"]);
 
 watch(
@@ -60,50 +57,41 @@ const handleKeypress = (event) => {
   const currentValue = inputElement.value;
   const cursorPosition = inputElement.selectionStart;
   const selectionEnd = inputElement.selectionEnd;
-  const isReplacing = cursorPosition !== selectionEnd; // Detect if replacing selected text
+  const isReplacing = cursorPosition !== selectionEnd;
 
-  // Allow numbers, backspace, one decimal point, and a leading minus sign
   if (!/[\d.-]/.test(char)) {
     event.preventDefault();
     return;
   }
 
-  // Prevent multiple decimal points
   if (char === "." && currentValue.includes(".") && !isReplacing) {
     event.preventDefault();
     return;
   }
 
-  // Allow minus only at the start
   if (char === "-" && cursorPosition !== 0) {
     event.preventDefault();
     return;
   }
 
-  // Handle decimal places limit
   if (currentValue.includes(".")) {
     const [integerPart, decimalPart] = currentValue.split(".");
     
-    // Prevent typing more than allowed decimal places
     if (char !== "-" && char !== "." && decimalPart && decimalPart.length >= props.decimalPlaces && cursorPosition > currentValue.indexOf(".") && !isReplacing) {
       event.preventDefault();
     }
   }
 
-  // Handle replacing selected text
   if (isReplacing) {
     const newValue =
       currentValue.slice(0, cursorPosition) + char + currentValue.slice(selectionEnd);
     
-    // Prevent invalid replacements (e.g., multiple dots)
     if (newValue.split(".").length > 2 || (newValue.includes("-") && newValue.indexOf("-") !== 0)) {
       event.preventDefault();
     }
   }
 };
 
-
-// Format value for display
 function formatValue(value) {
   if (value == null || value === "") return "";
   const number = parseFloat(value);
@@ -135,17 +123,14 @@ function onBlur(event) {
 
   formattedValue.value = formatValue(inputValue);
 
-  // Emit a number instead of a string
   emit("update:modelValue", parseFloat(inputValue) || inputValue);
   emit("blur", event);
 }
 
-// Handle focus to select all text
 function onFocus(event) {
   event.target.select();
 }
 </script>
-
 
 <template>
   <UFormGroup :label="label" :name="name" :error="error">
@@ -183,7 +168,6 @@ function onFocus(event) {
 </template>
 
 <style scoped>
-/* Hide spinner for numeric inputs */
 .no-spinner::-webkit-inner-spin-button,
 .no-spinner::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -192,6 +176,5 @@ function onFocus(event) {
 
 .no-spinner {
   -moz-appearance: textfield;
-  /* For Firefox */
 }
 </style>

@@ -10,7 +10,6 @@ const router = Router();
 router.post('/login', authLimiter, auth.login);
 router.post('/demo', authLimiter, auth.demo);
 router.post('/refresh', authLimiter, auth.refresh);
-// Logout is best effort: an expired or already revoked token still answers 200
 router.post('/logout', async (req, _res, next) => {
   const token = bearerToken(req.headers.authorization);
   if (token) {

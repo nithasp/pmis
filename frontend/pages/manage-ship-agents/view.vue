@@ -13,21 +13,16 @@
                 <div class="mt-1 text-grayy-75 text-sm">รายละเอียดตัวแทนเรือ</div>
             </div>
             <div class="flex items-center">
-                <!-- delete -->
                 <UButton @click="() => isConfirmCancelDialogOpen = true" class="mx-1 text-red-500" size="md"
                     color="white" variant="solid" label="ยกเลิก" />
-                <!-- back -->
                 <UButton @click="() => navigateToManageShipAgentsList()" class="mx-1 border border-grayy-100"
                     size="md" color="gray" label="ปิด" />
-                <!-- password reset -->
                 <UButton @click="() => isConfirmDialogResetPasswordOpen = true"
                     class="mx-1 bg-purple-25 text-primaryy-500 hover:bg-purple-50" size="md"
                     :label="$t('reset_password')" icon="i-heroicons-arrow-path"
                     v-if="canResetPassword(vesselAgentDetailData)" />
-                <!-- edit -->
                 <UButton @click="() => navigateTo(`/manage-ship-agents/edit?id=${vesselAgentId}`)" :class="editButtonClass" size="md" label="แก้ไข" icon="i-heroicons-pencil-square"
                     v-if="canEdit(user.roleType, vesselAgentDetailData.status)" />
-                <!-- approve -->
                 <UButton class="ml-1" @click="() => isConfirmDialogOpen = true" icon="i-heroicons-check" size="md"
                     label="อนุมัติ" type="submit" :trailing="true"
                     v-if="canApprove(user.roleType, vesselAgentDetailData.status)" />

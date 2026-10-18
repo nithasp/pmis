@@ -119,16 +119,16 @@ function prepareGroupedTableData(shipData: any) {
    const format3 = (num: number) =>
       num.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
    const tableRows = shipData.map((item: any, index: number) => [
-      index + 1, // ลำดับ
-      item.companyName, // ตัวแทนเรือ
-      item.countVessels, // จำนวนเรือ
-      format2(item.portDueTotal), // PORT DUES (2 decimals)
-      format3(item.mTonTotal), // M/Ton (3 decimals)
-      format3(item.rTonTotal), // R/Ton (3 decimals)
-      item.contactName, // ชื่อผู้ติดต่อ
-      item.phone, // เบอร์โทรศัพท์
-      item.mobilePhone, // เบอร์โทรศัพท์สำรอง
-      item.email, // อีเมล
+      index + 1,
+      item.companyName,
+      item.countVessels,
+      format2(item.portDueTotal),
+      format3(item.mTonTotal),
+      format3(item.rTonTotal),
+      item.contactName,
+      item.phone,
+      item.mobilePhone,
+      item.email,
    ]);
 
    const totalCountVessels = shipData.reduce((sum: number, item: any) => sum + item.countVessels, 0);

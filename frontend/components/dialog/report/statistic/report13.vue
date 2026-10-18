@@ -101,7 +101,6 @@ const isPreview = computed(() => props.isPreview);
 const reportType = computed(() => props.reportType);
 const isLoading = ref(false);
 
-
 const formSchema = z.object({
    grossTonnageStart: z.string().min(1, { message: t("required") }),
    grossTonnageEnd: z.string().min(1, { message: t("required") }),
@@ -289,10 +288,6 @@ async function onSubmit(event: FormSubmitEvent<z.output<any>>) {
 
 watch(
     () => props.isDialogOpen,
-    () => {
-        // if (props.vesselImportMapDetail) {
-        //     getGrossOption()
-        // }
-    }
+    () => {}
 );
 </script>

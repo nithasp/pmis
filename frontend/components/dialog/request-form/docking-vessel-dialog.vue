@@ -144,7 +144,6 @@ const errors = ref<FormError[]>([]);
 const validate = (field: string, valueSelected: any = 0) => {
     const validationErrors: FormError[] = [];
 
-    // Helper function to check if the time is after 00:00 based on a date string in ISO format
     const isTimeAfterMidnight = (isoDateString: string) => {
         if (!isoDateString) return false;
         const date = new Date(isoDateString);
@@ -152,7 +151,6 @@ const validate = (field: string, valueSelected: any = 0) => {
         const minutes = date.getMinutes();
         return hours > 0 || (hours === 0 && minutes > 0);
     };
-    // Berth ID validation
     if (field === 'berthId') {
         formGroup.berthId = valueSelected || formGroup.berthId
         if (!formGroup.berthId || formGroup.berthId < 1) {
@@ -160,7 +158,6 @@ const validate = (field: string, valueSelected: any = 0) => {
         }
     }
 
-    // Purpose Type ID validation
     if (field === 'purposeTypeId') {
         formGroup.purposeTypeId = valueSelected || formGroup.purposeTypeId
         if (!formGroup.purposeTypeId || formGroup.purposeTypeId < 1) {
@@ -168,7 +165,6 @@ const validate = (field: string, valueSelected: any = 0) => {
         }
     }
 
-    // Purpose ID validation
     if (field === 'purposeId') {
         formGroup.purposeId = valueSelected || formGroup.purposeId
         if (!formGroup.purposeId || formGroup.purposeId < 1) {
@@ -176,7 +172,6 @@ const validate = (field: string, valueSelected: any = 0) => {
         }
     }
 
-    // Cargo Type ID validation
     if (field === 'cargoTypeId') {
         formGroup.cargoTypeId = valueSelected || formGroup.cargoTypeId
         if (!formGroup.cargoTypeId || formGroup.cargoTypeId < 1) {
@@ -184,14 +179,12 @@ const validate = (field: string, valueSelected: any = 0) => {
         }
     }
 
-    // Passengers validation (optional)
     if (field === 'passengers') {
         if ((!formGroup.passengers || formGroup.passengers < 1) && isAllowPassenger.value) {
             validationErrors.push({ path: 'passengers', message: t('please_enter_a_value') });
         }
     }
 
-    // Estimated Arrival validation
     if (field === 'estimatedArrival') {
         if (!formGroup.estimatedArrival) {
             validationErrors.push({ path: 'estimatedArrival', message: t('please_enter_a_value') });
@@ -200,7 +193,6 @@ const validate = (field: string, valueSelected: any = 0) => {
         }
     }
 
-    // Estimated Departure validation
     if (field === 'estimatedDeparture') {
         if (!formGroup.estimatedDeparture) {
             validationErrors.push({ path: 'estimatedDeparture', message: t('please_enter_a_value') });
@@ -211,13 +203,10 @@ const validate = (field: string, valueSelected: any = 0) => {
         }
     }
 
-    // Note validation (optional)
     if (field === 'note' && formGroup.note !== undefined && !formGroup.note.trim()) {
         validationErrors.push({ path: 'note', message: t('please_enter_a_value') });
     }
 
-
-    // Clear previous errors for the specific field and add the new error if any
     errors.value = errors.value.filter(err => err.path !== field);
     if (validationErrors.length) {
         errors.value.push(...validationErrors);
@@ -273,7 +262,6 @@ onMounted(() => {
 });
 
 const handleSelectBerth = (value: any) => {
-
     const berth: any = documentOptionsStore.berthsOption.find((e: any) => e.id === value)
     const purpose: any = documentOptionsStore.purposesOptions.find((e: any) => e.id === formGroup.purposeId)
 
@@ -290,7 +278,6 @@ const handleSelectBerth = (value: any) => {
 }
 
 const handleSelectBerthType = (berthType: any) => {
-
     const purpose: any = documentOptionsStore.purposesOptions.find((e: any) => e.id === formGroup.purposeId)
 
     if (purpose && purpose.purposeType != PurposeType.Passenger) {
@@ -298,11 +285,9 @@ const handleSelectBerthType = (berthType: any) => {
     } else {
         isAllowPassenger.value = true;
     }
-
 }
 
 const handleSelectPurposeType = (value: any) => {
-
     const berth: any = documentOptionsStore.berthsOption.find((e: any) => e.id === formGroup.berthId)
 
     const purposeType: any = documentOptionsStore.purposeTypeOptions.find((e: any) => e.id === value)
@@ -312,7 +297,6 @@ const handleSelectPurposeType = (value: any) => {
 
         if (documentOptionsStore.filteredPurposesOptions.length == 1)
             formGroup.purposeId = documentOptionsStore.filteredPurposesOptions[0].id
-
     }
 
     validate('purposeTypeId', value)
@@ -321,19 +305,9 @@ const handleSelectPurposeType = (value: any) => {
     }
 }
 
-const handleSelectPurpose = (value: any) => {
-    // const findData: any = documentOptionsStore.filteredPurposesOptions.find((e: any) => e.id === value)
-    // if (findData) {
-    //     isAllowPassenger.value = ['Passenger'].includes(findData.purposeType)
-    // }
-    // validate('purposeId', value)
-    // if (!isAllowPassenger.value) {
-    //     validate('passengers')
-    // }
-}
+const handleSelectPurpose = (value: any) => {}
 
 const getDocumentBerthDetail = async (documentId: number, berthId: number) => {
-
     const resp = await documentService.getDocumentBerthDetail(documentId, berthId)
     if (resp.statusCode === 200) {
         formGroup.berthId = resp.data.berthId
@@ -381,7 +355,6 @@ async function onSubmit(event: FormSubmitEvent<z.output<any>>) {
         const newPayload: IBerthsDocumentRequest = {
             ...payload.value,
             ...event.data,
-            // sequence checking logic by item length of berths
             sequence: props.berths.length > 0 ? props.berths.length + 1 : 1
         }
         payload.value = newPayload

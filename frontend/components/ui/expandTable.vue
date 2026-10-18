@@ -60,7 +60,6 @@ import { ref } from "vue";
 import EmptyNotFoundTable from "~/components/ui/emptyNotFoundTable.vue";
 import NuxtIcon from "./nuxtIcon.vue";
 
-// Define props using `defineProps`
 const props = defineProps({
    headers: {
       type: Array,
@@ -85,10 +84,8 @@ const props = defineProps({
 });
 const emit = defineEmits(["rowSelected"]);
 
-// Reactive state for expanded row index
 const expandedRowIndex = ref(null);
 
-// Method to toggle row expansion
 function toggleExpand(index) {
    if (index < 0 || index >= props.rows.length) {
       console.error("Invalid row index:", index);

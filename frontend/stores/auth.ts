@@ -1,5 +1,3 @@
-// stores/auth.ts
-
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import useAuthService from '~/core/services/authService'
@@ -57,9 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     watch(permissions, (newPermissions) => {
         const permissionsString = newPermissions.join(',');
-        // Encode the string to Base64
         const base64Permissions = btoa(permissionsString);
-        // Store the Base64-encoded string in localStorage
         localStorage.setItem('permissions', base64Permissions);
     });
 

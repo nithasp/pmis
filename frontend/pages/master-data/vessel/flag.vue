@@ -269,8 +269,6 @@ const getVesselFlagList = async () => {
          total.value = totalItems;
          paginationData.value.totalItems = totalItems;
          paginationData.value.totalPages = totalPages;
-
-         // console.log("vesselFlagList.value", vesselFlagList.value);
       }
    } catch (error) {
       console.error(error);
@@ -331,7 +329,6 @@ const activateVesselFlag = async (status) => {
 
 const isOpenForm = ref(false);
 const setDialogEdit = (status: boolean) => {
-   // console.log("setDialogEdit", status);
    isOpenForm.value = status;
 };
 const isOpenStatus = ref(false);

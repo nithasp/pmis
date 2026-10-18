@@ -1,4 +1,3 @@
-// Deterministic PRNG (mulberry32) so every `npm run seed` produces the same demo data.
 export function createRandom(seed = 20260101) {
   let state = seed >>> 0;
   const next = (): number => {

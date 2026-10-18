@@ -390,7 +390,7 @@ const daysRemaining = computed(() => {
   const currentDate = new Date();
   if (props.formGroup.vesselLicenseExpiredDate && !new Date(props.formGroup.vesselLicenseExpiredDate)) return 0;
   const diffTime = new Date(props.formGroup.vesselLicenseExpiredDate).getTime() - currentDate.getTime();
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert ms to days
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 });
 
 const onSearchVesselOwners = async (q: any) => {
@@ -581,7 +581,6 @@ watch(
 watch(
   () => shipParticulars.value,
   (value) => {
-    // remove from uploadfile
     if (value === null) {
       const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileVesselTypeEnum.shipParticulars)
       if (findFileIndex !== -1) {
@@ -595,7 +594,6 @@ watch(
 watch(
   () => shipRegistry.value,
   (value) => {
-    // remove from uploadfile
     if (value === null) {
       const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileVesselTypeEnum.shipRegistry)
       if (findFileIndex !== -1) {
@@ -609,7 +607,6 @@ watch(
 watch(
   () => internationTonnageCert.value,
   (value) => {
-    // remove from uploadfile
     if (value === null) {
       const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileVesselTypeEnum.internationTonnageCert)
       if (findFileIndex !== -1) {
@@ -623,7 +620,6 @@ watch(
 watch(
   () => last10Ports.value,
   (value) => {
-    // remove from uploadfile
     if (value === null) {
       const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileVesselTypeEnum.last10Ports)
       if (findFileIndex !== -1) {
@@ -637,7 +633,6 @@ watch(
 watch(
   () => powerOfAttorney.value,
   (value) => {
-    // remove from uploadfile
     if (value === null) {
       const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileVesselTypeEnum.powerOfAttorney)
       if (findFileIndex !== -1) {

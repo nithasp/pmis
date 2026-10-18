@@ -94,8 +94,6 @@
                 </div>
                 <UDivider class="my-4" />
                 <div id="containerUpload">
-                    <!-- <UploadYourDocument :required="isRequiredFile" :files-value="filesUpload"
-                        :getFiles="(value: any) => filesUpload = value" /> -->
                     <h2 class="font-bold text-grayy-400">{{ $t('document_content.title2') }}</h2>
                     <div class="flex justify-between">
                         <span class="text-grayy-500 mr-2 my-3">{{ $t('document_content.upload_caption_2') }}</span>
@@ -285,7 +283,6 @@ const validate = (field: string) => {
         }
     }
 
-    // Clear previous errors for the specific field and add the new error if any
     errors.value = errors.value.filter(err => err.path !== field);
     if (validationErrors.length) {
         errors.value.push(...validationErrors);
@@ -358,9 +355,9 @@ onBeforeRouteLeave((to, from, next) => {
     if (notAllowNavigate.value) {
         isConfirmLeaveDialogOpen.value = true;
         nextRoute.value = to;
-        next(false); // Prevent navigation until confirmed
+        next(false);
     } else {
-        next(); // Allow navigation
+        next();
     }
 });
 
@@ -510,7 +507,6 @@ const dialogConfirm = async () => {
     isConfirmDialogOpen.value = false
 }
 
-
 const dialogConfirmDeleteVesselAgent = async () => {
     isLoading.value = true
     if (vesselAgentId) {
@@ -615,7 +611,6 @@ const validateFileUpload = (field: FileRegisterTypeEnum) => {
 watch(
     () => nationalId.value,
     (value) => {
-        // remove from uploadfile
         if (value === null) {
             const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileRegisterTypeEnum.nationalId)
             if (findFileIndex !== -1) {
@@ -631,7 +626,6 @@ watch(
 watch(
     () => powerOfAttorney.value,
     (value) => {
-        // remove from uploadfile
         if (value === null) {
             const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileRegisterTypeEnum.powerOfAttorney)
             if (findFileIndex !== -1) {
@@ -647,7 +641,6 @@ watch(
 watch(
     () => legalEntityCert.value,
     (value) => {
-        // remove from uploadfile
         if (value === null) {
             const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileRegisterTypeEnum.legalEntityCert)
             if (findFileIndex !== -1) {
@@ -663,7 +656,6 @@ watch(
 watch(
     () => powerOfAttorneyNationId.value,
     (value) => {
-        // remove from uploadfile
         if (value === null) {
             const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileRegisterTypeEnum.powerOfAttorneyNationId)
             if (findFileIndex !== -1) {

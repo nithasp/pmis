@@ -272,8 +272,6 @@ const route = useRoute();
 const vesselOutSchema = z.object({
    berth_id: z.number().min(1, { message: t("required") }),
    purpose_id: z.number().min(1, { message: t("required") }),
-   //cargo_type_id: z.number().min(1, { message: t("required") }),
-   //cargo_wharfage_id: z.number().min(1, { message: t("required") }),
    jetty_id: z.number().min(1, { message: t("required") }),
 });
 
@@ -287,8 +285,6 @@ const vesselInId: any = route.query.vessel_in_id;
 
 onMounted(() => {
    getDocumentDetail();
-   //getVtmsLogBookDetail();
-   //getVtmsDocumentBerthDetail();
    getVtmsLogBookDocumentDetail();
    getVtmsLogBookBerthDetail();
    getMasterDataList();
@@ -303,14 +299,11 @@ const formGroup = ref<any>({
    document_berth_id: 0,
    vessel_id: 0,
 
-   // Details
    berth_id: 0,
    purpose_id: 0,
    cargo_type_id: 0,
    cargo_wharfage_id: 0,
    jetty_id: 0,
-   // departure_date: generateDateTimeOffset(),
-   // mooring_date: generateDateTimeOffset(),
    departure_date: null,
    mooring_date: null,
    type_doc: "Departure",
@@ -429,7 +422,6 @@ const getVtmsLogBookDocumentDetail = async () => {
       tugList.value = resp.data.tugs ? resp.data.tugs : [];
       pilotList.value = resp.data.pilots ? resp.data.pilots : [];
 
-      // Update Vessel Out default value 09/01/2025
       formGroup.value.berth_id = resp.data.details.berth_id ? resp.data.details.berth_id : 0;
       formGroup.value.purpose_id = resp.data.details.purpose_id ? resp.data.details.purpose_id : 0;
       formGroup.value.cargo_type_id = resp.data.details.cargo_type_id ? resp.data.details.cargo_type_id : 0;
@@ -676,7 +668,6 @@ onBeforeRouteLeave((to, from, next) => {
    }
 });
 
-//tug boat
 const isDialogTugBoatFormOpen = ref(false);
 const handleTugBoatForm = (status: boolean, mode: string, vesselTypeValue: string) => {
    actionMode.value = mode;
@@ -688,13 +679,9 @@ const dialogTugBoatCancel = () => {
 };
 const dialogTugBoatConfirm = (status: boolean, type: string = "") => {
    isDialogTugBoatFormOpen.value = status;
-   if (type === "refresh") {
-      // filter.value.page = 1;
-      // getTugBoatList();
-   }
+   if (type === "refresh") {}
 };
 
-// navigate
 const isDialogNavigateFormOpen = ref(false);
 const handleNavigateForm = (status: boolean, mode: string, vesselTypeValue: string) => {
    actionMode.value = mode;
@@ -706,10 +693,7 @@ const dialogNavigateCancel = () => {
 };
 const dialogNavigateConfirm = (status: boolean, type: string = "") => {
    isDialogNavigateFormOpen.value = status;
-   if (type === "refresh") {
-      // filter.value.page = 1;
-      // getNavigateList();
-   }
+   if (type === "refresh") {}
 };
 
 const addTug = (tugs: any[]) => {

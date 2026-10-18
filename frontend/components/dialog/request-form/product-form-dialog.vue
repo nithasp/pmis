@@ -176,7 +176,7 @@ const formGroup = reactive({
     mTonQty: 0,
     rTonQty: 0,
     packageAmount: 0,
-    receiver: "", // ชื่อเจ้าของสินค้า
+    receiver: "",
     cargoOwnerId: 0,
     purposeId: 0,
     cargoWharfageId: 0,
@@ -287,13 +287,11 @@ function renderCargoWharfageOptions() {
 }
 
 function handleCargoOnwerCreated(newValue: any) {
-    // Check if newValue is an ID (number) or a new value (string)
     const isExistingId = documentOptionsStore.cargoOwnerOptions.some(
         (e: any) => e.id === newValue
     );
 
     if (isExistingId) {
-        // When selecting an existing item, update formGroup directly
         const selectedCargoOwner = documentOptionsStore.cargoOwnerOptions.find(
             (e: any) => e.id === newValue
         );
@@ -303,28 +301,22 @@ function handleCargoOnwerCreated(newValue: any) {
             formGroup.receiver = selectedCargoOwner.name;
         }
     } else {
-        // When creating a new item
         const newCargoOwner = { id: 0, name: newValue };
 
-        // Check if a new item with `id === 0` already exists
         const existingCargoOwner = documentOptionsStore.cargoOwnerOptions.find(
             (e: any) => e.id === 0
         );
 
         if (existingCargoOwner) {
-            // Replace the name of the existing item
             existingCargoOwner.name = newValue;
         } else {
-            // Add the new item to the options list
             documentOptionsStore.cargoOwnerOptions.push(newCargoOwner);
         }
 
-        // Update formGroup with the new ID and receiver
         formGroup.cargoOwnerId = newCargoOwner.id;
         formGroup.receiver = newValue;
     }
 }
-
 
 function handleCargoOwnerSelected(selectedValue: any) {
     const selectedCargoOwner = documentOptionsStore.cargoOwnerOptions.find(

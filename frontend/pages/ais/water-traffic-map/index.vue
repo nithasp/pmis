@@ -34,8 +34,6 @@
             <template #shipDetails-data="{ row }">
                <div class="grid grid-cols-[24px_1fr] items-center gap-3">
                   <div>
-                     <!-- <img :src="row.vessel.vesselFlagImage" :alt="row.vessel.vesselFlagName"
-                        class="w-6 h-6 rounded-[50%]" /> -->
                   </div>
                   <div>
                      <h3 class="text-grayy-900 font-anuphan-medium">{{ row.vessel.name }}</h3>

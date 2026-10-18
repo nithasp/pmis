@@ -18,7 +18,6 @@ const assertOwnOrOfficer = (req: Request, userId: number): void => {
   }
 };
 
-// ---- settings (own profile) -----------------------------------------------------------------
 export const detail = asyncHandler(async (req: Request, res: Response) => {
   const id = paramId(req);
   assertOwnOrOfficer(req, id);
@@ -79,7 +78,6 @@ export const addressDelete = asyncHandler(async (req: Request, res: Response) =>
   sendData(res, { success: true });
 });
 
-// ---- admin: officers ------------------------------------------------------------------------
 export const officerList = asyncHandler(async (req: Request, res: Response) => {
   const q = req.query as Record<string, string>;
   sendData(res, await userService.listOfficers({ enabled: str(q.enabled), roleId: idOrNull(q.roleId) ?? undefined }, listQuery(req)));
@@ -107,7 +105,6 @@ export const officerDelete = asyncHandler(async (req: Request, res: Response) =>
   sendData(res, { success: true });
 });
 
-// ---- admin: vessel agencies -----------------------------------------------------------------
 export const agencyList = asyncHandler(async (req: Request, res: Response) => {
   const q = req.query as Record<string, string>;
   sendData(

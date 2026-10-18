@@ -60,9 +60,6 @@ watch(
    () => props.isDialogOpen,
    (newValue) => {
       resetForm();
-      // if (props.isDialogOpen) {
-      //    form.value.note = props.itemData?.note;
-      // }
    }
 );
 

@@ -50,7 +50,6 @@ router.get('/vessel-flag/:id', master.flagDetail);
 router.post('/vessel-flag', write, master.flagCreate);
 router.put('/vessel-flag/:id', write, master.flagUpdate);
 
-// locate, use-berth, cargo-type, cargo-wharfage, vessel-type, product-group
 router.get('/:key', master.simpleList);
 router.get('/:key/:id', master.simpleDetail);
 router.post('/:key', write, master.simpleCreate);

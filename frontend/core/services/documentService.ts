@@ -1,5 +1,3 @@
-// services/auth.ts
-
 import { useNuxtApp } from "#app";
 import type { AxiosResponse } from "axios";
 import type { IVesselDocumentRequest } from "../interfaces/IVesselDocumentRequest";
@@ -17,7 +15,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.get(`/admin/documents?${filterParams}`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("get document list failed:", error);
          return wrapperErrorResp(error);
       }
@@ -29,7 +26,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.get(`/admin/admin-documents?${filterParams}`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("get admin document list failed:", error);
          return wrapperErrorResp(error);
       }
@@ -40,7 +36,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.post("admin/documents", { ...body });
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("create draft failed:", error);
          return wrapperErrorResp(error);
       }
@@ -51,7 +46,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.put(`admin/documents/${documentId}`, { ...body });
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("create draft failed:", error);
          return wrapperErrorResp(error);
       }
@@ -62,7 +56,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.put(`admin/documents/${id}/submit-for-review`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("submit to review failed:", error);
          return wrapperErrorResp(error);
       }
@@ -73,7 +66,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.get("admin/documents/draft");
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("get draft failed:", error);
          return wrapperErrorResp(error);
       }
@@ -84,7 +76,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.get(`admin/documents/${documentId}`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("get document id failed:", error);
          return wrapperErrorResp(error);
       }
@@ -95,7 +86,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.get(`admin/documents/${documentId}/admin`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("get document admin id failed:", error);
          return wrapperErrorResp(error);
       }
@@ -106,7 +96,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.get(`admin/documents/${documentId}/reviews`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("get document review id failed:", error);
          return wrapperErrorResp(error);
       }
@@ -117,7 +106,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.put(`admin/documents/${documentId}/cancel`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("cancel document failed:", error);
          return wrapperErrorResp(error);
       }
@@ -128,7 +116,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.put(`admin/documents/${documentId}/admin-cancel`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("cancel admin document failed:", error);
          return wrapperErrorResp(error);
       }
@@ -139,7 +126,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.post(`admin/documents/${id}/berths`, { ...body });
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("add document berths failed:", error);
          return wrapperErrorResp(error);
       }
@@ -150,7 +136,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.get(`admin/documents/${id}/berths/${berthId}`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("add document berths failed:", error);
          return wrapperErrorResp(error);
       }
@@ -161,7 +146,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.put(`admin/documents/${id}/berths/${berthId}`, { ...body });
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("update document berths failed:", error);
          return wrapperErrorResp(error);
       }
@@ -172,7 +156,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.delete(`admin/documents/${id}/berths/${berthId}`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("delete document berths failed:", error);
          return wrapperErrorResp(error);
       }
@@ -183,7 +166,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.post(`admin/documents/${id}/berths/${berthId}/products`, { ...body });
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("add document berths product failed:", error);
          return wrapperErrorResp(error);
       }
@@ -194,7 +176,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.put(`admin/documents/${id}/berths/${berthId}/products/${productId}`, { ...body });
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("update document berths product failed:", error);
          return wrapperErrorResp(error);
       }
@@ -205,7 +186,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.delete(`admin/documents/${id}/berths/${berthId}/products/${productId}`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("delete document berths product failed:", error);
          return wrapperErrorResp(error);
       }
@@ -216,7 +196,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.get(`admin/documents/${id}/berths/${berthId}/products/${productId}`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("get document berths product detail failed:", error);
          return wrapperErrorResp(error);
       }
@@ -228,7 +207,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.get(`customers/search?${filterParams}`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("get document berths product detail failed:", error);
          return wrapperErrorResp(error);
       }
@@ -239,7 +217,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.post(`admin/documents/${documentId}/customers`, { ...body });
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("add invoice failed:", error);
          return wrapperErrorResp(error);
       }
@@ -250,7 +227,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.put(`admin/documents/${documentId}/reject`, { ...body });
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("reject document failed:", error);
          return wrapperErrorResp(error);
       }
@@ -263,7 +239,6 @@ export default function useDocumentService() {
          });
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("approve document failed:", error);
          return wrapperErrorResp(error);
       }
@@ -274,7 +249,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.put(`admin/documents/${documentId}/recall`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("recall document failed:", error);
          return wrapperErrorResp(error);
       }
@@ -286,7 +260,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.get(`admin/documents/berths/${berthAlt}?${filterParams}`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("get document berths alt failed:", error);
          return wrapperErrorResp(error);
       }
@@ -297,7 +270,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.put(`admin/documents/berths/etd/${documentBerthId}`, { ...body });
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("update etd document berth failed:", error);
          return wrapperErrorResp(error);
       }
@@ -309,7 +281,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.get(`admin/documents/vessel-in/${berthAlt}?${filterParams}`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("get document vessel in failed:", error);
          return wrapperErrorResp(error);
       }
@@ -320,7 +291,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.put(`admin/documents/vessel-in/${logBookId}`, { ...body });
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("update document vessel in failed:", error);
          return wrapperErrorResp(error);
       }
@@ -331,7 +301,7 @@ export default function useDocumentService() {
          const response = await $api.get(
             `admin/documents/${documentId}/export-pdf`,
             {
-               responseType: "blob", // Treat response as binary PDF data
+               responseType: "blob",
             }
          );
 
@@ -358,7 +328,6 @@ export default function useDocumentService() {
          const response: AxiosResponse = await $api.get(`/admin/documents/vessel/${vesselId}?${filterParams}`);
          return wrapperSuccessResp(response.data);
       } catch (error) {
-         // Handle error (e.g., show a notification or throw an error)
          console.error("get document list failed:", error);
          return wrapperErrorResp(error);
       }

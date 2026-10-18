@@ -209,7 +209,6 @@ export function createVesselImportService(
   }
 
   return {
-    // Agency side ("ship entry"): the reports they are preparing or have sent
     async list(user: AuthUser, filter: Row, query: ListQuery): Promise<PagedResult<Row>> {
       const page = await imports.list(
         {
@@ -231,7 +230,6 @@ export function createVesselImportService(
       return { ...page, data: page.data.map((r) => ({ ...baseRow(r), products: (products.get(r.id as number) ?? []).map(productItem) })) };
     },
 
-    // Officer side ("vessel in-out"): everything that has been sent
     async listSend(filter: Row, query: ListQuery): Promise<PagedResult<Row>> {
       const page = await imports.list(
         {
@@ -323,7 +321,6 @@ export function createVesselImportService(
           targetId = created.id as number;
         } else {
           const patch: Row = { ...data };
-          // A corrected report goes back into the officer's queue
           if (['PendingEdit', 'PendingSend'].includes(str(existing!.status))) Object.assign(patch, { status: 'Send', sent_at: new Date() });
           await imports.update(targetId, patch, tx);
         }
@@ -333,7 +330,6 @@ export function createVesselImportService(
       return detailOf(await load(savedId));
     },
 
-    // Reads the uploaded spreadsheet and creates one sent report per valid row
     async sendFromFile(fileId: number, user: AuthUser, by: string): Promise<Row[]> {
       const { buffer, file } = await files.contents(fileId);
       if (!/sheet|excel|csv/i.test(str(file.mimeType)) && !/\.(xlsx|xls|csv)$/i.test(file.fileName)) {
@@ -409,7 +405,6 @@ export function createVesselImportService(
       return errors;
     },
 
-    // The agency asks to change a report that has already been sent
     async requestEdit(id: number, user: AuthUser, note: string, by: string): Promise<Row> {
       const row = await load(id);
       assertOwner(user, row);
@@ -421,7 +416,6 @@ export function createVesselImportService(
       return detailOf(await load(id));
     },
 
-    // The officer returns a report to the agency for correction
     async sendBack(id: number, note: string, by: string): Promise<Row> {
       const row = await load(id);
       const notes = Array.isArray(row.notes) ? row.notes : [];

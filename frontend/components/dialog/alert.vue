@@ -13,15 +13,6 @@
             <p class="text-sm text-gray-600" v-if="desc">{{ desc }}</p>
          </div>
 
-         <!-- <div class="mt-8" v-if="type === 'success'">
-            <ButtonWhite :text="btnName || 'ตกลง'" @click="setDialog(false)" class="w-full" size="lg" />
-         </div>
-         <div class="mt-8" v-else>
-            <ButtonPrimary :text="btnName || 'ตกลง'" @click="setDialog(false)" class="w-full" size="lg" />
-         </div> -->
-         <!-- <div class="mt-8">
-            <ButtonWhite :text="btnName || $t('ok')" @click="setDialog(false)" class="w-full" size="lg" />
-         </div> -->
          <div class="mt-8">
             <UButton size="lg" color="white" variant="solid" :label="btnName || $t('confirm')" block
                class="rounded-lg w-full border border-gray-100 outline-none" @click="setDialog(false)" />

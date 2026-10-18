@@ -6,7 +6,6 @@ import { pagedResult } from '../utils/paging';
 import { requireRow } from '../utils/rows';
 import { SqlBuilder, csvList } from '../utils/sql';
 
-// One row per document with its vessel snapshot, agency and the aggregates the list pages show
 export const DOCUMENT_SELECT = `
   d.*, dv.id AS document_vessel_id, dv.vessel_id, dv.vessel_flag_id, dv.vessel_type_id, dv.vessel_owner, dv.vessel_owner_id,
   dv.vessel_name, dv.vessel_imo_number, dv.vessel_mmsi_number, dv.vessel_dsv_number, dv.vessel_official_number, dv.vessel_call_sign,
@@ -133,7 +132,6 @@ export class DocumentRepository {
     return `${prefix}${String(last + 1).padStart(5, '0')}`;
   }
 
-  // ---- berths -------------------------------------------------------------------------------
   async berths(documentId: number, db: Queryable = pool): Promise<Row[]> {
     const { rows } = await db.query(
       `SELECT b.*, bb.name_th AS berth_name_th, bb.name_en AS berth_name_en, bb.name_alt AS berth_name_alt, bb.berth_type AS berth_berth_type,
@@ -192,7 +190,6 @@ export class DocumentRepository {
     return (rowCount ?? 0) > 0;
   }
 
-  // ---- berth products -----------------------------------------------------------------------
   async products(berthIds: number[], db: Queryable = pool): Promise<Map<number, Row[]>> {
     const out = new Map<number, Row[]>();
     if (!berthIds.length) return out;
@@ -255,7 +252,6 @@ export class DocumentRepository {
     return (rowCount ?? 0) > 0;
   }
 
-  // ---- invoice ------------------------------------------------------------------------------
   async invoice(documentId: number, db: Queryable = pool): Promise<Row | null> {
     const { rows } = await db.query(
       `SELECT i.*, pm.name AS payment_method_name, pm.payment_period_day, pt.name AS payment_term_name, c.name_th AS country_name,
@@ -283,7 +279,6 @@ export class DocumentRepository {
     );
   }
 
-  // ---- special berths (jetty chosen at confirmation) -----------------------------------------
   async spacialBerths(documentId: number, db: Queryable = pool): Promise<Row[]> {
     const { rows } = await db.query(
       `SELECT s.*, bb.name_alt AS berth_name, bb.berth_type, j.name AS jetty_name FROM document_spacial_berths s
@@ -303,7 +298,6 @@ export class DocumentRepository {
     }
   }
 
-  // ---- history ------------------------------------------------------------------------------
   async addHistory(documentId: number, status: string, snapshot: Row, db: Queryable = pool): Promise<void> {
     await db.query('INSERT INTO document_histories (document_id, status, snapshot) VALUES ($1, $2, $3)', [documentId, status, JSON.stringify(snapshot)]);
   }
@@ -313,8 +307,6 @@ export class DocumentRepository {
     return rows[0] ?? null;
   }
 
-  // ---- ship table (MIT / TCT) ---------------------------------------------------------------
-  // Approved request berths of one berth type that still wait for a jetty / ETB / ETD
   async berthQueue(berthType: string, query: ListQuery, db: Queryable = pool): Promise<PagedResult<Row>> {
     const b = new SqlBuilder();
     b.where('d.deleted_at IS NULL');
@@ -334,7 +326,6 @@ export class DocumentRepository {
     return pagedResult(rows, Number(countRows[0]?.count ?? 0), query);
   }
 
-  // Vessels that arrived at one berth type (an Arrival log entry) and have not departed yet
   async vesselsIn(berthType: string, query: ListQuery, db: Queryable = pool): Promise<PagedResult<Row>> {
     const b = new SqlBuilder();
     b.where('d.deleted_at IS NULL');

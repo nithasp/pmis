@@ -26,8 +26,6 @@
                      class="rounded-lg mt-6 font-anuphan-semi-bold" type="submit" />
                </UForm>
 
-               <!-- <UploadYourDocument :required="isRequiredFile" :files-value="filesUpload"
-                  :getFiles="(value: any) => filesUpload = value" /> -->
                <div v-if="currentStep === 1" class="mt-6">
                   <h2 class="font-bold text-grayy-400">{{ $t('document_content.title2') }}</h2>
                   <div class="flex justify-between">
@@ -104,7 +102,6 @@
             <div class="rounded-[20px] bg-white m-auto p-[24px] max-w-[414px]">
                <div @click="onClickBackToLogin" id="forget-password"
                   class="cursor-pointer mb-6 text-primaryy-500 flex items-center">
-                  <!-- <img :src="AngleLeft" alt="UserIcon" /> -->
                   <NuxtIcon name="angle-left" />
                   <div class="ml-2">{{ $t('back_to_login') }}</div>
                </div>
@@ -216,7 +213,6 @@ const formRegister = reactive({
 const errors = ref<FormError[]>([]);
 const validate = (field: string, valueSelected: any = 0) => {
    const validationErrors: FormError[] = [];
-   // Email validation
    if (field === 'email') {
       if (!formRegister.email) {
          validationErrors.push({ path: 'email', message: t('please_enter_a_value') });
@@ -225,7 +221,6 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Password validation
    if (field === 'password') {
       if (!formRegister.password) {
          validationErrors.push({ path: 'password', message: t('please_enter_a_value') });
@@ -234,7 +229,6 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Confirm Password validation
    if (field === 'confirmPassword') {
       if (!formRegister.confirmPassword) {
          validationErrors.push({ path: 'confirmPassword', message: t('please_enter_a_value') });
@@ -243,25 +237,22 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Company validation
    if (field === 'company') {
       if (!formRegister.company) {
          validationErrors.push({ path: 'company', message: t('please_enter_a_value') });
       }
    }
 
-   // Full Name validation
    if (field === 'fullName') {
       if (!formRegister.fullName) {
          validationErrors.push({ path: 'fullName', message: t('please_enter_a_value') });
       }
    }
 
-   // Phone validation
    if (field === 'phone') {
       if (!formRegister.phone) {
          validationErrors.push({ path: 'phone', message: t('please_enter_a_value') });
-      } else if (!regxPhone.test(formRegister.phone)) {  // Replace with desired phone number validation
+      } else if (!regxPhone.test(formRegister.phone)) {
          validationErrors.push({ path: 'phone', message: t('phone_format_validate_message') });
       }
    }
@@ -274,14 +265,12 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Person Type validation
    if (field === 'personType') {
       if (!formRegister.personType) {
          validationErrors.push({ path: 'personType', message: t('please_enter_a_value') });
       }
    }
 
-   // Country validation
    if (field === 'countryId') {
       formRegister.countryId = valueSelected || formRegister.countryId
       if (!formRegister.countryId) {
@@ -289,7 +278,6 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Province validation (dependent on isOtherCountry)
    if (field === 'provinceId') {
       formRegister.provinceId = valueSelected || formRegister.provinceId
       if (!isOtherCountry.value && (!formRegister.provinceId)) {
@@ -297,7 +285,6 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // District validation (dependent on isOtherCountry)
    if (field === 'districtId') {
       formRegister.districtId = valueSelected || formRegister.districtId
       if (!isOtherCountry.value && (!formRegister.districtId)) {
@@ -305,7 +292,6 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // SubDistrict validation (dependent on isOtherCountry)
    if (field === 'subDistrictId') {
       formRegister.subDistrictId = valueSelected || formRegister.subDistrictId
       if (!isOtherCountry.value && (!formRegister.subDistrictId)) {
@@ -313,36 +299,31 @@ const validate = (field: string, valueSelected: any = 0) => {
       }
    }
 
-   // Tax validation
    if (field === 'tax') {
       if (!formRegister.tax) {
          validationErrors.push({ path: 'tax', message: t('please_enter_a_value') });
-      } else if (!regxNumber13Degit.test(formRegister.tax)) {  // Replace with desired phone number validation
+      } else if (!regxNumber13Degit.test(formRegister.tax)) {
          validationErrors.push({ path: 'tax', message: t('taxpayer_identification_not_correct') });
       }
    }
 
-   // Zip Code validation
    if (field === 'zipCode') {
       if (!formRegister.zipCode) {
          validationErrors.push({ path: 'zipCode', message: t('please_enter_a_value') });
       }
    }
 
-   // Stage Province validation (dependent on isOtherCountry)
    if (field === 'stageProvince') {
       if (isOtherCountry.value && !formRegister.stageProvince) {
          validationErrors.push({ path: 'stageProvince', message: t('please_enter_a_value') });
       }
    }
 
-   // Full Name address
    if (field === 'address') {
       if (!formRegister.address) {
          validationErrors.push({ path: 'address', message: t('please_enter_a_value') });
       }
    }
-   // Clear previous errors for the specific field and add the new error if any
    errors.value = errors.value.filter(err => err.path !== field);
    if (validationErrors.length) {
       errors.value.push(...validationErrors);
@@ -401,7 +382,6 @@ onMounted(async () => {
    }
 })
 
-
 async function onSubmit(event: FormSubmitEvent<any>) {
    validate('email')
    validate('password')
@@ -459,7 +439,6 @@ const handleClickNextStep = async (step: number) => {
          }
          break;
       default:
-         // finished all steps
          isLoading.value = true
          const uploadFiles = filesUpload.value.filter((e: any) => !e.isError &&
             (formRegister.personType === 'corporate'
@@ -484,7 +463,6 @@ const handleClickNextStep = async (step: number) => {
 const handleClickBack = (step: number) => {
    switch (step) {
       case 2:
-         // validate form here
          currentStep.value = 1;
          break;
       case 1:
@@ -499,7 +477,6 @@ const handleClickBack = (step: number) => {
          currentStep.value = 0;
          break;
       default:
-         // finished all steps
          break;
    }
 }
@@ -550,7 +527,6 @@ watch(
    () => formRegister.countryId,
    (value) => {
       isOtherCountry.value = value !== 219 ? true : false
-      // registerSchema.value = createSchema(value !== 219 ? true : false)
       formRegister.provinceId = value !== 219 ? null : formRegister.provinceId
       formRegister.districtId = value !== 219 ? null : formRegister.districtId
       formRegister.subDistrictId = value !== 219 ? null : formRegister.subDistrictId
@@ -561,7 +537,6 @@ watch(
 watch(
    () => locale.value,
    () => {
-      // registerSchema.value = createSchema(isOtherCountry.value)
       if (getError('email')) {
          validate('email')
       }
@@ -615,14 +590,12 @@ watch(
       if (getError('address')) {
          validate('address')
       }
-
    }
 );
 
 watch(
    () => nationalId.value,
    (value) => {
-      // remove from uploadfile
       if (value === null) {
          const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileRegisterTypeEnum.nationalId)
          if (findFileIndex !== -1) {
@@ -638,7 +611,6 @@ watch(
 watch(
    () => powerOfAttorney.value,
    (value) => {
-      // remove from uploadfile
       if (value === null) {
          const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileRegisterTypeEnum.powerOfAttorney)
          if (findFileIndex !== -1) {
@@ -654,7 +626,6 @@ watch(
 watch(
    () => legalEntityCert.value,
    (value) => {
-      // remove from uploadfile
       if (value === null) {
          const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileRegisterTypeEnum.legalEntityCert)
          if (findFileIndex !== -1) {
@@ -670,7 +641,6 @@ watch(
 watch(
    () => powerOfAttorneyNationId.value,
    (value) => {
-      // remove from uploadfile
       if (value === null) {
          const findFileIndex = filesUpload.value.findIndex((e: any) => e.fileType === FileRegisterTypeEnum.powerOfAttorneyNationId)
          if (findFileIndex !== -1) {

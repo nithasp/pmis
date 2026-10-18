@@ -10,7 +10,6 @@ export default {
 
     const autoNumericInstance = new AutoNumeric(el, options);
 
-    // Sync changes back to the model
     el.addEventListener('input', () => {
       const event = new CustomEvent('update:modelValue', {
         detail: autoNumericInstance.getNumber(),
@@ -18,7 +17,6 @@ export default {
       el.dispatchEvent(event);
     });
 
-    // Save the instance for cleanup
     el.__autoNumericInstance = autoNumericInstance;
   },
   beforeUnmount(el: HTMLElement) {
