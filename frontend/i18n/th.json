@@ -240,5 +240,10 @@
    "departure_day_or_time_gte": "วันหรือเวลาที่เรือออกต้องมากกว่าหรือเท่ากับวันหรือเวลาที่เรือเข้า",
    "show_all": "แสดงทั้งหมด",
    "hide_all": "ซ่อนทั้งหมด",
-   "invoice_address": "ที่อยู่ใบแจ้งหนี้"
+   "invoice_address": "ที่อยู่ใบแจ้งหนี้",
+   "language": "ภาษา",
+   "language_th": "ไทย",
+   "language_en": "อังกฤษ",
+   "switch_language_to": "เปลี่ยนเป็นภาษา{lang}",
+   "logout": "ออกจากระบบ"
 }

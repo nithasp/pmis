@@ -21,7 +21,7 @@
         <img :src="Logo" alt="logo" class="w-[120px]" />
       </div>
       <div>
-        <ToggleLanguage v-if="isSmallScreen" />
+        <ToggleLanguage v-if="isSmallScreen" size="sm" />
       </div>
     </nav>
 
@@ -35,7 +35,7 @@
           'transition-all duration-300',
           isHamburgerMenuActive && isSmallScreen ? 'translate-x-0 opacity-100 w-full' 
           :!isHamburgerMenuActive && isSmallScreen?  'translate-x-[-100%] opacity-0 w-0' : '',
-          'md:opacity-100 md:translate-x-[0%] fixed z-[2000] h-full left-0 top-[7%] md:static md:top-0 md:left-0',
+          'md:opacity-100 md:translate-x-[0%] fixed z-[2000] h-full left-0 top-[7%] md:sticky md:top-6 md:left-0 md:h-[calc(100vh_-_3rem)]',
         ]"
       >
         <Sidebar :fullSidebar="fullSidebar" :setNavbar="setNavbar" :isSmallScreen="isSmallScreen"   :closeHamburgerMenu="closeHamburgerMenu"

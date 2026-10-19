@@ -238,5 +238,10 @@
    "departure_day_or_time_gte": "The day or time the ship departs must be greater than or equal to the day or time the ship arrives.",
    "show_all": "Show All",
    "hide_all": "Hide All",
-   "invoice_address": "Invoice Address"
+   "invoice_address": "Invoice Address",
+   "language": "Language",
+   "language_th": "Thai",
+   "language_en": "English",
+   "switch_language_to": "Switch to {lang}",
+   "logout": "Log out"
 }

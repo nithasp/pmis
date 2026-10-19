@@ -1,16 +1,18 @@
 <template>
    <aside v-if="showAside"
       :class="[isSmallScreen ? '!justify-start' : '', 'bg-white relative h-full flex flex-col justify-between rounded-[20px]']">
-      <div
-         :class="[fullSidebar ? 'p-4' : 'p-2 pt-4', isSmallScreen ? '!h-[75%]' : '', 'bg-white h-full overflow-y-auto overflow-x-hidden']">
-         <div v-if="!isSmallScreen" :class="[
+      <!-- Brand stays put; only the menu below scrolls -->
+      <div v-if="!isSmallScreen" :class="[fullSidebar ? 'px-4' : 'px-2', 'shrink-0 pt-4']">
+         <div :class="[
             !fullSidebar ? '!p-0 !justify-center' : '',
-            'border-b border-solid border-b-[#EAECF0] flex items-center justify-between pl-2 pr-3 pt-0 pb-2 mb-2',
+            'border-b border-solid border-b-[#EAECF0] flex items-center justify-between pl-2 pr-3 pt-0 pb-2',
          ]">
             <img :src="fullSidebar ? Logo : LogoMini" alt="PMIS Logo"
                :class="[!fullSidebar ? '!w-[30px] !h-[30px]' : '', 'w-[94px] h-[46px]']" />
-            <ToggleLanguage v-if="fullSidebar" />
          </div>
+      </div>
+      <div :class="[isSmallScreen ? '!h-[75%]' : 'min-h-0 flex-1', 'relative']">
+         <div :class="[fullSidebar ? 'px-4' : 'px-2', isSmallScreen ? 'pt-4' : 'pt-2', 'h-full overflow-y-auto overflow-x-hidden pb-6']">
          <div id="sidebar-items">
             <div id="main-menu" v-for="(menu, indexMenu) in menus" :key="`menu-${indexMenu}`"
                :class="[!fullSidebar ? 'flex mb-3' : '', 'select-none']">
@@ -163,9 +165,13 @@
                </div>
             </div>
          </div>
+         </div>
+         <!-- Fades the clipped last row so it reads as "more below" instead of merging into the footer -->
+         <div aria-hidden="true"
+            class="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-white to-transparent"></div>
       </div>
-      <div id="sidebar-footer" class="p-4">
-         <div class="bottom-menu mb-4">
+      <div id="sidebar-footer" :class="[fullSidebar ? 'p-4' : 'p-2', 'shrink-0 border-t border-solid border-[#EAECF0] pt-2']">
+         <div class="bottom-menu">
             <div id="main-menu" v-for="(menu, indexMenu) in bottomMenu" :key="`menu-${indexMenu}`"
                :class="[!fullSidebar ? 'flex' : '', 'select-none']">
                <div id="title"
@@ -204,22 +210,37 @@
                   </NuxtLink>
                </div>
             </div>
-         </div>
-         <div v-if="fullSidebar" class="info">
-            <div class="version text-center text-[10px] text-[#B7A4CE]">({{ version }})</div>
-            <div class="h-[1px] w-full bg-[#EAECF0] mt-[11px] mb-1"></div>
-            <div :class="[
-               isSmallScreen ? 'justify-between' : '',
-               'grid grid-cols-[119px_auto] gap-[25px] items-center px-2',
-            ]">
-               <div>
-                  <div class="text-sm font-anuphan-semi-bold">{{ authStore.profileUser.fullName }}</div>
-                  <div class="text-sm">{{ authStore.profileUser.roleName || "-" }}</div>
-               </div>
-               <div class="mx-auto my-0">
-                  <img :src="SignOutIcon" class="w-8 h-8 ml-6 cursor-pointer" @click="setLogoutDialog(true)" />
-               </div>
+            <!-- Language lives with the other personal preferences; on small screens the mobile navbar carries it -->
+            <div v-if="!isSmallScreen" id="language-switch"
+               :class="[fullSidebar ? 'justify-between px-3' : 'justify-center', 'flex items-center py-1 select-none']">
+               <template v-if="fullSidebar">
+                  <div class="flex items-center gap-3">
+                     <UIcon name="i-heroicons-language" class="w-5 h-5 text-grayy-75" />
+                     <p class="font-anuphan-semi-bold text-sm text-grayy-400">{{ $t("language") }}</p>
+                  </div>
+                  <ToggleLanguage size="sm" />
+               </template>
+               <ToggleLanguage v-else compact />
             </div>
+         </div>
+         <div v-if="fullSidebar" class="info mt-2 border-t border-solid border-[#EAECF0] pt-3">
+            <div class="flex items-center gap-2 pl-3 pr-1">
+               <div class="min-w-0 flex-1">
+                  <div class="text-sm font-anuphan-semi-bold text-grayy-900 line-clamp-2"
+                     :title="authStore.profileUser.fullName">
+                     {{ authStore.profileUser.fullName }}
+                  </div>
+                  <div class="text-xs text-grayy-75 line-clamp-2" :title="authStore.profileUser.roleName">
+                     {{ authStore.profileUser.roleName || "-" }}
+                  </div>
+               </div>
+               <button type="button" :title="$t('logout')" :aria-label="$t('logout')"
+                  class="shrink-0 rounded-md p-1 transition-colors hover:bg-[#E3D4F6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primaryy-500/40"
+                  @click="setLogoutDialog(true)">
+                  <img :src="SignOutIcon" class="w-7 h-7" alt="" />
+               </button>
+            </div>
+            <div class="version mt-2 text-center text-[10px] text-[#B7A4CE]">({{ version }})</div>
          </div>
       </div>
 

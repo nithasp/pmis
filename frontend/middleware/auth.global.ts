@@ -102,6 +102,12 @@ export default defineNuxtRouteMiddleware(async (to: any) => {
       }
    }
 
+   // The root route has no page of its own: a signed-in visitor (for example after refreshing "/")
+   // continues to the same landing page the login picks for the role
+   if (access_token && routeName === "index") {
+      return navigateTo(landingPathFor(profileUser?.roleType));
+   }
+
    if (!access_token && privatePath.includes(routeName)) {
       return navigateTo("/login");
    }
