@@ -9,6 +9,7 @@
          ]">
             <img :src="fullSidebar ? Logo : LogoMini" alt="PMIS Logo"
                :class="[!fullSidebar ? '!w-[30px] !h-[30px]' : '', 'w-[94px] h-[46px]']" />
+            <ToggleLanguage v-if="fullSidebar" />
          </div>
          <div id="sidebar-items">
             <div id="main-menu" v-for="(menu, indexMenu) in menus" :key="`menu-${indexMenu}`"
@@ -241,6 +242,7 @@ import useRoleService from "~/core/services/roleService";
 import { RoleTypeEnum } from "~/utils/enums/RoleTypeEnum";
 import { UserTypeEnum } from "~/utils/enums/UserTypeEnum";
 import NuxtIcon from "./ui/nuxtIcon.vue";
+import ToggleLanguage from "./ui/toggleLanguage.vue";
 import { useRuntimeConfig } from "#app";
 import useDocumentService from "~/core/services/documentService";
 import useVesselImportService from "~/core/services/vesselImport";

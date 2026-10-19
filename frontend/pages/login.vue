@@ -157,44 +157,51 @@ async function onSubmit(event: FormSubmitEvent<any>) {
    if (errors.value.length === 0) {
       isLoading.value = true;
       loginMessageError.value = "";
-      const resp = await login({ email, password });
-      if (resp.statusCode === 200) {
-         authStore.accessToken = resp.data.token.access_token;
-         authStore.refreshToken = resp.data.token.refresh_token;
-         const userData = resp.data.user;
-         authStore.profileUser = userData;
-         if (userData.type === UserTypeEnum.User) {
-            if (userData.roleId) {
-               const roleResp = await roleService.getRoleDetail(userData.roleId);
-               if (resp.statusCode === 200) {
-                  const permissions = roleResp.data.permissions;
-                  authStore.permissions = permissions;
+      try {
+         const resp = await login({ email, password });
+         if (resp.statusCode === 200) {
+            authStore.accessToken = resp.data.token.access_token;
+            authStore.refreshToken = resp.data.token.refresh_token;
+            const userData = resp.data.user;
+            authStore.profileUser = userData;
+            if (userData.type === UserTypeEnum.User) {
+               if (userData.roleId) {
+                  const roleResp = await roleService.getRoleDetail(userData.roleId);
+                  if (roleResp.statusCode === 200) {
+                     const permissions = roleResp.data.permissions;
+                     authStore.permissions = permissions;
+                  }
                }
             }
-         }
-         localStorage.setItem("firstLogin", "true");
+            localStorage.setItem("firstLogin", "true");
 
-         if (userData.roleType === 'Agency') {
-            navigateTo("/manage-ship/list?status=false");
-         } else if (userData.roleType === 'DocumentReviewer') {
-            navigateTo("/request-form/list");
-         } else if (userData.roleType === 'StatApprove') {
-            navigateTo("/request-form/list");
+            if (userData.roleType === 'Agency') {
+               navigateTo("/manage-ship/list?status=false");
+            } else if (userData.roleType === 'DocumentReviewer') {
+               navigateTo("/request-form/list");
+            } else if (userData.roleType === 'StatApprove') {
+               navigateTo("/request-form/list");
+            }
+            else if (userData.roleType === 'VTMS') {
+               navigateTo("/vt");
+            }
+            else if (userData.roleType === 'StatOfficer') {
+               navigateTo("/vessel-awaiting-import/list");
+            }
+            else {
+               navigateTo("/request-form/list");
+            }
+         } else {
+            console.error("Login error:", resp);
+            // statusCode 0 means the API was never reached, which is not a wrong password
+            loginMessageError.value = t(!resp.statusCode || resp.statusCode >= 500 ? "error_try_again" : "email_password_not_correct");
          }
-         else if (userData.roleType === 'VTMS') {
-            navigateTo("/vt");
-         }
-         else if (userData.roleType === 'StatOfficer') {
-            navigateTo("/vessel-awaiting-import/list");
-         }
-         else {
-            navigateTo("/request-form/list");
-         }
-      } else {
-         console.error("Login error:", resp);
-         loginMessageError.value = t("email_password_not_correct");
+      } catch (error) {
+         console.error("Login error:", error);
+         loginMessageError.value = t("error_try_again");
+      } finally {
+         isLoading.value = false;
       }
-      isLoading.value = false;
    }
 }
 

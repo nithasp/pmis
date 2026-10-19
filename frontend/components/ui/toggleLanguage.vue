@@ -27,15 +27,12 @@
 
 <script setup>
 
-const lang = localStorage.getItem('lang') || ''
-const isChecked = ref(lang === 'en' ? true : false);
-
 const { locale, setLocale } = useI18n();
 
-watch(isChecked, (newValue) => {
-  const lang = newValue ? 'en' : 'th'
-  setLocale(lang)
-  localStorage.setItem('lang', lang)
+// follows the active locale (@nuxtjs/i18n keeps it in its own cookie) so the toggle never shows the other language
+const isChecked = computed({
+  get: () => locale.value === 'en',
+  set: (checked) => setLocale(checked ? 'en' : 'th'),
 });
 
 </script>

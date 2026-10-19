@@ -13,11 +13,13 @@ export const wrapperSuccessResp = (resp) => {
 };
 
 export const wrapperErrorResp = (error) => {
+   // a network/CORS failure has no response and a proxy error page has no `error` body: neither may throw here
+   const body = error?.response?.data?.error;
    return {
-      statusCode: error.response.status,
-      message: typeof error.response.data === "object" ? error.response.data.error.message : "",
+      statusCode: error?.response?.status ?? 0,
+      message: body?.message ?? "",
       data: {},
-      translation: typeof error.response.data === "object" ? error.response.data.error.translation : "",
+      translation: body?.translation ?? "",
    };
 };
 

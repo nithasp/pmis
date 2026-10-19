@@ -20,7 +20,9 @@
       <div class="logo">
         <img :src="Logo" alt="logo" class="w-[120px]" />
       </div>
-      <div></div>
+      <div>
+        <ToggleLanguage v-if="isSmallScreen" />
+      </div>
     </nav>
 
     <div
@@ -54,6 +56,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import Sidebar from "../components/sidebar";
 import Loading from "~/components/loading";
+import ToggleLanguage from "~/components/ui/toggleLanguage.vue";
 import Logo from "~/assets/images/logo.png";
 import { useRoute } from 'vue-router';
 
